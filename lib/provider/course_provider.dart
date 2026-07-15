@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:homeopathy/model/course_model.dart';
 
 
-// CourseProvider holds all the course data and exposes it to the UI.
-// Any widget wrapped in a Consumer<CourseProvider> (or using context.watch)
-// will automatically rebuild whenever notifyListeners() is called.
 class CourseProvider extends ChangeNotifier {
-  // Hard-coded sample data, just like the screenshot we're recreating.
+  
+  int selectedIndex =0;
+  
   final List<Course> _courses = const [
+    
     Course(
       instructor: 'Dr. Anjali Menon',
       title: 'AIAPGET 2026 — Complete Preparation',
@@ -47,17 +47,20 @@ class CourseProvider extends ChangeNotifier {
     ),
   ];
 
-  // Read-only access for the UI layer.
+  
   List<Course> get courses => _courses;
 
-  // Example of an action a beginner project might add later:
-  // enrolling in a course. Kept simple on purpose.
+  
   final Set<String> _enrolledTitles = {};
 
   bool isEnrolled(Course course) => _enrolledTitles.contains(course.title);
 
   void enroll(Course course) {
     _enrolledTitles.add(course.title);
-    notifyListeners(); // tells every listening widget to rebuild
+    notifyListeners(); 
+  }
+   void selectCategory(int index) {
+    selectedIndex = index;
+    notifyListeners();
   }
 }

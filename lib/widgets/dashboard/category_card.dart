@@ -1,58 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/model/category_model.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
+import 'package:provider/provider.dart';
+import 'package:homeopathy/provider/category_provider.dart';
 
 class CategoryCard extends StatelessWidget {
-  final CategoryModel category;
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final int index;
 
-  const CategoryCard({super.key, required this.category});
+  const CategoryCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.green.shade100),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.withOpacity(.08),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: 62,
-            height: 62,
-            decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              shape: BoxShape.circle,
+    return Consumer<CategoryProvider>(
+      builder: (context, provider, child) {
+        final isSelected = provider.selectedIndex == index;
+
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) {
+            provider.selectCategory(index);
+          },
+          onExit: (_) {
+            provider.clearSelected();
+          },
+          child: GestureDetector(
+            onTap: () {
+              provider.selectCategory(index);
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.green : Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    size: 40,
+                    color: isSelected ? Colors.white : Colors.green,
+                  ),
+             
+               AppSpacing.h16,
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  ),
+                 
+                  AppSpacing.h8,
+                  Text(
+                    subtitle,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white70 : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Icon(category.icon, color: Colors.green.shade700, size: 30),
           ),
-
-          const SizedBox(height: 20),
-
-          Text(
-            category.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            category.subtitle,
-            style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

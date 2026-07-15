@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:homeopathy/pages/home/dashboard.dart';
 import 'package:homeopathy/provider/category_provider.dart';
 import 'package:homeopathy/provider/course_provider.dart';
+import 'package:homeopathy/provider/faculty_provider.dart';
+import 'package:homeopathy/provider/journey_provider.dart';
+import 'package:homeopathy/provider/live_classes.dart';
+import 'package:homeopathy/provider/pricing_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -10,6 +14,10 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => FacultyProvider()),
+        ChangeNotifierProvider(create: (_) => PricingProvider()),
+        ChangeNotifierProvider(create: (_) => JourneyProvider()),
+        ChangeNotifierProvider(create: (_) => LiveClassProvider()),
       ],
       child: const MyApp(),
     ),

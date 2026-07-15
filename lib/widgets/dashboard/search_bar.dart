@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 
 class SearchBarWidget extends StatelessWidget {
   const SearchBarWidget({super.key});
@@ -18,10 +19,18 @@ class SearchBarWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 20),
+      AppSpacing.w20,
         ElevatedButton(
-          onPressed: () {},
-          child: const Text("Find Courses"),
+          child:  Text("Find Courses",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w200
+          ),),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
+           onPressed: () {},
         )
       ],
     );

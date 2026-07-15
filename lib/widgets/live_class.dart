@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 
 class LiveClassCard extends StatelessWidget {
   const LiveClassCard({super.key});
@@ -23,7 +24,7 @@ class LiveClassCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+           AppSpacing.h25,
 
             Container(
               height: 300,
@@ -36,15 +37,14 @@ class LiveClassCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+          AppSpacing.h20,
 
             const Text(
               "Organon Aphorism 1-70 — Deep Analysis",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(height: 10),
-
+         AppSpacing.h16,
             const ListTile(
               leading: CircleAvatar(),
               title: Text("Dr. Anjali Menon"),

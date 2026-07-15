@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/provider/category_provider.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 import 'package:provider/provider.dart';
-
 import 'category_card.dart';
 
-class CategorySection extends StatelessWidget {
+class CategorySection extends StatefulWidget {
   const CategorySection({super.key});
+
+  @override
+  State<CategorySection> createState() => _CategorySectionState();
+}
+
+class _CategorySectionState extends State<CategorySection> {
+  // int SelectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,8 @@ class CategorySection extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.circle, size: 10, color: Colors.green.shade700),
-              const SizedBox(width: 8),
+              AppSpacing.w8,
+             
               Text(
                 "Popular Categories",
                 style: TextStyle(
@@ -36,21 +44,22 @@ class CategorySection extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 30),
-
+      
+        AppSpacing.h30,
         const Text(
           "Learn what you love. Master what you need.",
           style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
         ),
 
-        const SizedBox(height: 16),
+        AppSpacing.h16,
 
         const Text(
           "From AIAPGET and NEET PG to the classical pillars of homeopathy — pick your track.",
           style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
 
-        const SizedBox(height: 40),
+  
+       AppSpacing.h40,
 
         GridView.builder(
           shrinkWrap: true,
@@ -63,8 +72,16 @@ class CategorySection extends StatelessWidget {
 
             mainAxisExtent: 220,
           ),
+
           itemBuilder: (context, index) {
-            return CategoryCard(category: provider.categories[index]);
+            final category = provider.categories[index];
+
+            return CategoryCard(
+              title: category.title,
+              subtitle: category.subtitle,
+              icon: category.icon,
+              index: index,
+            );
           },
         ),
       ],

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-// The top part of the screen: "Featured Courses" pill, heading,
-// subtitle, and the "Browse all courses" button.
 class SectionHeader extends StatelessWidget {
   const SectionHeader({super.key});
 
+
   @override
   Widget build(BuildContext context) {
-    // LayoutBuilder lets the row of text + button wrap on narrow screens
-    // instead of overflowing — a simple, beginner-friendly responsive trick.
+  
     return LayoutBuilder(
       builder: (context, constraints) {
         final isNarrow = constraints.maxWidth < 600;

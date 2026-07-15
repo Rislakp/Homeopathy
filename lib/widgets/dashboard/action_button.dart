@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 
 class ActionButtons extends StatelessWidget {
   const ActionButtons({super.key});
@@ -12,7 +13,8 @@ class ActionButtons extends StatelessWidget {
           icon: const Icon(Icons.arrow_forward),
           label: const Text("Explore Courses"),
         ),
-        const SizedBox(width: 20),
+      
+        AppSpacing.w20,
         OutlinedButton.icon(
           onPressed: () {},
           icon: const Icon(Icons.play_arrow),

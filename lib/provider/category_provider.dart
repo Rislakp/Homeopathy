@@ -4,6 +4,8 @@ import 'package:homeopathy/model/category_model.dart';
 
 class CategoryProvider extends ChangeNotifier {
 
+int selectedIndex = -1;
+
   final List<CategoryModel> categories = [
 
     CategoryModel(
@@ -53,6 +55,16 @@ class CategoryProvider extends ChangeNotifier {
       subtitle: "12 Courses",
       icon: Icons.science_outlined,
     ),
-
   ];
+
+  void selectCategory(int index) {
+    selectedIndex = index;
+    notifyListeners();
+  }
+
+void clearSelected (){
+  selectedIndex =-1;
+  notifyListeners();
+}
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 import 'package:homeopathy/widgets/dashboard/action_button.dart';
 import 'package:homeopathy/widgets/dashboard/search_bar.dart';
 
@@ -22,10 +23,14 @@ class HeroSection extends StatelessWidget {
           ),
           child: const Text(
             "India's #1 Homeopathy Learning Platform",
+            style: TextStyle(
+              color: Color(0xff009B5A),
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
 
-        const SizedBox(height: 25),
+        AppSpacing.h25,
 
         const Text(
           "Master\nHomeopathy.",
@@ -44,7 +49,7 @@ class HeroSection extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 20),
+       AppSpacing.w20,
 
         const Text(
           "Live classes, mock tests and personal mentorship from India's top homeopathy faculty.",
@@ -54,7 +59,7 @@ class HeroSection extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 30),
+       AppSpacing.h30,
 
         const SearchBarWidget(),
 
@@ -62,7 +67,7 @@ class HeroSection extends StatelessWidget {
 
         const ActionButtons(),
 
-        const SizedBox(height: 30),
+       AppSpacing.h25,
 
         Row(
           children: const [

@@ -1,71 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/model/course_model.dart';
 import 'package:homeopathy/provider/course_provider.dart';
+import 'package:homeopathy/widgets/common_widgetts.dart/size.dart';
 import 'package:provider/provider.dart';
 
-
-// A single, self-contained card widget.
-// It only needs a Course object to render itself — this keeps it
-// reusable and easy to test.
 class CourseCard extends StatelessWidget {
   final Course course;
+  final isSelected = false;
 
   const CourseCard({super.key, required this.course});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _CardImage(course: course),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  course.instructor,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  course.title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _CardStats(course: course),
-                const SizedBox(height: 12),
-                const Divider(height: 1),
-                const SizedBox(height: 12),
-                _CardPriceRow(course: course),
-              ],
+    return InkWell(
+      onTap: () {
+      
+      },
+      child: Container(
+        width: 300,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF2E7D4F) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
             ),
-          ),
-        ],
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CardImage(course: course),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    course.instructor,
+                    style: const TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                 
+                  AppSpacing.h4,
+                  Text(
+                    course.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                
+                  AppSpacing.w10,
+                  _CardStats(course: course),
+             
+                  AppSpacing.h12,
+                  const Divider(height: 1),
+                  
+                  AppSpacing.h12,
+                  _CardPriceRow(course: course),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-// --- Private helper widgets below, split out purely for readability ---
 
 class _CardImage extends StatelessWidget {
   final Course course;
@@ -98,7 +103,8 @@ class _CardImage extends StatelessWidget {
                   background: Colors.white,
                   textColor: Colors.black87,
                 ),
-                const SizedBox(width: 8),
+               
+                AppSpacing.w10,
                 _Badge(
                   text: '${course.discountPercent}% OFF',
                   background: const Color(0xFF1E5631),
@@ -162,11 +168,18 @@ class _CardStats extends StatelessWidget {
       children: [
         const Icon(Icons.access_time, size: 16, color: Colors.grey),
         const SizedBox(width: 4),
-        Text(course.duration, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        AppSpacing.w4,
+        Text(
+          course.duration,
+          style: const TextStyle(color: Colors.grey, fontSize: 13),
+        ),
         const SizedBox(width: 14),
         const Icon(Icons.people_outline, size: 16, color: Colors.grey),
         const SizedBox(width: 4),
-        Text(course.studentsCount, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        Text(
+          course.studentsCount,
+          style: const TextStyle(color: Colors.grey, fontSize: 13),
+        ),
         const SizedBox(width: 14),
         const Icon(Icons.star, size: 16, color: Colors.amber),
         const SizedBox(width: 4),
