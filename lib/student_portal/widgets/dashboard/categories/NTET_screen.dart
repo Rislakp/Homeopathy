@@ -1,0 +1,1 @@
+export 'screens/ntet_screen.dart';

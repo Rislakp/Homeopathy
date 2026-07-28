@@ -1,0 +1,1 @@
+export 'screens/clinical_screen.dart';
