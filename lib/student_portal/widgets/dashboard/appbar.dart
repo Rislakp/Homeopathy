@@ -1,4 +1,5 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:homeopathy/student_portal/widgets/dashboard/unani/unani.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -20,27 +21,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           AppSpacing.w10,
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Homoeo",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  "White Coat ",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    wordSpacing: 3.0,
+                 
+                  ),
                 ),
-              ),
-              Text(
-                "ACADEMY",
-                style: TextStyle(
-                  color: Colors.grey,
-                  letterSpacing: 2,
-                  fontSize: 10,
+                Text(
+                  "ACADEMY",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    letterSpacing: 2,
+                    fontSize: 10,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -50,8 +57,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         _menuItem(context, "Mock Tests", const MockTest()),
         _menuItem(context, "Faculty", const FacultyScreen()),
         _menuItem(context, "Success Stories", const SucessStories()),
-        _menuItem(context, "Blog", const BlogScreen()),
-        _menuItem(context, "Pricing", const PriceScreen()),
+        //_menuItem(context, "Blog", const BlogScreen()),
+        _menuItem(context, "Pricing", const PricingScreen()),
+        _menuItem(context, "unani", const  UnaniScreen(),  ),
 
         // _menuItem( context,"More", const MoreScreen() ),
         AppSpacing.w20,

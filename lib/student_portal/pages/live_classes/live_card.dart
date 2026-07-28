@@ -9,7 +9,7 @@ class LiveSessionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 360, // Fixed width for each card
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -61,7 +61,7 @@ class LiveSessionCard extends StatelessWidget {
             ],
           ),
           
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // Title
           Text(
@@ -80,18 +80,20 @@ class LiveSessionCard extends StatelessWidget {
           // Instructor
           Text(
             session.instructor,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 15,
               color: Colors.grey.shade600,
             ),
           ),
           
-          const Spacer(),
+          const SizedBox(height: 20),
 
           // Countdown Timer Box
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
               color: Colors.green.shade50,
               borderRadius: BorderRadius.circular(20),
@@ -111,7 +113,7 @@ class LiveSessionCard extends StatelessWidget {
                 Text(
                   session.countdown,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                     letterSpacing: 2.0,
@@ -126,7 +128,7 @@ class LiveSessionCard extends StatelessWidget {
           // Register Button
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 44,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(

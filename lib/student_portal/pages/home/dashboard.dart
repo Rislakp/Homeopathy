@@ -1,13 +1,13 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-class Student_DashboardScreen extends StatefulWidget {
-  const Student_DashboardScreen({super.key});
+class StudentDashboardScreen extends StatefulWidget {
+  const StudentDashboardScreen({super.key});
 
   @override
-  State<Student_DashboardScreen> createState() => Student_DashboardScreenState();
+  State<StudentDashboardScreen> createState() => StudentDashboardScreenState();
 }
 
-class Student_DashboardScreenState extends State<Student_DashboardScreen> {
+class StudentDashboardScreenState extends State<StudentDashboardScreen> {
   @override
   void initState() {
     super.initState();
@@ -36,8 +36,11 @@ class Student_DashboardScreenState extends State<Student_DashboardScreen> {
                   Expanded(flex: 4, child: DemoClassVideo()),
                 ],
               ),
+              // category
               const SizedBox(height: 80),
-              const CategorySection(),
+              const CategoryScreen(),
+
+              
               const SizedBox(height: 60),
               const SectionHeader(),
               const SizedBox(height: 32),

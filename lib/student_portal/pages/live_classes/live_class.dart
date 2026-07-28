@@ -1,6 +1,5 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-
 class LiveClassesSection extends StatelessWidget {
   LiveClassesSection({super.key});
 
@@ -79,10 +78,7 @@ class LiveClassesSection extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     "Interactive sessions, doubt-solving, and recorded playback — all included.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -93,14 +89,20 @@ class LiveClassesSection extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   side: BorderSide(color: Colors.grey.shade300),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                 ),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "See full schedule",
-                      style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(width: 8),
                     Icon(Icons.arrow_forward, size: 16, color: Colors.black87),
@@ -109,17 +111,17 @@ class LiveClassesSection extends StatelessWidget {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 40),
 
           // Horizontal List of Cards
           SizedBox(
-            height: 320, // Fixed height for the horizontal list
+            height: 320,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: sessions.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 24),
-              itemBuilder: (context, index) {
+              separatorBuilder: (_, __) => const SizedBox(width: 24),
+              itemBuilder: (_, index) {
                 return LiveSessionCard(session: sessions[index]);
               },
             ),
@@ -129,5 +131,3 @@ class LiveClassesSection extends StatelessWidget {
     );
   }
 }
-
-

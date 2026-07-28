@@ -1,47 +1,24 @@
-import 'package:homeopathy/Admin_portal/auth/admin_login_screen.dart';
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/admin_app.dart';
+import 'package:homeopathy/student_portal/student_app.dart';
+
+
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CategoryProvider()),
-        ChangeNotifierProvider(create: (_) => CourseProvider()),
-        ChangeNotifierProvider(create: (_) => FacultyProvider()),
-        ChangeNotifierProvider(create: (_) => PricingProvider()),
-        ChangeNotifierProvider(create: (_) => JourneyProvider()),
-        // ChangeNotifierProvider(create: (_) => LiveClassProvider()),
-        ChangeNotifierProvider(create: (_) => StatsProvider()),
-        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const RootApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RootApp extends StatelessWidget {
+  const RootApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'White coat Academy',
+      bool isAdmin = false
+      ;
 
-      theme: ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white,
-        primaryColor: const Color(0xFF2E7D32),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2E7D32)),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          foregroundColor: Colors.black,
-        ),
-
-      ),
-
-      home: const AdminLoginScreen(),
-    );
+    return isAdmin
+        ? const WhiteCoatAdminPortal()
+        : const WhiteCoatStudentPortal();
   }
 }
