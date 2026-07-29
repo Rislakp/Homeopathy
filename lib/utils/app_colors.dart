@@ -22,4 +22,6 @@ class AppColors {
 
   static const Color archivedBg = Color(0xFFFEE2E2);
   static const Color archivedText = Color(0xFFB91C1C);
+
+  static get primaryGreen => null;
 }

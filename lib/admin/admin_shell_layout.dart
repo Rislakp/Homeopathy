@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/students/students_screen.dart';
 import 'package:provider/provider.dart';
 import 'models/admin_menu_item.dart';
 import 'providers/drawer_provider.dart';
@@ -13,7 +14,6 @@ import 'screens/coupons/coupons_screen.dart';
 import 'screens/courses/courses_screen.dart';
 import 'screens/dashboard/dashboard_screen.dart';
 import 'screens/demo_videos/demo_videos_screen.dart';
-import 'screens/events/events_screen.dart';
 import 'screens/exams/exams_screen.dart';
 import 'screens/live_classes/live_classes_screen.dart';
 import 'screens/messages/messages_screen.dart';
@@ -21,19 +21,15 @@ import 'screens/notes/notes_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
 import 'screens/payments/payments_screen.dart';
 import 'screens/permissions/permissions_screen.dart';
-import 'screens/placements/placements_screen.dart';
 import 'screens/question_bank/question_bank_screen.dart';
 import 'screens/recorded_classes/recorded_classes_screen.dart';
 import 'screens/refunds/refunds_screen.dart';
 import 'screens/reports/reports_screen.dart';
 import 'screens/revenue/revenue_screen.dart';
 import 'screens/roles/roles_screen.dart';
-import 'screens/settings/api_keys_screen.dart';
 import 'screens/settings/app_settings_screen.dart';
-import 'screens/settings/backup_screen.dart';
 import 'screens/settings/branding_screen.dart';
 import 'screens/settings/email_settings_screen.dart';
-import 'screens/settings/firebase_screen.dart';
 import 'screens/settings/general_settings_screen.dart';
 import 'screens/settings/logs_screen.dart';
 import 'screens/settings/payment_gateway_screen.dart';
@@ -121,8 +117,8 @@ class AdminShellLayout extends StatelessWidget {
       // Academics
       case AdminMenuItem.teachers:
         return const TeachersScreen();
-        // case AdminMenuItem.students:
-        // return const StudentScreen();
+        case AdminMenuItem.students:
+        return const StudentsScreen();
       case AdminMenuItem.courses:
         return const CourseManagementPage();
       // return const CoursesScreen();
@@ -144,20 +140,20 @@ class AdminShellLayout extends StatelessWidget {
         return const QuestionBankScreen();
       case AdminMenuItem.exams:
         return const ExamsScreen();
-      case AdminMenuItem.admissions:
-        return const AdmissionsScreen();
+      // case AdminMenuItem.admissions:
+      //   return const AdmissionsScreen();
       case AdminMenuItem.fees:
         return const SubscriptionPlansScreen();
 
       // Events
-      case AdminMenuItem.events:
-        return const EventsScreen();
-      case AdminMenuItem.workshops:
-        return const WorkshopsScreen();
-      case AdminMenuItem.webinars:
-        return const WebinarsScreen();
-      case AdminMenuItem.placements:
-        return const PlacementsScreen();
+      // case AdminMenuItem.events:
+      //   return const EventsScreen();
+      // case AdminMenuItem.workshops:
+      //   return const WorkshopsScreen();
+      // case AdminMenuItem.webinars:
+      //   return const WebinarsScreen();
+      // case AdminMenuItem.placements:
+      //   return const PlacementsScreen();
 
       // Communication
       case AdminMenuItem.notifications:
@@ -206,12 +202,12 @@ class AdminShellLayout extends StatelessWidget {
         return const SmsSettingsScreen();
       case AdminMenuItem.paymentGateway:
         return const PaymentGatewayScreen();
-      case AdminMenuItem.firebase:
-        return const FirebaseScreen();
-      case AdminMenuItem.apiKeys:
-        return const ApiKeysScreen();
-      case AdminMenuItem.backup:
-        return const BackupScreen();
+      // case AdminMenuItem.firebase:
+      //   return const FirebaseScreen();
+      // case AdminMenuItem.apiKeys:
+      //   return const ApiKeysScreen();
+      // case AdminMenuItem.backup:
+      //   return const BackupScreen();
       case AdminMenuItem.security:
         return const SecurityScreen();
       case AdminMenuItem.logs:

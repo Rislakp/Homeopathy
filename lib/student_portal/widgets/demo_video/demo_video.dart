@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:homeopathy/student_portal/pages/course/constants/app_colors.dart';
+import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/app_colour.dart' show AppColors;
+
+
 
 
 class DemoItem {
@@ -171,7 +173,7 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
               children: [
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.smart_display_rounded,
                       color: AppColors.primaryGreen,
                       size: 24,
@@ -777,19 +779,19 @@ class _InteractiveActionButtonState extends State<_InteractiveActionButton> {
             height: 48,
             decoration: BoxDecoration(
               color: widget.isPrimary
-                  ? (_isHovered ? AppColors.primaryGreen : AppColors.buttonGreen)
+                  ? (_isHovered ? AppColors.primaryHover : AppColors.primary)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
               border: widget.isPrimary
                   ? null
                   : Border.all(
-                      color: _isHovered ? AppColors.primaryGreen : AppColors.border,
+                      color: _isHovered ? AppColors.primaryHover : AppColors.border,
                       width: 1.5,
                     ),
               boxShadow: [
                 if (widget.isPrimary && _isHovered)
                   BoxShadow(
-                    color: AppColors.buttonGreen.withOpacity(0.3),
+                    color: AppColors.primary.withOpacity(0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -803,7 +805,7 @@ class _InteractiveActionButtonState extends State<_InteractiveActionButton> {
                   fontWeight: FontWeight.bold,
                   color: widget.isPrimary
                       ? Colors.white
-                      : (_isHovered ? AppColors.primaryGreen : AppColors.textPrimary),
+                      : (_isHovered ? AppColors.primaryHover : AppColors.textPrimary),
                 ),
               ),
             ),

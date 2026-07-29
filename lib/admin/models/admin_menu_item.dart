@@ -20,6 +20,7 @@ enum AdminMenuItem {
 
   // Academics
   teachers(AdminMenuSection.academics, 'Teachers', Icons.school_rounded),
+  students(AdminMenuSection.academics, ' Students', Icons.people,),
   courses(AdminMenuSection.academics, 'Courses', Icons.menu_book_rounded),
   categories(AdminMenuSection.academics, 'Categories', Icons.category_rounded),
   videos(AdminMenuSection.academics, 'Videos', Icons.play_circle_fill_rounded),
@@ -30,18 +31,18 @@ enum AdminMenuItem {
   notes(AdminMenuSection.academics, 'Notes', Icons.description_rounded),
   questionBank(AdminMenuSection.academics, 'Question Bank', Icons.quiz_rounded),
   exams(AdminMenuSection.academics, 'Exams', Icons.fact_check_rounded),
-  certificates(AdminMenuSection.academics, 'Certificates', Icons.workspace_premium_rounded),
-  admissions(AdminMenuSection.academics, 'Admissions', Icons.how_to_reg_rounded),
-  attendance(AdminMenuSection.academics, 'Attendance', Icons.rule_rounded),
+  // certificates(AdminMenuSection.academics, 'Certificates', Icons.workspace_premium_rounded),
+  // admissions(AdminMenuSection.academics, 'Admissions', Icons.how_to_reg_rounded),
+  // attendance(AdminMenuSection.academics, 'Attendance', Icons.rule_rounded),
   fees(AdminMenuSection.academics, 'Fees', Icons.payments_rounded),
   library(AdminMenuSection.academics, 'Library', Icons.local_library_rounded),
-  hostel(AdminMenuSection.academics, 'Hostel', Icons.apartment_rounded),
+  // hostel(AdminMenuSection.academics, 'Hostel', Icons.apartment_rounded),
 
   // Events
-  events(AdminMenuSection.events, 'Events', Icons.event_rounded),
-  workshops(AdminMenuSection.events, 'Workshops', Icons.build_circle_rounded),
-  webinars(AdminMenuSection.events, 'Webinars', Icons.video_call_rounded),
-  placements(AdminMenuSection.events, 'Placements', Icons.work_rounded),
+  // events(AdminMenuSection.events, 'Events', Icons.event_rounded),
+  // workshops(AdminMenuSection.events, 'Workshops', Icons.build_circle_rounded),
+  // webinars(AdminMenuSection.events, 'Webinars', Icons.video_call_rounded),
+  // placements(AdminMenuSection.events, 'Placements', Icons.work_rounded),
 
   // Communication
   notifications(AdminMenuSection.communication, 'Notifications', Icons.notifications_rounded),
@@ -72,9 +73,9 @@ enum AdminMenuItem {
   emailSettings(AdminMenuSection.settings, 'Email Settings', Icons.email_rounded),
   smsSettings(AdminMenuSection.settings, 'SMS Settings', Icons.sms_rounded),
   paymentGateway(AdminMenuSection.settings, 'Payment Gateway', Icons.credit_card_rounded),
-  firebase(AdminMenuSection.settings, 'Firebase', Icons.local_fire_department_rounded),
-  apiKeys(AdminMenuSection.settings, 'API Keys', Icons.vpn_key_rounded),
-  backup(AdminMenuSection.settings, 'Backup', Icons.cloud_download_rounded),
+  // firebase(AdminMenuSection.settings, 'Firebase', Icons.local_fire_department_rounded),
+  // apiKeys(AdminMenuSection.settings, 'API Keys', Icons.vpn_key_rounded),
+  // backup(AdminMenuSection.settings, 'Backup', Icons.cloud_download_rounded),
   security(AdminMenuSection.settings, 'Security', Icons.shield_rounded),
   logs(AdminMenuSection.settings, 'Logs', Icons.receipt_long_rounded),
   activityHistory(AdminMenuSection.settings, 'Activity History', Icons.history_rounded),

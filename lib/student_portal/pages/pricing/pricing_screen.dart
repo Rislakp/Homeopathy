@@ -3,6 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'pricing_provider.dart';
 import 'pricing_card.dart';
+import 'package:homeopathy/responsive/responsive_layout.dart';
+import 'package:homeopathy/responsive/mobile/pricing_mobile.dart';
+import 'package:homeopathy/responsive/tablet/pricing_tablet.dart';
+import 'package:homeopathy/responsive/desktop/pricing_desktop.dart';
 
 class PricingScreen extends StatelessWidget {
   const PricingScreen({super.key});
@@ -28,111 +32,94 @@ class _PricingScreenContent extends StatelessWidget {
     final isMobile = width < 768;
     final isTablet = width >= 768 && width < 1200;
 
-    return Scaffold(
-      backgroundColor: scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFF1E293B), size: 20),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          "Membership Plans",
-          style: GoogleFonts.outfit(
-            color: const Color(0xFF1E293B),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 1. Top Section (Badge, Heading, Subtitle)
-              _buildHeaderSection(isMobile),
-
-              // 2. Responsive Cards Grid
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 16 : (isTablet ? 24 : 40),
-                  vertical: 30,
-                ),
-                child: Consumer<PricingProvider>(
-                  builder: (context, provider, child) {
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
-                        int columns = 5;
-                        double cardHeight = 440; // Safe baseline card height to support font spacing
-
-                        if (isMobile) {
-                          columns = 1;
-                          cardHeight = 390;
-                        } else if (isTablet) {
-                          columns = 2;
-                          cardHeight = 410;
-                        }
-
-                        // Calculate aspect ratio dynamically to prevent RenderFlex overflow
-                        final double gridWidth = constraints.maxWidth;
-                        final double gap = 20.0;
-                        final double cardWidth = (gridWidth - (gap * (columns - 1))) / columns;
-                        final double childAspectRatio = cardWidth / cardHeight;
-
-                        return Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 1400),
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.plans.length,
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: columns,
-                                mainAxisSpacing: 36, // extra vertical spacing to accommodate popular badges
-                                crossAxisSpacing: gap,
-                                childAspectRatio: childAspectRatio,
-                              ),
-                              itemBuilder: (context, index) {
-                                final plan = provider.plans[index];
-                                final isSelected = provider.selectedPlanId == plan.id;
-
-                                return _FadeInStaggered(
-                                  index: index,
-                                  child: PricingCard(
-                                    plan: plan,
-                                    isSelected: isSelected,
-                                    onSelect: () {
-                                      provider.selectPlan(plan.id);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Plan selected: ${plan.name}'),
-                                          behavior: SnackBarBehavior.floating,
-                                          backgroundColor: primaryGreen,
-                                          duration: const Duration(seconds: 1),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+    final mainBody = Container(
+      color: scaffoldBg,
+      width: double.infinity,
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildHeaderSection(isMobile),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : (isTablet ? 24 : 40),
+                vertical: 30,
               ),
-              const SizedBox(height: 80),
-            ],
-          ),
+              child: Consumer<PricingProvider>(
+                builder: (context, provider, child) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      int columns = 5;
+                      double cardHeight = 440;
+
+                      if (isMobile) {
+                        columns = 1;
+                        cardHeight = 390;
+                      } else if (isTablet) {
+                        columns = 2;
+                        cardHeight = 410;
+                      }
+
+                      final double gridWidth = constraints.maxWidth;
+                      final double gap = 20.0;
+                      final double cardWidth = (gridWidth - (gap * (columns - 1))) / columns;
+                      final double childAspectRatio = cardWidth / cardHeight;
+
+                      return Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1400),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: provider.plans.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: columns,
+                              mainAxisSpacing: 36,
+                              crossAxisSpacing: gap,
+                              childAspectRatio: childAspectRatio,
+                            ),
+                            itemBuilder: (context, index) {
+                              final plan = provider.plans[index];
+                              final isSelected = provider.selectedPlanId == plan.id;
+
+                              return _FadeInStaggered(
+                                index: index,
+                                child: PricingCard(
+                                  plan: plan,
+                                  isSelected: isSelected,
+                                  onSelect: () {
+                                    provider.selectPlan(plan.id);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Plan selected: ${plan.name}'),
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: primaryGreen,
+                                        duration: const Duration(seconds: 1),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 80),
+          ],
         ),
       ),
+    );
+
+    return ResponsiveLayout(
+      mobile: PricingMobile(body: mainBody),
+      tablet: PricingTablet(body: mainBody),
+      desktop: PricingDesktop(body: mainBody),
     );
   }
 
@@ -150,7 +137,6 @@ class _PricingScreenContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Small badge
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
@@ -168,8 +154,6 @@ class _PricingScreenContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Large bold heading
               Text(
                 "Simple plans.\nSerious outcomes.",
                 textAlign: TextAlign.center,
@@ -181,8 +165,6 @@ class _PricingScreenContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Subtitle
               Text(
                 "Choose the best plan for your learning journey.",
                 textAlign: TextAlign.center,
@@ -200,7 +182,6 @@ class _PricingScreenContent extends StatelessWidget {
   }
 }
 
-// Fade in staggered animation widget
 class _FadeInStaggered extends StatelessWidget {
   final Widget child;
   final int index;
