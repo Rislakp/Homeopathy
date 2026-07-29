@@ -19,7 +19,6 @@ export 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.da
 export 'package:homeopathy/student_portal/widgets/dashboard/journey/journey_card.dart';
 export 'package:homeopathy/student_portal/widgets/dashboard/pricing/feature_tile.dart';
 export 'package:homeopathy/student_portal/widgets/dashboard/pricing/pricing_card.dart';
-export 'package:homeopathy/student_portal/widgets/dashboard/category_card.dart';
 export 'package:homeopathy/student_portal/widgets/stats/stats_card.dart';
 export 'package:homeopathy/student_portal/widgets/dashboard/action_button.dart';
 export 'package:homeopathy/student_portal/widgets/dashboard/search_bar.dart';
@@ -47,7 +46,6 @@ export 'package:homeopathy/student_portal/provider/subscription/Subscription_Pro
 
 //pages
 export 'package:homeopathy/student_portal/pages/blog/blog_screen.dart';
-export 'package:homeopathy/student_portal/pages/course/course_screen.dart';
 export 'package:homeopathy/student_portal/pages/faculty/faculty.dart';
 export 'package:homeopathy/student_portal/pages/mock_test/mock_test.dart';
 export 'package:homeopathy/student_portal/pages/pricing/pricing_screen.dart';
