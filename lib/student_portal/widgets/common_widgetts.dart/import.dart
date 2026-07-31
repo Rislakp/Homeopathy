@@ -54,4 +54,65 @@ export 'package:homeopathy/student_portal/pages/home/dashboard.dart';
 export 'package:homeopathy/student_portal/pages/live_classes/live_class.dart';
 export 'package:homeopathy/student_portal/pages/live_classes/live_card.dart';
 
-//import 'package:homeopathy/widgets/common_widgetts.dart/import.dart';
+//admin portal
+
+export 'package:homeopathy/admin/widgets/responsive/responsive_layout.dart';
+export 'package:homeopathy/admin/models/admin_menu_item.dart';
+export 'package:homeopathy/admin/providers/drawer_provider.dart';
+export 'package:homeopathy/admin/screens/admins/admins_screen.dart';
+export 'package:homeopathy/admin/screens/analytics/analytics_screen.dart';
+export 'package:homeopathy/admin/screens/announcements/announcements_screen.dart';
+export 'package:homeopathy/admin/screens/assignments/assignments_screen.dart';
+export 'package:homeopathy/admin/screens/categories/categories_screen.dart';
+export 'package:homeopathy/admin/screens/coupons/coupons_screen.dart';
+export 'package:homeopathy/admin/screens/courses/courses_screen.dart';
+export 'package:homeopathy/admin/screens/dashboard/dashboard_screen.dart';
+export 'package:homeopathy/admin/screens/demo_videos/demo_videos_screen.dart';
+export 'package:homeopathy/admin/screens/exams/exams_screen.dart';
+export 'package:homeopathy/admin/screens/live_classes/live_classes_screen.dart';
+export 'package:homeopathy/admin/screens/messages/messages_screen.dart';
+export 'package:homeopathy/admin/screens/notes/notes_screen.dart';
+export 'package:homeopathy/admin/screens/notifications/notifications_screen.dart';
+export 'package:homeopathy/admin/screens/payments/payments_screen.dart';
+export 'package:homeopathy/admin/screens/permissions/permissions_screen.dart';
+export 'package:homeopathy/admin/screens/question_bank/question_bank_screen.dart';
+export 'package:homeopathy/admin/screens/recorded_classes/recorded_classes_screen.dart';
+export 'package:homeopathy/admin/screens/refunds/refunds_screen.dart';
+export 'package:homeopathy/admin/screens/reports/reports_screen.dart';
+export 'package:homeopathy/admin/screens/revenue/revenue_screen.dart';
+export 'package:homeopathy/admin/screens/roles/roles_screen.dart';
+export 'package:homeopathy/admin/screens/settings/activity_history_screen.dart';
+export 'package:homeopathy/admin/screens/settings/app_settings_screen.dart';
+export 'package:homeopathy/admin/screens/settings/branding_screen.dart';
+export 'package:homeopathy/admin/screens/settings/email_settings_screen.dart';
+export 'package:homeopathy/admin/screens/settings/general_settings_screen.dart';
+export 'package:homeopathy/admin/screens/settings/logs_screen.dart';
+export 'package:homeopathy/admin/screens/settings/payment_gateway_screen.dart';
+export 'package:homeopathy/admin/screens/settings/security_screen.dart';
+export 'package:homeopathy/admin/screens/settings/sms_settings_screen.dart';
+export 'package:homeopathy/admin/screens/students/students_screen.dart';
+export 'package:homeopathy/admin/screens/subscriptions/subscriptions_screen.dart';
+export 'package:homeopathy/admin/screens/support/support_screen.dart';
+export 'package:homeopathy/admin/screens/teachers/teachers_screen.dart';
+export 'package:homeopathy/admin/screens/videos/videos_screen.dart';
+export 'package:homeopathy/admin/theme/admin_colors.dart';
+export 'package:homeopathy/admin/widgets/common/admin_header.dart';
+export 'package:homeopathy/admin/widgets/drawer/app_drawer.dart';
+
+export 'package:homeopathy/admin/providers/video_provider.dart';
+export 'package:homeopathy/admin/providers/course_management_provider.dart';
+export 'package:homeopathy/admin/providers/live_class_provider.dart';
+export 'package:homeopathy/admin/providers/subscription_plan_provider.dart';
+export 'package:homeopathy/admin/screens/auth/login/login_screen.dart';
+
+export 'package:homeopathy/admin/providers/admin_data_provider.dart';
+export 'package:homeopathy/admin/theme/admin_theme.dart';
+
+export 'package:homeopathy/admin/screens/auth/login/widgets/left_brand_panel.dart';
+export 'package:homeopathy/admin/screens/auth/login/widgets/login_form.dart';
+export 'package:homeopathy/admin/admin_shell_layout.dart';
+export 'package:homeopathy/admin/screens/auth/login/models/login_model.dart';
+export 'package:homeopathy/admin/screens/auth/login/widgets/custom_textfield.dart';
+export 'package:homeopathy/admin/screens/auth/login/widgets/footer_text.dart';
+export 'package:homeopathy/admin/screens/auth/login/widgets/login_button.dart';
+export 'package:homeopathy/admin/screens/auth/login/widgets/remember_me.dart';
