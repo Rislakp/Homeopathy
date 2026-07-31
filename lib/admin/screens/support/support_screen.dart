@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import '../../models/admin_menu_item.dart';
-import '../../widgets/common/universal_admin_screen.dart';
+import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
