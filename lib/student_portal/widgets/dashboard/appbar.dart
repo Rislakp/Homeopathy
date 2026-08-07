@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:homeopathy/student_portal/pages/courses/courses_screen.dart';
-import 'package:homeopathy/student_portal/pages/live_classes/live_classes_page.dart';
+
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 import 'package:homeopathy/student_portal/widgets/dashboard/unani/unani.dart';
 

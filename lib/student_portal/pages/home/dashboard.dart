@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
-import 'package:homeopathy/responsive/responsive_layout.dart';
 import 'package:homeopathy/responsive/mobile/dashboard_mobile.dart';
 import 'package:homeopathy/responsive/tablet/dashboard_tablet.dart';
 import 'package:homeopathy/responsive/desktop/dashboard_desktop.dart';

@@ -1,19 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/screens/courses/courses_screen.dart';
-import 'package:homeopathy/admin/screens/dashboard/dashboard_screen.dart';
-import 'package:homeopathy/admin/screens/question_bank/question_bank_screen.dart';
-import 'package:homeopathy/admin/screens/students/students_screen.dart';
-import 'package:homeopathy/utils/app_colors.dart';
-import 'package:provider/provider.dart';
-import 'models/admin_menu_item.dart';
-import 'providers/drawer_provider.dart';
-import 'widgets/common/admin_header.dart';
-import 'widgets/drawer/app_drawer.dart';
-import 'widgets/responsive/responsive_layout.dart';
+import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-class AdminShellLayout extends StatelessWidget {
+class AdminShellLayout extends StatefulWidget {
   const AdminShellLayout({super.key});
 
+  @override
+  State<AdminShellLayout> createState() => _AdminShellLayoutState();
+}
+
+class _AdminShellLayoutState extends State<AdminShellLayout> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final drawerProvider = context.watch<DrawerProvider>();
@@ -21,7 +16,9 @@ class AdminShellLayout extends StatelessWidget {
     final isMobile = ResponsiveLayout.isMobile(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      key: _scaffoldKey,
+
+      backgroundColor: AdminColors.background,
       drawer: isMobile ? const Drawer(child: AppDrawer()) : null,
       body: Row(
         children: [
@@ -36,10 +33,10 @@ class AdminShellLayout extends StatelessWidget {
                 AdminHeader(
                   title: selectedMenu.label,
                   showMenuButton: isMobile,
-                  onMenuPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
                   subtitle: '',
+                  onMenuPressed: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
                 ),
 
                 // Animated Active Screen Container
@@ -80,9 +77,9 @@ class AdminShellLayout extends StatelessWidget {
         return const DashboardScreen();
 
       // Academics
-      // case AdminMenuItem.teachers:
-      //   return const TeachersScreen();
-        case AdminMenuItem.students:
+      case AdminMenuItem.teachers:
+        return const TeachersScreen();
+      case AdminMenuItem.students:
         return const StudentsScreen();
       case AdminMenuItem.courses:
         return const CourseManagementPage();

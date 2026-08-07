@@ -1,101 +1,108 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import '../models/course_model.dart';
-// import '../providers/course_provider.dart';
-// import '../utils/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 
-// class EditCourseDialog extends StatefulWidget {
-//   final CourseModel course;
 
-//   const EditCourseDialog({
-//     super.key,
-//     required this.course,
-//   });
+import 'package:provider/provider.dart';
 
-//   @override
-//   State<EditCourseDialog> createState() => _EditCourseDialogState();
-// }
+import '../../../../utils/app_colors.dart';
 
-// class _EditCourseDialogState extends State<EditCourseDialog> {
-//   final _formKey = GlobalKey<FormState>();
 
-//   late String _title;
-//   late String _instructor;
-//   late String _category;
-//   late double _price;
-//   late int _students;
-//   late String _status;
-//   late String _description;
-//   late String _image;
+class EditCourseDialog extends StatefulWidget {
+  final CourseModel course;
 
-//   final List<String> _categories = [
-//     'Anatomy',
-//     'Physiology',
-//     'Pathology',
-//     'Materia Medica',
-//     'Repertory',
-//     'Organon',
-//   ];
+  const EditCourseDialog({
+    super.key,
+    required this.course,
+  });
 
-//   final List<String> _statuses = [
-//     'Published',
-//     'Draft',
-//     'Archived',
-//   ];
+  @override
+  State<EditCourseDialog> createState() => _EditCourseDialogState();
+}
 
-//   final Map<String, IconData> _iconOptions = {
-//     'menu_book': Icons.menu_book,
-//     'auto_stories': Icons.auto_stories,
-//     'troubleshoot': Icons.troubleshoot,
-//     'history_edu': Icons.history_edu,
-//     'accessibility': Icons.accessibility,
-//     'favorite': Icons.favorite,
-//     'biotech': Icons.biotech,
-//     'groups': Icons.groups,
-//     'vaccines': Icons.vaccines,
-//     'local_hospital': Icons.local_hospital,
-//     'content_cut': Icons.content_cut,
-//     'gavel': Icons.gavel,
-//   };
+class _EditCourseDialogState extends State<EditCourseDialog> {
+  final _formKey = GlobalKey<FormState>();
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     final c = widget.course;
-//     _title = c.title;
-//     _instructor = c.instructor;
-//     _category = c.category;
-//     _price = c.price;
-//     _students = c.students;
-//     _status = c.status;
-//     _description = c.description;
-//     _image = c.image;
-//   }
+  late String _title;
+  late String _instructor;
+  late String _category;
+  late double _price;
+  late int _students;
+  late String _status;
+  late String _description;
+  late String _image;
 
-//   void _onSave() {
-//     if (!_formKey.currentState!.validate()) return;
-//     _formKey.currentState!.save();
+  final List<String> _categories = [
+    'Anatomy',
+    'Physiology',
+    'Pathology',
+    'Materia Medica',
+    'Repertory',
+    'Organon',
+  ];
+
+  final List<String> _statuses = [
+    'Published',
+    'Draft',
+    'Archived',
+  ];
+
+  final Map<String, IconData> _iconOptions = {
+    'menu_book': Icons.menu_book,
+    'auto_stories': Icons.auto_stories,
+    'troubleshoot': Icons.troubleshoot,
+    'history_edu': Icons.history_edu,
+    'accessibility': Icons.accessibility,
+    'favorite': Icons.favorite,
+    'biotech': Icons.biotech,
+    'groups': Icons.groups,
+    'vaccines': Icons.vaccines,
+    'local_hospital': Icons.local_hospital,
+    'content_cut': Icons.content_cut,
+    'gavel': Icons.gavel,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    final c = widget.course;
+    _title = c.title;
+    _instructor = c.instructor;
+    _category = c.category;
+    _price = c.price;
+    _students = c.students;
+    _status = c.status;
+    _description = c.description;
+    _image = c.image;
+  }
+
+  void _onSave() {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
 
     final provider = context.read<CourseProvider>();
-    debugPrint('Updating course: $_title. Students count: $_students. Icon: $_image');
     final updated = widget.course.copyWith(
-      courseTitle: _title,
+      title: _title,
       instructor: _instructor,
       category: _category,
       price: _price,
+      students: _students,
+      status: _status,
+      description: _description,
+      image: _image,
     );
 
-    provider.updateCourse(updated as String);
+    provider.updateCourse(updated as CourseModel);
     Navigator.of(context).pop();
 
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(
-//         content: Text('Course updated successfully!'),
-//         backgroundColor: AppColors.primary,
-//         behavior: SnackBarBehavior.floating,
-//       ),
-//     );
-//   }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Course updated successfully!'),
+        backgroundColor: AppColors.primary,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,42 +199,42 @@
                             ),
                           ),
                           const SizedBox(width: 16),
-                          // Expanded(
-                          //   child: TextFormField(
-                          //     initialValue: _students.toString(),
-                          //     decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
-                          //     keyboardType: TextInputType.number,
-                          //     validator: (v) {
-                          //       if (v == null || v.trim().isEmpty) return 'Student Count is required';
-                          //       if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
-                          //       return null;
-                          //     },
-                          //     onSaved: (v) => _students = int.parse(v!.trim()),
-                          //   ),
-                          // ),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: _students.toString(),
+                              decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
+                              keyboardType: TextInputType.number,
+                              validator: (v) {
+                                if (v == null || v.trim().isEmpty) return 'Student Count is required';
+                                if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
+                                return null;
+                              },
+                              onSaved: (v) => _students = int.parse(v!.trim()),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       // Dropdown of Illustration Icon
-                      // DropdownButtonFormField<String>(
-                      //   value: _image,
-                      //   decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
-                      //   items: _iconOptions.keys.map((k) {
-                      //     return DropdownMenuItem(
-                      //       value: k,
-                      //       child: Row(
-                      //         children: [
-                      //           Icon(_iconOptions[k], size: 18, color: AppColors.primary),
-                      //           const SizedBox(width: 10),
-                      //           Text(k.replaceAll('_', ' ')),
-                      //         ],
-                      //       ),
-                      //     );
-                      //   }).toList(),
-                      //   onChanged: (v) {
-                      //     if (v != null) setState(() => _image = v);
-                      //   },
-                      // ),
+                      DropdownButtonFormField<String>(
+                        value: _image,
+                        decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
+                        items: _iconOptions.keys.map((k) {
+                          return DropdownMenuItem(
+                            value: k,
+                            child: Row(
+                              children: [
+                                Icon(_iconOptions[k], size: 18, color: AppColors.primary),
+                                const SizedBox(width: 10),
+                                Text(k.replaceAll('_', ' ')),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (v) {
+                          if (v != null) setState(() => _image = v);
+                        },
+                      ),
                       const SizedBox(height: 16),
                       // Description
                       TextFormField(

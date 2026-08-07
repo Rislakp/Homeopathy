@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/providers/course_provider.dart';
+import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:homeopathy/admin/screens/live_classes/widgets/loading_widget.dart';
-import 'package:homeopathy/widgets/course_grid.dart';
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/app_colour.dart';
-import 'package:homeopathy/widgets/course_search_filter.dart';
 import 'package:homeopathy/widgets/empty_course_widget.dart';
 import 'package:provider/provider.dart';
+import '../../../../utils/app_colors.dart';
+import '../widgets/course_grid.dart';
+import '../widgets/course_header.dart';
+import '../widgets/course_search_filter.dart';
+
 
 class CourseBody extends StatelessWidget {
   const CourseBody({super.key});
@@ -23,7 +25,8 @@ class CourseBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-         
+            // Top title and subtitle description
+            const CourseHeader(),
 
             // Search input field, category drop-down, and add button
             const CourseSearchFilter(),

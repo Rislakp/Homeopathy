@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:provider/provider.dart';
 import '../providers/course_provider.dart';
 import '../utils/app_colors.dart';
 import '../models/course_model.dart';
 
-class AddCourseDialog extends StatefulWidget {
-  const AddCourseDialog({super.key});
+// class AddCourseDialog extends StatefulWidget {
+//   const AddCourseDialog({super.key});
 
-  @override
-  State<AddCourseDialog> createState() => _AddCourseDialogState();
-}
+//   @override
+//   State<AddCourseDialog> createState() => _AddCourseDialogState();
+// }
 
-class _AddCourseDialogState extends State<AddCourseDialog> {
-  final _formKey = GlobalKey<FormState>();
+// class _AddCourseDialogState extends State<AddCourseDialog> {
+//   final _formKey = GlobalKey<FormState>();
 
   String _title = '';
   String _instructor = '';
@@ -23,20 +24,20 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
   String _description = '';
   String _image = 'menu_book'; // Default Icon code
 
-  final List<String> _categories = [
-    'Anatomy',
-    'Physiology',
-    'Pathology',
-    'Materia Medica',
-    'Repertory',
-    'Organon',
-  ];
+//   final List<String> _categories = [
+//     'Anatomy',
+//     'Physiology',
+//     'Pathology',
+//     'Materia Medica',
+//     'Repertory',
+//     'Organon',
+//   ];
 
-  final List<String> _statuses = [
-    'Published',
-    'Draft',
-    'Archived',
-  ];
+//   final List<String> _statuses = [
+//     'Published',
+//     'Draft',
+//     'Archived',
+//   ];
 
 
   @override

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:homeopathy/models/course_model.dart';
+import '../model/course_model.dart';
 
 class CourseProvider extends ChangeNotifier {
   static const String _baseUrl = 'https://homeopathybackend-1.onrender.com/api/courses';

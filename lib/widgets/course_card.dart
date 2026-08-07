@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import 'package:homeopathy/admin/screens/courses/widgets/delete_course_dialog.dart';
+import 'package:homeopathy/admin/screens/courses/widgets/edit%20course_dialog.dart';
 import 'package:homeopathy/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
-import '../models/course_model.dart';
-import 'delete_course_dialog.dart';
-import 'edit_course_dialog.dart';
 import '../admin/screens/courses/view/course_view_screen.dart';
 
 class CourseCard extends StatelessWidget {

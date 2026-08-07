@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/screens/courses/course_body.dart';
-import 'package:homeopathy/providers/course_provider.dart';
+import 'package:homeopathy/admin/screens/courses/screens/course_body.dart';
+import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:provider/provider.dart';
 
 class CourseManagementPage extends StatelessWidget {
@@ -9,7 +9,7 @@ class CourseManagementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CourseProvider()..loadCourses(),
+      create: (_) => CourseProvider(),
       child: const Scaffold(
         backgroundColor: Color(0xFFF8FAFC),
         body: SafeArea(

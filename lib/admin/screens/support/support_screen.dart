@@ -1,7 +1,7 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-class TeachersScreen extends StatelessWidget {
-  const TeachersScreen({super.key});
+class SupportScreen extends StatelessWidget {
+  const SupportScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
