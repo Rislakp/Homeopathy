@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
 import 'package:http/http.dart' as http;
-import '../models/course_model.dart';
 import '../core/constants/api_constants.dart';
 
 class CourseApiService {
