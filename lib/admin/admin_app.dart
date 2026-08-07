@@ -3,8 +3,9 @@ import 'package:homeopathy/admin/providers/video_provider.dart';
 import 'package:homeopathy/admin/providers/course_management_provider.dart';
 import 'package:homeopathy/admin/providers/live_class_provider.dart';
 import 'package:homeopathy/admin/providers/subscription_plan_provider.dart';
+import 'package:homeopathy/admin/screens/auth/login_screen.dart';
+import 'package:homeopathy/providers/course_provider.dart';
 import 'package:provider/provider.dart';
-import 'admin_shell_layout.dart';
 import 'providers/admin_data_provider.dart';
 import 'providers/drawer_provider.dart';
 import 'theme/admin_theme.dart';
@@ -22,13 +23,17 @@ class WhiteCoatAdminPortal extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VideoProvider()),
         ChangeNotifierProvider(create: (_) => LiveClassProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionPlanProvider()),
+        ChangeNotifierProvider(create: (_) => CourseProvider()),
+       // ChangeNotifierProvider(create: (_) => CourseDetailsViewProvider()),
+     
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'White Coat Academy - Admin Portal',
         theme: AdminTheme.lightTheme,
-        home: const AdminShellLayout(),
+        home: const AdminLoginScreen(),
       ),
     );
   }
 }
+

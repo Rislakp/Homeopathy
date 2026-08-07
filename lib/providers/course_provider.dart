@@ -1,209 +1,286 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../models/course_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:homeopathy/models/course_model.dart';
 
 class CourseProvider extends ChangeNotifier {
+  static const String _baseUrl = 'https://homeopathybackend-1.onrender.com/api/courses';
+
   List<CourseModel> _allCourses = [];
   List<CourseModel> _filteredCourses = [];
+  
   bool _isLoading = false;
+  bool _isCreating = false; 
+  String? _errorMessage;
 
-  // Filter States
+  // Filter and Search States
   String _searchQuery = '';
   String _selectedCategory = 'All Categories';
 
   // Getters
   bool get isLoading => _isLoading;
+  bool get isCreating => _isCreating;
+  String? get errorMessage => _errorMessage;
   List<CourseModel> get courses => _filteredCourses;
   String get searchQuery => _searchQuery;
   String get selectedCategory => _selectedCategory;
 
-  // Load courses simulation
-  Future<void> loadCourses() async {
+  // ==========================================
+  // Fetch all courses (GET)
+  // ==========================================
+  Future<void> fetchCourses() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
 
-    // 600ms network delay simulation
-    await Future.delayed(const Duration(milliseconds: 600));
+    try {
+      final response = await http.get(Uri.parse(_baseUrl));
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        List<dynamic> rawData = [];
 
-    _allCourses = [
-      const CourseModel(
-        id: '1',
-        title: 'Classical Homeopathy Foundations',
-        instructor: 'Dr. Samuel Hahnemann',
-        category: 'Materia Medica',
-        price: 4999,
-        students: 120,
-        status: 'Published',
-        description: 'Explore the primary principles of homeotherapy, including similia similibus curentur, single remedy, and minimum dose.',
-        image: 'menu_book',
-      ),
-      const CourseModel(
-        id: '2',
-        title: 'Advanced Materia Medica',
-        instructor: 'Dr. J. T. Kent',
-        category: 'Materia Medica',
-        price: 6499,
-        students: 85,
-        status: 'Published',
-        description: 'Deep dive into Kentian constitutional profiles, drug provings, and comparative study of polychrests.',
-        image: 'auto_stories',
-      ),
-      const CourseModel(
-        id: '3',
-        title: 'Repertory Mastery Program',
-        instructor: 'Dr. Boenninghausen',
-        category: 'Repertory',
-        price: 5299,
-        students: 95,
-        status: 'Published',
-        description: 'Learn case analysis, rubric selection, and comparative study of Kent, Boenninghausen, and Boger repertories.',
-        image: 'troubleshoot',
-      ),
-      const CourseModel(
-        id: '4',
-        title: 'Organon Essentials',
-        instructor: 'Dr. Samuel Hahnemann',
-        category: 'Organon',
-        price: 3999,
-        students: 110,
-        status: 'Published',
-        description: 'Chronological analysis of Samuel Hahnemann\'s Organon of Medicine (Aphorisms 1 to 291) covering logic and philosophy.',
-        image: 'history_edu',
-      ),
-      const CourseModel(
-        id: '5',
-        title: 'Anatomy Complete',
-        instructor: 'Dr. Henry Gray',
-        category: 'Anatomy',
-        price: 4599,
-        students: 150,
-        status: 'Published',
-        description: 'Comprehensive gross anatomy module covering osteology, myology, neurology, and clinical correlation.',
-        image: 'accessibility',
-      ),
-      const CourseModel(
-        id: '6',
-        title: 'Physiology Masterclass',
-        instructor: 'Dr. Arthur Guyton',
-        category: 'Physiology',
-        price: 4799,
-        students: 140,
-        status: 'Draft',
-        description: 'Understand molecular, cellular, systemic human organ actions, and homeostatic regulation loops.',
-        image: 'favorite',
-      ),
-      const CourseModel(
-        id: '7',
-        title: 'Pathology Basics',
-        instructor: 'Dr. William Boyd',
-        category: 'Pathology',
-        price: 4299,
-        students: 60,
-        status: 'Published',
-        description: 'Introduction to general pathognomonic processes, cell injury, inflammation, hemodynamic disorders, and neoplasia.',
-        image: 'biotech',
-      ),
-      const CourseModel(
-        id: '8',
-        title: 'Community Medicine',
-        instructor: 'Dr. K. Park',
-        category: 'Physiology',
-        price: 3499,
-        students: 45,
-        status: 'Published',
-        description: 'Epidemiological studies, preventive medicine protocols, health policies, environmental sanitation, and demography.',
-        image: 'groups',
-      ),
-      const CourseModel(
-        id: '9',
-        title: 'Pharmacology',
-        instructor: 'Dr. Burt Kent',
-        category: 'Materia Medica',
-        price: 3899,
-        students: 75,
-        status: 'Published',
-        description: 'Understanding pharmacodynamics, pharmacokinetics, adverse effects, and comparative dosing guidelines.',
-        image: 'vaccines',
-      ),
-      const CourseModel(
-        id: '10',
-        title: 'Practice of Medicine',
-        instructor: 'Dr. T. Harrison',
-        category: 'Repertory',
-        price: 5999,
-        students: 130,
-        status: 'Published',
-        description: 'Diagnostic criteria, systemic clinical symptoms, physical examinations, and holistic case formulations.',
-        image: 'local_hospital',
-      ),
-      const CourseModel(
-        id: '11',
-        title: 'Surgery',
-        instructor: 'Dr. Hamilton Bailey',
-        category: 'Anatomy',
-        price: 6999,
-        students: 50,
-        status: 'Archived',
-        description: 'Surgical pathology, pre/post-operative patient monitoring guidelines, suturing basics, and emergency setups.',
-        image: 'content_cut',
-      ),
-      const CourseModel(
-        id: '12',
-        title: 'Forensic Medicine',
-        instructor: 'Dr. K. S. Reddy',
-        category: 'Pathology',
-        price: 3299,
-        students: 40,
-        status: 'Published',
-        description: 'Medical jurisprudence, postmortem investigations, toxicology assays, legal evidence documentation rules.',
-        image: 'gavel',
-      ),
-    ];
+        // Safely handle both Map { "data": [...] } and direct List [...] responses
+        if (decoded is Map<String, dynamic>) {
+          rawData = decoded['data'] ?? decoded['courses'] ?? [];
+        } else if (decoded is List) {
+          rawData = decoded;
+        }
 
-    _isLoading = false;
-    _applyFilters();
-    notifyListeners();
-  }
+        _allCourses.clear();
 
-  // CRUD Operations
-  Future<void> addCourse(CourseModel course) async {
-    final newCourse = course.id.isEmpty
-        ? course.copyWith(id: DateTime.now().millisecondsSinceEpoch.toString())
-        : course;
-    _allCourses.insert(0, newCourse);
-    _applyFilters();
-    notifyListeners();
-  }
-
-  Future<void> updateCourse(CourseModel course) async {
-    final index = _allCourses.indexWhere((c) => c.id == course.id);
-    if (index != -1) {
-      _allCourses[index] = course;
+        // Safely parse each item so one bad database entry doesn't break the whole app
+        for (var item in rawData) {
+          try {
+            _allCourses.add(CourseModel.fromJson(item));
+          } catch (e) {
+            debugPrint('Skipped corrupted course entry: $e');
+          }
+        }
+      } else {
+        throw Exception('Failed to load courses. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      debugPrint('Error fetching courses in CourseProvider: $e');
+    } finally {
+      _isLoading = false;
+      _applyFilters();
+      notifyListeners();
     }
-    _applyFilters();
-    notifyListeners();
   }
 
-  Future<void> deleteCourse(String id) async {
-    _allCourses.removeWhere((c) => c.id == id);
-    _applyFilters();
-    notifyListeners();
+  // Alias for backward compatibility
+  Future<void> loadCourses() async {
+    await fetchCourses();
   }
 
-  // Search
+  // ==========================================
+  // Create a new course (POST)
+  // ==========================================
+  Future<bool> addCourse(CourseModel course) async {
+    _isCreating = true;
+    _isLoading = true;
+    _errorMessage = null;
+    bool success = false;
+    notifyListeners();
+
+    try {
+      final response = await http.post(
+        Uri.parse(_baseUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(course.toJson()),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final Map<String, dynamic> data = (decoded is Map<String, dynamic> && decoded.containsKey('data')) 
+            ? decoded['data'] 
+            : decoded;
+            
+        final newCourse = CourseModel.fromJson(data);
+        
+        _allCourses.insert(0, newCourse);
+        _applyFilters();
+        success = true;
+      } else {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        _errorMessage = responseData['message'] ?? 'Failed to save course. Status: ${response.statusCode}';
+      }
+    } catch (e) {
+      _errorMessage = 'Network error: $e';
+      debugPrint('Error adding course in CourseProvider: $e');
+    } finally {
+      _isCreating = false;
+      _isLoading = false;
+      notifyListeners();
+    }
+    
+    return success;
+  }
+
+  // Legacy createCourse helper
+ Future<bool> createCourse({
+  required String courseTitle,
+  required String instructor,
+  required String category,
+  required double price,
+}) async {
+  _isCreating = true;
+  _isLoading = true;
+  _errorMessage = null;
+
+  notifyListeners();
+
+  try {
+    print('Creating course: $courseTitle');
+
+    final response = await http.post(
+      Uri.parse(_baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'courseTitle': courseTitle,
+        'instructor': instructor,
+        'category': category,
+        'price': price,
+      }),
+    );
+
+    print('POST STATUS: ${response.statusCode}');
+    print('POST RESPONSE: ${response.body}');
+
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == 200 ||
+        response.statusCode == 201) {
+      await fetchCourses();
+      return true;
+    }
+
+    _errorMessage =
+        responseData['message'] ?? 'Failed to create course';
+
+    return false;
+  } catch (e) {
+    _errorMessage = 'Network error: $e';
+
+    debugPrint('CREATE COURSE ERROR: $e');
+
+    return false;
+  } finally {
+    _isCreating = false;
+    _isLoading = false;
+
+    notifyListeners();
+  }
+}
+
+  // ==========================================
+  // Update an existing course (PUT)
+  // ==========================================
+  Future<bool> updateCourse(dynamic arg1, [CourseModel? arg2]) async {
+    String courseId;
+    CourseModel updatedCourse;
+    bool success = false;
+
+    if (arg2 == null && arg1 is CourseModel) {
+      updatedCourse = arg1;
+      courseId = arg1.courseId.isNotEmpty ? arg1.courseId : arg1.id;
+    } else if (arg1 is String && arg2 is CourseModel) {
+      courseId = arg1;
+      updatedCourse = arg2;
+    } else {
+      _errorMessage = 'Invalid arguments to updateCourse';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await http.put(
+        Uri.parse('$_baseUrl/$courseId'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(updatedCourse.toJson()),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        final index = _allCourses.indexWhere((c) => c.courseId == courseId || c.id == courseId);
+        if (index != -1) {
+          _allCourses[index] = updatedCourse;
+        }
+        _applyFilters();
+        success = true;
+      } else {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        _errorMessage = responseData['message'] ?? 'Failed to update course. Status: ${response.statusCode}';
+      }
+    } catch (e) {
+      _errorMessage = 'Network error: $e';
+      debugPrint('Error updating course in CourseProvider: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+    
+    return success;
+  }
+
+  // ==========================================
+  // Delete a course (DELETE)
+  // ==========================================
+  Future<bool> deleteCourse(String courseId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    bool success = false;
+    notifyListeners();
+
+    try {
+      final response = await http.delete(
+        Uri.parse('$_baseUrl/$courseId'),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        _allCourses.removeWhere((c) => c.courseId == courseId || c.id == courseId);
+        _applyFilters();
+        success = true;
+      } else {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        _errorMessage = responseData['message'] ?? 'Failed to delete course. Status: ${response.statusCode}';
+      }
+    } catch (e) {
+      _errorMessage = 'Network error: $e';
+      debugPrint('Error deleting course in CourseProvider: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+    
+    return success;
+  }
+
+  // ==========================================
+  // Search & Filtering Logic
+  // ==========================================
   void searchCourses(String query) {
     _searchQuery = query;
     _applyFilters();
     notifyListeners();
   }
 
-  // Category Filtering
   void filterCategory(String category) {
     _selectedCategory = category;
     _applyFilters();
     notifyListeners();
   }
 
-  // Reset Filters
   void clearFilters() {
     _searchQuery = '';
     _selectedCategory = 'All Categories';
@@ -211,11 +288,9 @@ class CourseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Helper filter executor
   void _applyFilters() {
     List<CourseModel> result = List.from(_allCourses);
 
-    // Search by title, instructor, or category
     if (_searchQuery.trim().isNotEmpty) {
       final q = _searchQuery.toLowerCase().trim();
       result = result.where((c) {
@@ -225,7 +300,6 @@ class CourseProvider extends ChangeNotifier {
       }).toList();
     }
 
-    // Filter by Category Dropdown
     if (_selectedCategory != 'All Categories') {
       result = result.where((c) => c.category == _selectedCategory).toList();
     }

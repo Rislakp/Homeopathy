@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/models/course_management_model.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import 'package:homeopathy/services/course_api_service.dart';
 
 class CourseManagementNotifier extends ChangeNotifier {
+  final CourseApiService _apiService = CourseApiService();
+
+  List<CourseModel> _courses = [];
+  bool _isLoading = false;
+  String? _errorMessage;
+
   String searchQuery = '';
   String selectedCategory = 'All Categories';
   String selectedInstructor = 'All Instructors';
   String selectedStatus = 'All Status';
   String selectedLanguage = 'All Languages';
   String selectedSort = 'Newest';
+
+  // Getters
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+  List<CourseModel> get courses => _courses;
 
   final List<String> categories = [
     'All Categories',
@@ -30,79 +42,68 @@ class CourseManagementNotifier extends ChangeNotifier {
   final List<String> languages = ['All Languages', 'English', 'Hindi', 'Bilingual'];
   final List<String> sortOptions = ['Newest', 'Popularity', 'Rating', 'Price: Low to High'];
 
-  final List<CourseItem> _courses = [
-    const CourseItem(
-      id: 'WCA-01',
-      name: 'Advanced Materia Medica',
-      category: 'Materia Medica',
-      instructor: 'Dr. Renu Sharma',
-      duration: '32 Hours',
-      price: '₹2,499',
-      students: 425,
-      rating: 4.9,
-      status: 'Published',
-      thumbnailIcon: Icons.menu_book_rounded,
-      thumbnailBgColor: Color(0xFF16A34A),
-    ),
-    const CourseItem(
-      id: 'WCA-02',
-      name: 'Organon of Medicine',
-      category: 'Organon',
-      instructor: 'Dr. Arjun',
-      duration: '28 Hours',
-      price: '₹1,999',
-      students: 312,
-      rating: 4.8,
-      status: 'Published',
-      thumbnailIcon: Icons.psychology_rounded,
-      thumbnailBgColor: Color(0xFF2563EB),
-    ),
-    const CourseItem(
-      id: 'WCA-03',
-      name: 'Homeopathic Pharmacy',
-      category: 'Pharmacy',
-      instructor: 'Dr. Meera',
-      duration: '18 Hours',
-      price: '₹999',
-      students: 208,
-      rating: 4.6,
-      status: 'Draft',
-      thumbnailIcon: Icons.science_rounded,
-      thumbnailBgColor: Color(0xFFD97706),
-    ),
-    const CourseItem(
-      id: 'WCA-04',
-      name: 'Case Studies & Therapeutics',
-      category: 'Clinical',
-      instructor: 'Dr. Ahmed',
-      duration: '40 Hours',
-      price: '₹2,999',
-      students: 520,
-      rating: 4.9,
-      status: 'Published',
-      thumbnailIcon: Icons.medical_services_rounded,
-      thumbnailBgColor: Color(0xFF9333EA),
-    ),
-  ];
+  // API Methods
+  Future<void> fetchCourses() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
 
-  final List<ActivityLog> activities = const [
-    ActivityLog(text: 'New course "Advanced Materia Medica" added', time: '12 mins ago', icon: Icons.add_circle_outline_rounded),
-    ActivityLog(text: 'Course "Organon of Medicine" updated', time: '1 hour ago', icon: Icons.edit_note_rounded),
-    ActivityLog(text: 'Draft "Homeopathic Pharmacy" awaiting approval', time: '3 hours ago', icon: Icons.pending_actions_rounded),
-    ActivityLog(text: 'New instructor Dr. Ahmed assigned', time: '5 hours ago', icon: Icons.person_add_alt_1_rounded),
-  ];
+    try {
+      _courses = await _apiService.getCourses();
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      debugPrint('Error loading courses in provider: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
-  List<CourseItem> get filteredCourses {
+  // Alias for loadCourses in case it's triggered by existing widgets
+  Future<void> loadCourses() async {
+    await fetchCourses();
+  }
+
+  // API Course Creation
+  Future<bool> createCourse({
+    required String courseTitle,
+    required String instructor,
+    required String category,
+    required double price,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final newCourse = await _apiService.createCourse(
+        courseTitle: courseTitle,
+        instructor: instructor,
+        category: category,
+        price: price,
+      );
+      _courses.insert(0, newCourse);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      notifyListeners();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  List<CourseModel> get filteredCourses {
     return _courses.where((c) {
       final matchSearch = searchQuery.isEmpty ||
-          c.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          c.courseTitle.toLowerCase().contains(searchQuery.toLowerCase()) ||
           c.instructor.toLowerCase().contains(searchQuery.toLowerCase());
       final matchCat = selectedCategory == 'All Categories' || c.category == selectedCategory;
       final matchInst = selectedInstructor == 'All Instructors' || c.instructor == selectedInstructor;
-      final matchStatus = selectedStatus == 'All Status' || c.status == selectedStatus;
-      final matchLang = selectedLanguage == 'All Languages' || c.language == selectedLanguage;
 
-      return matchSearch && matchCat && matchInst && matchStatus && matchLang;
+      return matchSearch && matchCat && matchInst;
     }).toList();
   }
 
@@ -112,6 +113,26 @@ class CourseManagementNotifier extends ChangeNotifier {
   void setStatus(String val) { selectedStatus = val; notifyListeners(); }
   void setLanguage(String val) { selectedLanguage = val; notifyListeners(); }
   void setSort(String val) { selectedSort = val; notifyListeners(); }
-  void addCourse(CourseItem item) { _courses.insert(0, item); notifyListeners(); }
-  void deleteCourse(String id) { _courses.removeWhere((c) => c.id == id); notifyListeners(); }
+
+  // API Mock CRUD fallback
+  void addCourse(CourseModel item) {
+    _courses.insert(0, item);
+    notifyListeners();
+  }
+
+  void deleteCourse(String id) {
+    _courses.removeWhere((c) => c.id == id);
+    notifyListeners();
+  }
+}
+class ActivityLog {
+  final String text;
+  final String time;
+  final IconData icon;
+
+  const ActivityLog({
+    required this.text,
+    required this.time,
+    required this.icon,
+  });
 }

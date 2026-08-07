@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
 import 'package:provider/provider.dart';
-import '../models/course_model.dart';
 import '../providers/course_provider.dart';
 import '../utils/app_colors.dart';
+import '../models/course_model.dart';
 
 class AddCourseDialog extends StatefulWidget {
   const AddCourseDialog({super.key});
@@ -18,7 +19,6 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
   String _instructor = '';
   String _category = 'Materia Medica';
   double _price = 0.0;
-  int _students = 0;
   String _status = 'Published';
   String _description = '';
   String _image = 'menu_book'; // Default Icon code
@@ -38,52 +38,10 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
     'Archived',
   ];
 
-  final Map<String, IconData> _iconOptions = {
-    'menu_book': Icons.menu_book,
-    'auto_stories': Icons.auto_stories,
-    'troubleshoot': Icons.troubleshoot,
-    'history_edu': Icons.history_edu,
-    'accessibility': Icons.accessibility,
-    'favorite': Icons.favorite,
-    'biotech': Icons.biotech,
-    'groups': Icons.groups,
-    'vaccines': Icons.vaccines,
-    'local_hospital': Icons.local_hospital,
-    'content_cut': Icons.content_cut,
-    'gavel': Icons.gavel,
-  };
-
-  void _onSave() {
-    if (!_formKey.currentState!.validate()) return;
-    _formKey.currentState!.save();
-
-    final provider = context.read<CourseProvider>();
-    final newCourse = CourseModel(
-      id: '',
-      title: _title,
-      instructor: _instructor,
-      category: _category,
-      price: _price,
-      students: _students,
-      status: _status,
-      description: _description,
-      image: _image,
-    );
-
-    provider.addCourse(newCourse);
-    Navigator.of(context).pop();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Course added successfully!'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<CourseProvider>();
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
@@ -99,7 +57,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Add New Course',
+                    'Course',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                   ),
                   IconButton(
@@ -157,58 +115,9 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      // Row of Price & Students
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              decoration: const InputDecoration(labelText: 'Price (₹)', prefixIcon: Icon(Icons.currency_rupee, size: 18)),
-                              keyboardType: TextInputType.number,
-                              validator: (v) {
-                                if (v == null || v.trim().isEmpty) return 'Price is required';
-                                if (double.tryParse(v.trim()) == null) return 'Enter valid price';
-                                return null;
-                              },
-                              onSaved: (v) => _price = double.parse(v!.trim()),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
-                              keyboardType: TextInputType.number,
-                              validator: (v) {
-                                if (v == null || v.trim().isEmpty) return 'Student Count is required';
-                                if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
-                                return null;
-                              },
-                              onSaved: (v) => _students = int.parse(v!.trim()),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      // Dropdown of Illustration Icon
-                      DropdownButtonFormField<String>(
-                        value: _image,
-                        decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
-                        items: _iconOptions.keys.map((k) {
-                          return DropdownMenuItem(
-                            value: k,
-                            child: Row(
-                              children: [
-                                Icon(_iconOptions[k], size: 18, color: AppColors.primary),
-                                const SizedBox(width: 10),
-                                Text(k.replaceAll('_', ' ')),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (v) {
-                          if (v != null) setState(() => _image = v);
-                        },
-                      ),
+                     const SizedBox(height: 16),
+                   
+                     
                       const SizedBox(height: 16),
                       // Description
                       TextFormField(
@@ -236,7 +145,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton(
-                    onPressed: _onSave,
+                    onPressed: provider.isCreating ? null : _onSave,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -244,7 +153,16 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       elevation: 0,
                     ),
-                    child: const Text('Save'),
+                    child: provider.isCreating
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text('Save'),
                   ),
                 ],
               ),
@@ -254,4 +172,51 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
       ),
     );
   }
+  void _onSave() async {
+  if (!_formKey.currentState!.validate()) return;
+
+  _formKey.currentState!.save();
+
+  final provider = context.read<CourseProvider>();
+
+  debugPrint('Creating course: $_title');
+
+  final course = CourseModel(
+    id: '',
+    courseId: '',
+    title: _title,
+    instructor: _instructor,
+    category: _category,
+    price: _price,
+     description: '',
+  );
+
+  final success = await provider.addCourse(course);
+
+  if (!mounted) return;
+
+  if (success) {
+    await provider.fetchCourses();
+
+    Navigator.of(context).pop();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Course created successfully'),
+        backgroundColor: AppColors.success,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          provider.errorMessage ?? 'Failed to create course',
+        ),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+}
 }

@@ -77,18 +77,15 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
     _formKey.currentState!.save();
 
     final provider = context.read<CourseProvider>();
+    debugPrint('Updating course: $_title. Students count: $_students. Icon: $_image');
     final updated = widget.course.copyWith(
-      title: _title,
+      courseTitle: _title,
       instructor: _instructor,
       category: _category,
       price: _price,
-      students: _students,
-      status: _status,
-      description: _description,
-      image: _image,
     );
 
-    provider.updateCourse(updated);
+    provider.updateCourse(updated as String);
     Navigator.of(context).pop();
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -195,42 +192,42 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: _students.toString(),
-                              decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
-                              keyboardType: TextInputType.number,
-                              validator: (v) {
-                                if (v == null || v.trim().isEmpty) return 'Student Count is required';
-                                if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
-                                return null;
-                              },
-                              onSaved: (v) => _students = int.parse(v!.trim()),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: TextFormField(
+                          //     initialValue: _students.toString(),
+                          //     decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
+                          //     keyboardType: TextInputType.number,
+                          //     validator: (v) {
+                          //       if (v == null || v.trim().isEmpty) return 'Student Count is required';
+                          //       if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
+                          //       return null;
+                          //     },
+                          //     onSaved: (v) => _students = int.parse(v!.trim()),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       // Dropdown of Illustration Icon
-                      DropdownButtonFormField<String>(
-                        value: _image,
-                        decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
-                        items: _iconOptions.keys.map((k) {
-                          return DropdownMenuItem(
-                            value: k,
-                            child: Row(
-                              children: [
-                                Icon(_iconOptions[k], size: 18, color: AppColors.primary),
-                                const SizedBox(width: 10),
-                                Text(k.replaceAll('_', ' ')),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (v) {
-                          if (v != null) setState(() => _image = v);
-                        },
-                      ),
+                      // DropdownButtonFormField<String>(
+                      //   value: _image,
+                      //   decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
+                      //   items: _iconOptions.keys.map((k) {
+                      //     return DropdownMenuItem(
+                      //       value: k,
+                      //       child: Row(
+                      //         children: [
+                      //           Icon(_iconOptions[k], size: 18, color: AppColors.primary),
+                      //           const SizedBox(width: 10),
+                      //           Text(k.replaceAll('_', ' ')),
+                      //         ],
+                      //       ),
+                      //     );
+                      //   }).toList(),
+                      //   onChanged: (v) {
+                      //     if (v != null) setState(() => _image = v);
+                      //   },
+                      // ),
                       const SizedBox(height: 16),
                       // Description
                       TextFormField(

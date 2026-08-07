@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../theme/admin_colors.dart';
 
 class AppDrawerHeader extends StatelessWidget {
@@ -17,9 +18,9 @@ class AppDrawerHeader extends StatelessWidget {
         vertical: 20,
       ),
       decoration: const BoxDecoration(
-        color: AdminColors.surface,
+        color: AppColors.surface,
         border: Border(
-          bottom: BorderSide(color: AdminColors.border, width: 1),
+          bottom: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: isCollapsed
@@ -28,7 +29,7 @@ class AppDrawerHeader extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: const BoxDecoration(
-                  color: AdminColors.primary,
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -44,11 +45,11 @@ class AppDrawerHeader extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: AdminColors.primary,
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AdminColors.primary.withOpacity(0.3),
+                        color: AppColors.primary.withOpacity(0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 3),
                       ),
@@ -70,7 +71,7 @@ class AppDrawerHeader extends StatelessWidget {
                         'White Coat',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w800,
-                              color: AdminColors.textPrimary,
+                              color: AppColors.textPrimary,
                               height: 1.1,
                             ),
                       ),
@@ -78,7 +79,7 @@ class AppDrawerHeader extends StatelessWidget {
                         'ACADEMY',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AdminColors.primary,
+                              color: AppColors.primary,
                               fontSize: 12,
                               letterSpacing: 1.2,
                               height: 1.1,
@@ -88,13 +89,13 @@ class AppDrawerHeader extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AdminColors.primaryLight,
+                          color: AppColors.primaryLight,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
                           'ADMIN PORTAL',
                           style: TextStyle(
-                            color: AdminColors.primaryDark,
+                            color: AppColors.primaryDark,
                             fontSize: 9,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.8,

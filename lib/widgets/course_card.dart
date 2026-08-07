@@ -1,10 +1,12 @@
+
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import 'package:intl/intl.dart';
+
 import '../models/course_model.dart';
-import '../utils/app_colors.dart';
 import 'delete_course_dialog.dart';
 import 'edit_course_dialog.dart';
-
+import '../admin/screens/courses/view/course_view_screen.dart';
 
 class CourseCard extends StatelessWidget {
   final CourseModel course;
@@ -14,52 +16,97 @@ class CourseCard extends StatelessWidget {
     required this.course,
   });
 
+  // ============================================================
+  // COURSE ICON
+  // ============================================================
+
   IconData _getIconData(String key) {
     switch (key) {
-      case 'menu_book': return Icons.menu_book;
-      case 'auto_stories': return Icons.auto_stories;
-      case 'troubleshoot': return Icons.troubleshoot;
-      case 'history_edu': return Icons.history_edu;
-      case 'accessibility': return Icons.accessibility;
-      case 'favorite': return Icons.favorite;
-      case 'biotech': return Icons.biotech;
-      case 'groups': return Icons.groups;
-      case 'vaccines': return Icons.vaccines;
-      case 'local_hospital': return Icons.local_hospital;
-      case 'content_cut': return Icons.content_cut;
-      case 'gavel': return Icons.gavel;
-      default: return Icons.book;
+      case 'menu_book':
+        return Icons.menu_book;
+      case 'auto_stories':
+        return Icons.auto_stories;
+      case 'troubleshoot':
+        return Icons.troubleshoot;
+      case 'history_edu':
+        return Icons.history_edu;
+      case 'accessibility':
+        return Icons.accessibility;
+      case 'favorite':
+        return Icons.favorite;
+      case 'biotech':
+        return Icons.biotech;
+      case 'groups':
+        return Icons.groups;
+      case 'vaccines':
+        return Icons.vaccines;
+      case 'local_hospital':
+        return Icons.local_hospital;
+      case 'content_cut':
+        return Icons.content_cut;
+      case 'gavel':
+        return Icons.gavel;
+      default:
+        return Icons.book;
     }
   }
+
+  // ============================================================
+  // STATUS BACKGROUND COLOR
+  // ============================================================
 
   Color _getStatusBg(String status) {
     switch (status.toLowerCase()) {
-      case 'published': return AppColors.publishedBg;
-      case 'draft': return AppColors.draftBg;
-      case 'archived': return AppColors.archivedBg;
-      default: return AppColors.draftBg;
+      case 'published':
+        return AppColors.successBg;
+
+      case 'draft':
+        return AppColors.draftBg;
+
+      case 'archived':
+        return AppColors.archivedBg;
+
+      default:
+        return AppColors.background;
     }
   }
 
+  // ============================================================
+  // STATUS TEXT COLOR
+  // ============================================================
+
   Color _getStatusText(String status) {
     switch (status.toLowerCase()) {
-      case 'published': return AppColors.publishedText;
-      case 'draft': return AppColors.draftText;
-      case 'archived': return AppColors.archivedText;
-      default: return AppColors.draftText;
+      case 'published':
+        return AppColors.publishedText;
+
+      case 'draft':
+        return AppColors.draftText;
+
+      case 'archived':
+        return AppColors.archivedText;
+
+      default:
+        return AppColors.textSecondary;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currencyFormat = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
+    final currencyFormat = NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 0,
+    );
 
     return Container(
       height: 360,
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(
+          color: AppColors.border,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.03),
@@ -71,29 +118,42 @@ class CourseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top Green Banner (Height 150)
+          // ======================================================
+          // TOP BANNER
+          // ======================================================
+
           Stack(
             children: [
               Container(
                 height: 150,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(19),
-                    topRight: Radius.circular(19),
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
                   ),
                   gradient: LinearGradient(
-                    colors: [AppColors.primary, Color(0xFF22C55E)],
+                    colors: [
+                      AppColors.primary,
+                      AppColors.success,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                 ),
               ),
-              // Top Left Status Badge
+
+              // ==================================================
+              // STATUS BADGE
+              // ==================================================
+
               Positioned(
                 top: 14,
                 left: 14,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: _getStatusBg(course.status),
                     borderRadius: BorderRadius.circular(12),
@@ -108,7 +168,11 @@ class CourseCard extends StatelessWidget {
                   ),
                 ),
               ),
-              // Top Right Icon Illustration
+
+              // ==================================================
+              // BACKGROUND ICON
+              // ==================================================
+
               Positioned(
                 top: 20,
                 right: 20,
@@ -117,31 +181,43 @@ class CourseCard extends StatelessWidget {
                   child: Icon(
                     _getIconData(course.image),
                     size: 80,
-                    color: Colors.white,
+                    color: AppColors.textOnPrimary,
                   ),
                 ),
               ),
+
+              // ==================================================
+              // MAIN ICON
+              // ==================================================
+
               Positioned(
                 top: 40,
                 right: 32,
                 child: Icon(
                   _getIconData(course.image),
                   size: 40,
-                  color: Colors.white,
+                  color: AppColors.textOnPrimary,
                 ),
               ),
-              // Price Badge (White Floating Badge bottom right)
+
+              // ==================================================
+              // PRICE BADGE
+              // ==================================================
+
               Positioned(
                 bottom: 12,
                 right: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.10),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),
@@ -150,7 +226,7 @@ class CourseCard extends StatelessWidget {
                   child: Text(
                     currencyFormat.format(course.price),
                     style: const TextStyle(
-                      color: AppColors.primaryHover,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
@@ -160,25 +236,36 @@ class CourseCard extends StatelessWidget {
             ],
           ),
 
-          // Bottom Section
+          // ======================================================
+          // COURSE DETAILS
+          // ======================================================
+
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category
+                  // ==================================================
+                  // CATEGORY
+                  // ==================================================
+
                   Text(
                     course.category.toUpperCase(),
                     style: const TextStyle(
-                      color: AppColors.textLight,
+                      color: AppColors.textMuted,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
                     ),
                   ),
+
                   const SizedBox(height: 4),
-                  // Course Title
+
+                  // ==================================================
+                  // COURSE TITLE
+                  // ==================================================
+
                   Text(
                     course.title,
                     style: const TextStyle(
@@ -189,8 +276,13 @@ class CourseCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+
                   const SizedBox(height: 6),
-                  // Instructor
+
+                  // ==================================================
+                  // INSTRUCTOR
+                  // ==================================================
+
                   Text(
                     'Instructor: ${course.instructor}',
                     style: const TextStyle(
@@ -200,11 +292,20 @@ class CourseCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+
                   const Spacer(),
-                  // Student Count Row
+
+                  // ==================================================
+                  // STUDENT COUNT
+                  // ==================================================
+
                   Row(
                     children: [
-                      const Icon(Icons.people_outline, size: 16, color: AppColors.textLight),
+                      const Icon(
+                        Icons.people_outline,
+                        size: 16,
+                        color: AppColors.textMuted,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         '${course.students} Enrolled Students',
@@ -216,72 +317,125 @@ class CourseCard extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 12),
-                  // Bottom Actions Row (Equal Width Rounded Buttons)
+
+                  // ==================================================
+                  // ACTION BUTTONS
+                  // ==================================================
+
                   Row(
                     children: [
-                      // View
+                      // ------------------------------------------------
+                      // VIEW
+                      // ------------------------------------------------
+
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (_) => ViewCourseDialog(course: course),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const CourseViewScreen(),
+                              ),
+                            );
                           },
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: AppColors.border),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            side: const BorderSide(
+                              color: AppColors.border,
+                            ),
+                            foregroundColor: AppColors.textSecondary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                           ),
                           child: const Text(
                             'View',
-                            style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
+
                       const SizedBox(width: 8),
-                      // Edit
+
+                      // ------------------------------------------------
+                      // EDIT
+                      // ------------------------------------------------
+
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-                              builder: (_) => EditCourseDialog(course: course),
+                              builder: (_) => EditCourseDialog(
+                                course: course,
+                              ),
                             );
                           },
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: AppColors.primary),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            side: const BorderSide(
+                              color: AppColors.primary,
+                            ),
+                            foregroundColor: AppColors.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                           ),
                           child: const Text(
                             'Edit',
-                            style: TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
+
                       const SizedBox(width: 8),
-                      // Delete
+
+                      // ------------------------------------------------
+                      // DELETE
+                      // ------------------------------------------------
+
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
                             showDialog(
                               context: context,
-                              builder: (_) => DeleteCourseDialog(course: course),
+                              builder: (_) => DeleteCourseDialog(
+                                course: course,
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.archivedBg,
                             foregroundColor: AppColors.archivedText,
                             elevation: 0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                           ),
                           child: const Text(
                             'Delete',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -296,3 +450,4 @@ class CourseCard extends StatelessWidget {
     );
   }
 }
+

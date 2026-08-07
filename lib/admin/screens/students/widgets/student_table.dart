@@ -153,7 +153,7 @@ class StudentTable extends StatelessWidget {
           ElevatedButton(
             onPressed: onClearFilters,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: Color.fromARGB(255, 10, 5, 100),
               foregroundColor: Colors.white,
               elevation: 0,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

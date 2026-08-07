@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_data_models.dart';
-import '../../theme/admin_colors.dart';
+
 
 class AdminStatCard extends StatelessWidget {
   final AdminStatItem item;
@@ -15,10 +16,10 @@ class AdminStatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AdminColors.cardBackground,
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-        border: Border.all(color: AdminColors.border),
-        boxShadow: AdminColors.softShadow,
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
+        boxShadow: AppColors.softShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +42,7 @@ class AdminStatCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: item.isPositive ? AdminColors.successBg : AdminColors.dangerBg,
+                  color: item.isPositive ? AppColors.successBg : AppColors.dangerBg,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -50,7 +51,7 @@ class AdminStatCard extends StatelessWidget {
                     Icon(
                       item.isPositive ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
                       size: 12,
-                      color: item.isPositive ? AdminColors.success : AdminColors.danger,
+                      color: item.isPositive ? AppColors.success : AppColors.danger,
                     ),
                     const SizedBox(width: 2),
                     Text(
@@ -58,7 +59,7 @@ class AdminStatCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: item.isPositive ? AdminColors.success : AdminColors.danger,
+                        color: item.isPositive ? AppColors.success : AppColors.danger,
                       ),
                     ),
                   ],
@@ -70,7 +71,7 @@ class AdminStatCard extends StatelessWidget {
           Text(
             item.title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AdminColors.textSecondary,
+                  color: AppColors.textSecondary,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
@@ -81,7 +82,7 @@ class AdminStatCard extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
-                  color: AdminColors.textPrimary,
+                  color: AppColors.textPrimary,
                 ),
           ),
         ],

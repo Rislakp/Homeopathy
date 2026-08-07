@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_menu_item.dart';
 import '../../theme/admin_colors.dart';
 
@@ -29,21 +30,21 @@ class _DrawerItemTileState extends State<DrawerItemTile> {
     final isCollapsed = widget.isCollapsed;
 
     final tileColor = isSelected
-        ? AdminColors.primary
-        : (_isHovered ? AdminColors.primaryHover : Colors.transparent);
+        ? AppColors.primary
+        : (_isHovered ? AppColors.primaryHover : Colors.transparent);
 
     final iconColor = isSelected
         ? Colors.white
-        : (_isHovered ? AdminColors.primary : AdminColors.textSecondary);
+        : (_isHovered ? AppColors.primary : AppColors.textSecondary);
 
     final textColor = isSelected
         ? Colors.white
-        : (_isHovered ? AdminColors.primary : AdminColors.textPrimary);
+        : (_isHovered ? AppColors.primary : AppColors.textPrimary);
 
     Widget content = InkWell(
       onTap: widget.onTap,
       onHover: (hovered) => setState(() => _isHovered = hovered),
-      borderRadius: BorderRadius.circular(AdminColors.borderRadius),
+      borderRadius: BorderRadius.circular(AppColors.borderRadius),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         height: 44,
@@ -53,11 +54,11 @@ class _DrawerItemTileState extends State<DrawerItemTile> {
         ),
         decoration: BoxDecoration(
           color: tileColor,
-          borderRadius: BorderRadius.circular(AdminColors.borderRadius),
+          borderRadius: BorderRadius.circular(AppColors.borderRadius),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AdminColors.primary.withOpacity(0.3),
+                    color: AppColors.primary.withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   )
