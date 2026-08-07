@@ -13,8 +13,8 @@ import '../models/course_model.dart';
 //   State<AddCourseDialog> createState() => _AddCourseDialogState();
 // }
 
-// class _AddCourseDialogState extends State<AddCourseDialog> {
-//   final _formKey = GlobalKey<FormState>();
+class _AddCourseDialogState extends State<AddCourseDialog> {
+  final _formKey = GlobalKey<FormState>();
 
   String _title = '';
   String _instructor = '';
