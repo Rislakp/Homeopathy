@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:homeopathy/responsive/responsive_constants.dart';
@@ -29,7 +30,7 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
     'Pharmacy',
     'Anatomy',
     'Physiology',
-    'Pathology'
+    'Pathology',
   ];
 
   final List<String> _statuses = [
@@ -37,14 +38,18 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
     'Active',
     'Trial',
     'Expired',
-    'Inactive'
+    'Inactive',
   ];
 
   @override
   void initState() {
     super.initState();
+
     final provider = context.read<StudentProvider>();
-    _searchController = TextEditingController(text: provider.searchQuery);
+
+    _searchController = TextEditingController(
+      text: provider.searchQuery,
+    );
   }
 
   @override
@@ -59,86 +64,136 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
 
     if (_searchController.text != provider.searchQuery) {
       _searchController.text = provider.searchQuery;
+      _searchController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _searchController.text.length),
+      );
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Utilize existing project responsive constants
-        final isMobile = constraints.maxWidth <= ResponsiveConstants.mobileMax;
-        final isTablet = constraints.maxWidth > ResponsiveConstants.mobileMax &&
-            constraints.maxWidth <= ResponsiveConstants.tabletMax;
+        final width = constraints.maxWidth;
 
+        final isMobile =
+            width <= ResponsiveConstants.mobileMax;
+
+        final isTablet =
+            width > ResponsiveConstants.mobileMax &&
+            width <= ResponsiveConstants.tabletMax;
+
+        // MOBILE
         if (isMobile) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildSearchField(provider),
+
               const SizedBox(height: 12),
+
               Row(
                 children: [
-                  Expanded(child: _buildCourseDropdown(provider)),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildStatusDropdown(provider)),
+                  Expanded(
+                    child: _buildCourseDropdown(provider),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildStatusDropdown(provider),
+                  ),
                 ],
               ),
+
               const SizedBox(height: 12),
+
               Row(
                 children: [
-                  Expanded(child: _buildExportButton()),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildAddButton()),
+                  Expanded(
+                    child: _buildExportButton(),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildAddButton(),
+                  ),
                 ],
               ),
             ],
           );
-        } else if (isTablet) {
+        }
+
+        // TABLET
+        if (isTablet) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 children: [
-                  Expanded(flex: 2, child: _buildSearchField(provider)),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildCourseDropdown(provider)),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildStatusDropdown(provider)),
+                  Expanded(
+                    flex: 2,
+                    child: _buildSearchField(provider),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  Expanded(
+                    child: _buildCourseDropdown(provider),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  Expanded(
+                    child: _buildStatusDropdown(provider),
+                  ),
                 ],
               ),
+
               const SizedBox(height: 12),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   _buildExportButton(),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
                   _buildAddButton(),
                 ],
               ),
             ],
           );
-        } else {
-          return Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: _buildSearchField(provider),
-              ),
-              const SizedBox(width: 16),
-              SizedBox(
-                width: 200,
-                child: _buildCourseDropdown(provider),
-              ),
-              const SizedBox(width: 16),
-              SizedBox(
-                width: 160,
-                child: _buildStatusDropdown(provider),
-              ),
-              const SizedBox(width: 16),
-              _buildExportButton(),
-              const SizedBox(width: 16),
-              _buildAddButton(),
-            ],
-          );
         }
+
+        // DESKTOP
+        return Row(
+          children: [
+            // Search gets all remaining space
+            Expanded(
+              flex: 3,
+              child: _buildSearchField(provider),
+            ),
+
+            const SizedBox(width: 12),
+
+            // Course
+            Flexible(
+              flex: 2,
+              child: _buildCourseDropdown(provider),
+            ),
+
+            const SizedBox(width: 12),
+
+            // Status
+            Flexible(
+              flex: 1,
+              child: _buildStatusDropdown(provider),
+            ),
+
+            const SizedBox(width: 12),
+
+            // Export
+            _buildExportButton(),
+
+            const SizedBox(width: 8),
+
+            // Add
+            _buildAddButton(),
+          ],
+        );
       },
     );
   }
@@ -148,34 +203,65 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
       height: 46,
       child: TextField(
         controller: _searchController,
-        onChanged: (value) => provider.searchStudents(value),
+        onChanged: (value) {
+          provider.searchStudents(value);
+        },
         decoration: InputDecoration(
           hintText: 'Search students...',
-          hintStyle: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 14),
-          prefixIcon: const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
+          hintStyle: const TextStyle(
+            color: Color(0xFF9CA3AF),
+            fontSize: 14,
+          ),
+
+          prefixIcon: const Icon(
+            Icons.search,
+            color: Color(0xFF9CA3AF),
+            size: 20,
+          ),
+
           suffixIcon: _searchController.text.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.clear, color: Color(0xFF9CA3AF), size: 18),
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Color(0xFF9CA3AF),
+                    size: 18,
+                  ),
                   onPressed: () {
                     _searchController.clear();
                     provider.searchStudents('');
+                    setState(() {});
                   },
                 )
               : null,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 16,
+          ),
+
           filled: true,
           fillColor: Colors.white,
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFF10B981), width: 1.5),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 10, 5, 100),
+              width: 1.5,
+            ),
           ),
         ),
       ),
@@ -187,36 +273,58 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
       height: 46,
       child: DropdownButtonFormField<String>(
         value: provider.selectedCourse,
+
+        isExpanded: true,
+
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+
           filled: true,
           fillColor: Colors.white,
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFF10B981), width: 1.5),
+            borderSide: const BorderSide(
+              color: Color(0xFF10B981),
+              width: 1.5,
+            ),
           ),
         ),
+
         items: _courses.map((course) {
           return DropdownMenuItem<String>(
             value: course,
             child: Text(
               course,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
+              style: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFF374151),
+              ),
             ),
           );
         }).toList(),
-        onChanged: (val) {
-          if (val != null) {
-            provider.filterCourse(val);
+
+        onChanged: (value) {
+          if (value != null) {
+            provider.filterCourse(value);
           }
         },
       ),
@@ -228,35 +336,58 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
       height: 46,
       child: DropdownButtonFormField<String>(
         value: provider.selectedStatus,
+
+        isExpanded: true,
+
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+
           filled: true,
           fillColor: Colors.white,
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+            ),
           ),
+
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFF10B981), width: 1.5),
+            borderSide: const BorderSide(
+              color: Color(0xFF10B981),
+              width: 1.5,
+            ),
           ),
         ),
+
         items: _statuses.map((status) {
           return DropdownMenuItem<String>(
             value: status,
             child: Text(
               status,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFF374151),
+              ),
             ),
           );
         }).toList(),
-        onChanged: (val) {
-          if (val != null) {
-            provider.filterStatus(val);
+
+        onChanged: (value) {
+          if (value != null) {
+            provider.filterStatus(value);
           }
         },
       ),
@@ -268,18 +399,38 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
       height: 46,
       child: OutlinedButton.icon(
         onPressed: widget.onExportPressed,
-        icon: const Icon(Icons.download_rounded, size: 18, color: Color(0xFF4B5563)),
+
+        icon: const Icon(
+          Icons.download_rounded,
+          size: 18,
+          color: Color(0xFF4B5563),
+        ),
+
         label: const Text(
           'Export',
-          style: TextStyle(color: Color(0xFF4B5563), fontSize: 14, fontWeight: FontWeight.w600),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Color(0xFF4B5563),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
+
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
-          side: const BorderSide(color: Color(0xFFD1D5DB)),
+
+          side: const BorderSide(
+            color: Color(0xFFD1D5DB),
+          ),
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+          ),
         ),
       ),
     );
@@ -290,20 +441,39 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
       height: 46,
       child: ElevatedButton.icon(
         onPressed: widget.onAddStudentPressed,
-        icon: const Icon(Icons.add, size: 18, color: Colors.white),
+
+        icon: const Icon(
+          Icons.add,
+          size: 18,
+          color: Colors.white,
+        ),
+
         label: const Text(
           'Add Student',
-          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
+
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF10B981),
           elevation: 0,
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+          ),
         ),
       ),
     );
   }
 }
+
+

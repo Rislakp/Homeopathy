@@ -84,28 +84,28 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
       case AdminMenuItem.courses:
         return const CourseManagementPage();
       // return const CoursesScreen();
-      case AdminMenuItem.categories:
-        return const CategoriesScreen();
-      case AdminMenuItem.videos:
-        return const VideosScreen();
-      case AdminMenuItem.demoVideos:
-        return const DemoVideosScreen();
-      case AdminMenuItem.liveClasses:
-        return const LiveClassesScreen();
-      case AdminMenuItem.recordedClasses:
-        return const RecordedClassesScreen();
-      case AdminMenuItem.assignments:
-        return const AssignmentsScreen();
-      case AdminMenuItem.notes:
-        return const NotesScreen();
+      // case AdminMenuItem.categories:
+      //   return const CategoriesScreen();
+      // case AdminMenuItem.videos:
+      //   return const VideosScreen();
+      // case AdminMenuItem.demoVideos:
+      //   return const DemoVideosScreen();
+      // case AdminMenuItem.liveClasses:
+      //   return const LiveClassesScreen();
+      // case AdminMenuItem.recordedClasses:
+      //   return const RecordedClassesScreen();
+      // case AdminMenuItem.assignments:
+      //   return const AssignmentsScreen();
+      // case AdminMenuItem.notes:
+      //   return const NotesScreen();
       case AdminMenuItem.questionBank:
         return const QuestionBankScreen();
-      case AdminMenuItem.exams:
-        return const ExamsScreen();
+      // case AdminMenuItem.exams:
+      //   return const ExamsScreen();
       // case AdminMenuItem.admissions:
       //   return const AdmissionsScreen();
-      case AdminMenuItem.fees:
-        return const SubscriptionPlansScreen();
+      // case AdminMenuItem.fees:
+      //   return const SubscriptionPlansScreen();
 
       // Events
       // case AdminMenuItem.events:
@@ -118,64 +118,64 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
       //   return const PlacementsScreen();
 
       // Communication
-      case AdminMenuItem.notifications:
-        return const NotificationsScreen();
-      case AdminMenuItem.announcements:
-        return const AnnouncementsScreen();
-      case AdminMenuItem.messages:
-        return const MessagesScreen();
-      case AdminMenuItem.supportTickets:
-        return const SupportScreen();
-      case AdminMenuItem.reports:
-        return const ReportsScreen();
-      case AdminMenuItem.analytics:
-        return const AnalyticsScreen();
+      // case AdminMenuItem.notifications:
+      //   return const NotificationsScreen();
+      // case AdminMenuItem.announcements:
+      //   return const AnnouncementsScreen();
+      // case AdminMenuItem.messages:
+      //   return const MessagesScreen();
+      // case AdminMenuItem.supportTickets:
+      //   return const SupportScreen();
+      // case AdminMenuItem.reports:
+      //   return const ReportsScreen();
+      // case AdminMenuItem.analytics:
+      //   return const AnalyticsScreen();
 
       // Finance
-      case AdminMenuItem.payments:
-        return const PaymentsScreen();
-      case AdminMenuItem.revenue:
-        return const RevenueScreen();
-      case AdminMenuItem.subscriptions:
-        return const SubscriptionPlansScreen();
-      case AdminMenuItem.coupons:
-        return const CouponsScreen();
-      case AdminMenuItem.refunds:
-        return const RefundsScreen();
+      // case AdminMenuItem.payments:
+      //   return const PaymentsScreen();
+      // case AdminMenuItem.revenue:
+      //   return const RevenueScreen();
+      // case AdminMenuItem.subscriptions:
+      //   return const SubscriptionPlansScreen();
+      // case AdminMenuItem.coupons:
+      //   return const CouponsScreen();
+      // case AdminMenuItem.refunds:
+      //   return const RefundsScreen();
 
       // User Management
-      case AdminMenuItem.admins:
-        return const AdminsScreen();
-      case AdminMenuItem.roles:
-        return const RolesScreen();
-      case AdminMenuItem.permissions:
-        return const PermissionsScreen();
+      // case AdminMenuItem.admins:
+      //   return const AdminsScreen();
+      // case AdminMenuItem.roles:
+      //   return const RolesScreen();
+      // case AdminMenuItem.permissions:
+      //   return const PermissionsScreen();
 
       // Settings
-      case AdminMenuItem.generalSettings:
-        return const GeneralSettingsScreen();
-      case AdminMenuItem.branding:
-        return const BrandingScreen();
-      case AdminMenuItem.appSettings:
-        return const AppSettingsScreen();
-      case AdminMenuItem.emailSettings:
-        return const EmailSettingsScreen();
-      case AdminMenuItem.smsSettings:
-        return const SmsSettingsScreen();
-      case AdminMenuItem.paymentGateway:
-        return const PaymentGatewayScreen();
+      // case AdminMenuItem.generalSettings:
+      //   return const GeneralSettingsScreen();
+      // case AdminMenuItem.branding:
+      //   return const BrandingScreen();
+      // case AdminMenuItem.appSettings:
+      //   return const AppSettingsScreen();
+      // case AdminMenuItem.emailSettings:
+      //   return const EmailSettingsScreen();
+      // case AdminMenuItem.smsSettings:
+      //   return const SmsSettingsScreen();
+      // case AdminMenuItem.paymentGateway:
+      //   return const PaymentGatewayScreen();
       // case AdminMenuItem.firebase:
       //   return const FirebaseScreen();
       // case AdminMenuItem.apiKeys:
       //   return const ApiKeysScreen();
       // case AdminMenuItem.backup:
       //   return const BackupScreen();
-      case AdminMenuItem.security:
-        return const SecurityScreen();
-      case AdminMenuItem.logs:
-        return const LogsScreen();
-      case AdminMenuItem.activityHistory:
-        return const ActivityHistoryScreen();
+      // case AdminMenuItem.security:
+      //   return const SecurityScreen();
+      // case AdminMenuItem.logs:
+      //   return const LogsScreen();
+      // case AdminMenuItem.activityHistory:
+      //   return const ActivityHistoryScreen();
 
       default:
         return const DashboardScreen();

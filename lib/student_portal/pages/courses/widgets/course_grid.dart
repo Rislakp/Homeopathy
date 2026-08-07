@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
 import 'package:provider/provider.dart';
 import '../provider/course_provider.dart';
 import 'course_card.dart';
 import 'empty_state.dart';
 
 class CourseGrid extends StatelessWidget {
-  const CourseGrid({super.key});
+  const CourseGrid({super.key, required List<CourseModel> courses});
 
   @override
   Widget build(BuildContext context) {

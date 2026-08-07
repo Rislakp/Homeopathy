@@ -1,9 +1,10 @@
 // import 'package:flutter/material.dart';
-// import 'package:homeopathy/student_portal/pages/courses/provider/course_provider.dart';
+// import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+// import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 // import 'package:provider/provider.dart';
-// import '../models/course_model.dart';
-
+// import '../providers/course_provider.dart';
 // import '../utils/app_colors.dart';
+// import '../models/course_model.dart';
 
 // class AddCourseDialog extends StatefulWidget {
 //   const AddCourseDialog({super.key});
@@ -17,12 +18,10 @@
 
 //   String _title = '';
 //   String _instructor = '';
-//   String _category = 'Materia Medica';
+//   String _category = 'Anatomy';
 //   double _price = 0.0;
-//   int _students = 0;
-//   String _status = 'Published';
-//   String _description = '';
-//   String _image = 'menu_book'; // Default Icon code
+//   String _description = 'Homeopathy foundational and advanced modules.';
+//   String _image = 'menu_book';
 
 //   final List<String> _categories = [
 //     'Anatomy',
@@ -38,50 +37,6 @@
 //     'Draft',
 //     'Archived',
 //   ];
-
-//   final Map<String, IconData> _iconOptions = {
-//     'menu_book': Icons.menu_book,
-//     'auto_stories': Icons.auto_stories,
-//     'troubleshoot': Icons.troubleshoot,
-//     'history_edu': Icons.history_edu,
-//     'accessibility': Icons.accessibility,
-//     'favorite': Icons.favorite,
-//     'biotech': Icons.biotech,
-//     'groups': Icons.groups,
-//     'vaccines': Icons.vaccines,
-//     'local_hospital': Icons.local_hospital,
-//     'content_cut': Icons.content_cut,
-//     'gavel': Icons.gavel,
-//   };
-
-//   void _onSave() {
-//     if (!_formKey.currentState!.validate()) return;
-//     _formKey.currentState!.save();
-
-//     final provider = context.read<CourseProvider>();
-//     final newCourse = CourseModel(
-//       id: '',
-//       title: _title,
-//       instructor: _instructor,
-//       category: _category,
-//       price: _price,
-//       students: _students,
-//       status: _status,
-//       description: _description,
-//       image: _image,
-//     );
-
-//     provider.addCourse(newCourse);
-//     Navigator.of(context).pop();
-
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(
-//         content: Text('Course added successfully!'),
-//         backgroundColor: AppColors.primary,
-//         behavior: SnackBarBehavior.floating,
-//       ),
-//     );
-//   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -114,21 +69,18 @@
 //                 child: SingleChildScrollView(
 //                   child: Column(
 //                     children: [
-//                       // Title
 //                       TextFormField(
 //                         decoration: const InputDecoration(labelText: 'Course Name', prefixIcon: Icon(Icons.book_outlined, size: 18)),
 //                         validator: (v) => v == null || v.trim().isEmpty ? 'Course Name is required' : null,
 //                         onSaved: (v) => _title = v ?? '',
 //                       ),
 //                       const SizedBox(height: 16),
-//                       // Instructor
 //                       TextFormField(
 //                         decoration: const InputDecoration(labelText: 'Instructor Name', prefixIcon: Icon(Icons.person_outline, size: 18)),
 //                         validator: (v) => v == null || v.trim().isEmpty ? 'Instructor Name is required' : null,
 //                         onSaved: (v) => _instructor = v ?? '',
 //                       ),
 //                       const SizedBox(height: 16),
-//                       // Row of Category & Status
 //                       Row(
 //                         children: [
 //                           Expanded(
@@ -143,80 +95,18 @@
 //                               },
 //                             ),
 //                           ),
-//                           const SizedBox(width: 16),
-//                           Expanded(
-//                             child: DropdownButtonFormField<String>(
-//                               value: _status,
-//                               decoration: const InputDecoration(labelText: 'Status'),
-//                               items: _statuses.map((s) {
-//                                 return DropdownMenuItem(value: s, child: Text(s));
-//                               }).toList(),
-//                               onChanged: (v) {
-//                                 if (v != null) setState(() => _status = v);
-//                               },
-//                             ),
-//                           ),
 //                         ],
 //                       ),
 //                       const SizedBox(height: 16),
-//                       // Row of Price & Students
-//                       Row(
-//                         children: [
-//                           Expanded(
-//                             child: TextFormField(
-//                               decoration: const InputDecoration(labelText: 'Price (₹)', prefixIcon: Icon(Icons.currency_rupee, size: 18)),
-//                               keyboardType: TextInputType.number,
-//                               validator: (v) {
-//                                 if (v == null || v.trim().isEmpty) return 'Price is required';
-//                                 if (double.tryParse(v.trim()) == null) return 'Enter valid price';
-//                                 return null;
-//                               },
-//                               onSaved: (v) => _price = double.parse(v!.trim()),
-//                             ),
-//                           ),
-//                           const SizedBox(width: 16),
-//                           Expanded(
-//                             child: TextFormField(
-//                               decoration: const InputDecoration(labelText: 'Student Count', prefixIcon: Icon(Icons.people_outline, size: 18)),
-//                               keyboardType: TextInputType.number,
-//                               validator: (v) {
-//                                 if (v == null || v.trim().isEmpty) return 'Student Count is required';
-//                                 if (int.tryParse(v.trim()) == null) return 'Enter valid integer';
-//                                 return null;
-//                               },
-//                               onSaved: (v) => _students = int.parse(v!.trim()),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       const SizedBox(height: 16),
-//                       // Dropdown of Illustration Icon
-//                       DropdownButtonFormField<String>(
-//                         value: _image,
-//                         decoration: const InputDecoration(labelText: 'Course Icon/Illustration'),
-//                         items: _iconOptions.keys.map((k) {
-//                           return DropdownMenuItem(
-//                             value: k,
-//                             child: Row(
-//                               children: [
-//                                 Icon(_iconOptions[k], size: 18, color: AppColors.primary),
-//                                 const SizedBox(width: 10),
-//                                 Text(k.replaceAll('_', ' ')),
-//                               ],
-//                             ),
-//                           );
-//                         }).toList(),
-//                         onChanged: (v) {
-//                           if (v != null) setState(() => _image = v);
-//                         },
-//                       ),
-//                       const SizedBox(height: 16),
-//                       // Description
 //                       TextFormField(
-//                         decoration: const InputDecoration(labelText: 'Description', alignLabelWithHint: true),
-//                         maxLines: 3,
-//                         validator: (v) => v == null || v.trim().isEmpty ? 'Description is required' : null,
-//                         onSaved: (v) => _description = v ?? '',
+//                         decoration: const InputDecoration(labelText: 'Price (₹)', prefixIcon: Icon(Icons.currency_rupee, size: 18)),
+//                         keyboardType: TextInputType.number,
+//                         validator: (v) {
+//                           if (v == null || v.trim().isEmpty) return 'Price is required';
+//                           if (double.tryParse(v.trim()) == null) return 'Enter valid price';
+//                           return null;
+//                         },
+//                         onSaved: (v) => _price = double.parse(v!.trim()),
 //                       ),
 //                     ],
 //                   ),
@@ -237,7 +127,42 @@
 //                   ),
 //                   const SizedBox(width: 12),
 //                   ElevatedButton(
-//                     onPressed: _onSave,
+//                     onPressed: () async {
+//                       if (!_formKey.currentState!.validate()) return;
+//                       _formKey.currentState!.save();
+
+//                       final provider = context.read<CourseProvider>();
+//                       final newCourse = CourseModel(
+//                         id: '',
+//                         courseId: '',
+//                         title: _title,
+//                         instructor: _instructor,
+//                         category: _category,
+//                         price: _price,
+//                         description: _description,
+//                         image: _image,
+//                       );
+
+//                       final success = await provider.addCourse(newCourse);
+//                       if (success) {
+//                         Navigator.of(context).pop();
+//                         ScaffoldMessenger.of(context).showSnackBar(
+//                           const SnackBar(
+//                             content: Text('Course added successfully!'),
+//                             backgroundColor: AppColors.primary,
+//                             behavior: SnackBarBehavior.floating,
+//                           ),
+//                         );
+//                       } else {
+//                         ScaffoldMessenger.of(context).showSnackBar(
+//                           SnackBar(
+//                             content: Text(provider.errorMessage ?? 'Failed to add course'),
+//                             backgroundColor: Colors.red,
+//                             behavior: SnackBarBehavior.floating,
+//                           ),
+//                         );
+//                       }
+//                     },
 //                     style: ElevatedButton.styleFrom(
 //                       backgroundColor: AppColors.primary,
 //                       foregroundColor: Colors.white,
@@ -245,7 +170,7 @@
 //                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
 //                       elevation: 0,
 //                     ),
-//                     child: const Text('Save'),
+//                     child: const Text('Add Course'),
 //                   ),
 //                 ],
 //               ),

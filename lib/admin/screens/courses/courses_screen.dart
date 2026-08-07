@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/screens/courses/screens/course_body.dart';
-import 'package:homeopathy/student_portal/pages/courses/provider/course_provider.dart';
+import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:provider/provider.dart';
 
 class CourseManagementPage extends StatelessWidget {

@@ -22,10 +22,10 @@ class DashboardMobile extends StatelessWidget {
         ),
         title: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xff1F7A3D),
-              child: Icon(Icons.water_drop, color: Colors.white, size: 16),
+              backgroundColor: Color.fromARGB(255, 10, 5, 100),
+              child: const Icon(Icons.water_drop, color: Colors.white, size: 16),
             ),
             const SizedBox(width: 8),
             Text(
@@ -44,7 +44,7 @@ class DashboardMobile extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xff1F7A3D)),
+              decoration: const BoxDecoration(color:Color.fromARGB(255, 10, 5, 100),),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -52,7 +52,7 @@ class DashboardMobile extends StatelessWidget {
                   const CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.water_drop, color: Color(0xff1F7A3D), size: 28),
+                    child: Icon(Icons.water_drop, color:Color.fromARGB(255, 10, 5, 100), size: 28),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -68,9 +68,7 @@ class DashboardMobile extends StatelessWidget {
             ),
             _drawerTile(context, Icons.dashboard_rounded, "Dashboard", null),
             _drawerTile(context, Icons.menu_book_rounded, "Courses", const CoursesScreen()),
-            _drawerTile(context, Icons.live_tv_rounded, "Live Classes", LiveClassesSection()),
             _drawerTile(context, Icons.quiz_rounded, "Mock Tests", const MockTest()),
-            _drawerTile(context, Icons.school_rounded, "Faculty", const FacultyScreen()),
             _drawerTile(context, Icons.monetization_on_rounded, "Pricing", const PricingScreen()),
           ],
         ),
@@ -138,7 +136,7 @@ class DashboardMobile extends StatelessWidget {
 
   Widget _drawerTile(BuildContext context, IconData icon, String title, Widget? targetScreen) {
     return ListTile(
-      leading: Icon(icon, color: const Color(0xff1F7A3D)),
+      leading: Icon(icon, color: Color.fromARGB(255, 10, 5, 100)),
       title: Text(
         title,
         style: GoogleFonts.outfit(fontWeight: FontWeight.w600),

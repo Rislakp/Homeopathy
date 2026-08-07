@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_data_models.dart';
 import '../../theme/admin_colors.dart';
 
@@ -18,12 +19,12 @@ class AdminDataTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AdminColors.surface,
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-        border: Border.all(color: AdminColors.border),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(
@@ -31,7 +32,7 @@ class AdminDataTable extends StatelessWidget {
               minWidth: MediaQuery.of(context).size.width - 340,
             ),
             child: DataTable(
-              headingRowColor: WidgetStateProperty.all(AdminColors.background),
+              headingRowColor: WidgetStateProperty.all(AppColors.background),
               horizontalMargin: 20,
               columnSpacing: 28,
               dataRowMaxHeight: 64,
@@ -41,7 +42,7 @@ class AdminDataTable extends StatelessWidget {
                     'ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -50,7 +51,7 @@ class AdminDataTable extends StatelessWidget {
                     'RECORD / TITLE',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -59,7 +60,7 @@ class AdminDataTable extends StatelessWidget {
                     'CATEGORY',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -68,7 +69,7 @@ class AdminDataTable extends StatelessWidget {
                     'DATE',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -77,7 +78,7 @@ class AdminDataTable extends StatelessWidget {
                     'STATUS',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -86,7 +87,7 @@ class AdminDataTable extends StatelessWidget {
                     'VALUE / META',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -95,7 +96,7 @@ class AdminDataTable extends StatelessWidget {
                     'ACTIONS',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AdminColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -122,14 +123,14 @@ class AdminDataTable extends StatelessWidget {
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
-                              color: AdminColors.textPrimary,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           Text(
                             row.subtitle,
                             style: const TextStyle(
                               fontSize: 11,
-                              color: AdminColors.textMuted,
+                              color: AppColors.textMuted,
                             ),
                           ),
                         ],
@@ -142,14 +143,14 @@ class AdminDataTable extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AdminColors.background,
+                          color: AppColors.background,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           row.category,
                           style: const TextStyle(
                             fontSize: 12,
-                            color: AdminColors.textSecondary,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -159,7 +160,7 @@ class AdminDataTable extends StatelessWidget {
                         row.date,
                         style: const TextStyle(
                           fontSize: 12,
-                          color: AdminColors.textSecondary,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -200,7 +201,7 @@ class AdminDataTable extends StatelessWidget {
                             icon: const Icon(
                               Icons.visibility_rounded,
                               size: 18,
-                              color: AdminColors.textSecondary,
+                              color: AppColors.textSecondary,
                             ),
                             onPressed: () => onView(row),
                             tooltip: 'View Details',
@@ -209,7 +210,7 @@ class AdminDataTable extends StatelessWidget {
                             icon: const Icon(
                               Icons.edit_rounded,
                               size: 18,
-                              color: AdminColors.info,
+                              color: AppColors.info,
                             ),
                             onPressed: () {},
                             tooltip: 'Edit Record',
@@ -218,7 +219,7 @@ class AdminDataTable extends StatelessWidget {
                             icon: const Icon(
                               Icons.delete_outline_rounded,
                               size: 18,
-                              color: AdminColors.danger,
+                              color: AppColors.danger,
                             ),
                             onPressed: () => onDelete(row),
                             tooltip: 'Delete Record',

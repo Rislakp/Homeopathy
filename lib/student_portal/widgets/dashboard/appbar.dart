@@ -13,7 +13,7 @@ import 'package:homeopathy/student_portal/widgets/dashboard/categories/screens/c
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
 
-  static const Color primaryGreen = Color(0xFF0FA958);
+  static const Color primaryGreen =Color.fromARGB(255, 10, 5, 100); 
   static const Color textDarkGrey = Color(0xFF4A5568);
 
   @override
@@ -58,7 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "AirHomoeo",
+                "White Coat",
                 style: GoogleFonts.outfit(
                   color: Colors.black,
                   fontSize: 18,
@@ -97,7 +97,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Spacer(),
           // Tablet Layout shows compact navigation links (hides blog to save space)
           _NavMenuItem(title: "Courses", page: const CoursesScreen()),
-          _NavMenuItem(title: "Live Classes", page: LiveClassesSection()),
           _NavMenuItem(title: "Mock Tests", page: const MockTest()),
           _NavMenuItem(title: "Faculty", page: const FacultyScreen()),
           _NavMenuItem(title: "Pricing", page: const PricingScreen()),
@@ -134,17 +133,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const _NavMenuItem(title: "Courses", page: CoursesScreen()),
-                    _NavMenuItem(
-                      title: "Live Classes",
-                      page: LiveClassesSection(),
-                    ),
+                    // _NavMenuItem(
+                    //   title: "Live Classes",
+                    //   page: LiveClassesSection(),
+                    // ),
                     const _NavMenuItem(title: "Mock Tests", page: MockTest()),
-                    const _NavMenuItem(title: "Faculty", page: FacultyScreen()),
-                    const _NavMenuItem(
-                      title: "Success Stories",
-                      page: SucessStories(),
-                    ),
-                    const _NavMenuItem(title: "Blog", page: BlogScreen()),
+                 //   const _NavMenuItem(title: "Faculty", page: FacultyScreen()),
+                    // const _NavMenuItem(
+                    //   title: "Success Stories",
+                    //   page: SucessStories(),
+                    // ),
                     const _NavMenuItem(title: "Pricing", page: PricingScreen()),
                     _buildMoreDropdown(context),
                   ],
@@ -302,7 +300,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          // Navigate to Sign In page
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (_) => const SignInScreen()),
+          // );
+        },
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
