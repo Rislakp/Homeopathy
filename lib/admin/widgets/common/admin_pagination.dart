@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../theme/admin_colors.dart';
 
 class AdminPagination extends StatelessWidget {
@@ -28,16 +29,16 @@ class AdminPagination extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: AdminColors.surface,
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-        border: Border.all(color: AdminColors.border),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
       ),
       child: isMobile
           ? Column(
               children: [
                 Text(
                   'Showing $startRow-$endRow of $totalRows entries',
-                  style: const TextStyle(color: AdminColors.textSecondary, fontSize: 12),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                 ),
                 const SizedBox(height: 10),
                 _buildPageButtons(),
@@ -50,7 +51,7 @@ class AdminPagination extends StatelessWidget {
                   children: [
                     const Text(
                       'Rows per page: ',
-                      style: TextStyle(color: AdminColors.textSecondary, fontSize: 12),
+                      style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                     ),
                     DropdownButtonHideUnderline(
                       child: DropdownButton<int>(
@@ -69,7 +70,7 @@ class AdminPagination extends StatelessWidget {
                     const SizedBox(width: 16),
                     Text(
                       'Showing $startRow to $endRow of $totalRows entries',
-                      style: const TextStyle(color: AdminColors.textSecondary, fontSize: 12),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                     ),
                   ],
                 ),
@@ -90,13 +91,13 @@ class AdminPagination extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AdminColors.primaryLight,
+            color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             'Page $currentPage of $totalPages',
             style: const TextStyle(
-              color: AdminColors.primaryDark,
+              color: AppColors.primaryDark,
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),

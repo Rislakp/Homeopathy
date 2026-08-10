@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../../service/course/course_api_service.dart';
 import '../model/course_model.dart';
@@ -7,21 +8,29 @@ class CourseProvider extends ChangeNotifier {
 
   List<CourseModel> _allCourses = [];
   List<CourseModel> _filteredCourses = [];
+  
   bool _isLoading = false;
+  bool _isCreating = false; 
+  String? _errorMessage;
 
-  // Filter States
+  // Filter and Search States
   String _searchQuery = '';
   String _selectedCategory = 'All Categories';
 
   // Getters
   bool get isLoading => _isLoading;
+  bool get isCreating => _isCreating;
+  String? get errorMessage => _errorMessage;
   List<CourseModel> get courses => _filteredCourses;
   String get searchQuery => _searchQuery;
   String get selectedCategory => _selectedCategory;
 
-  // Load courses simulation
-  Future<void> loadCourses() async {
+  // ==========================================
+  // Fetch all courses (GET)
+  // ==========================================
+  Future<void> fetchCourses() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
 
     try {
@@ -88,6 +97,15 @@ class CourseProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+  // ==========================================
+  // Update an existing course (PUT)
+  // ==========================================
+  Future<bool> updateCourse(dynamic arg1, [CourseModel? arg2]) async {
+    String courseId;
+    CourseModel updatedCourse;
+    bool success = false;
 
   Future<void> updateCourse(CourseModel course) async {
     _isLoading = true;
@@ -143,21 +161,21 @@ class CourseProvider extends ChangeNotifier {
     }
   }
 
-  // Search
+  // ==========================================
+  // Search & Filtering Logic
+  // ==========================================
   void searchCourses(String query) {
     _searchQuery = query;
     _applyFilters();
     notifyListeners();
   }
 
-  // Category Filtering
   void filterCategory(String category) {
     _selectedCategory = category;
     _applyFilters();
     notifyListeners();
   }
 
-  // Reset Filters
   void clearFilters() {
     _searchQuery = '';
     _selectedCategory = 'All Categories';
@@ -165,11 +183,9 @@ class CourseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Helper filter executor
   void _applyFilters() {
     List<CourseModel> result = List.from(_allCourses);
 
-    // Search by title, instructor, or category
     if (_searchQuery.trim().isNotEmpty) {
       final q = _searchQuery.toLowerCase().trim();
       result = result.where((c) {
@@ -179,7 +195,6 @@ class CourseProvider extends ChangeNotifier {
       }).toList();
     }
 
-    // Filter by Category Dropdown
     if (_selectedCategory != 'All Categories') {
       result = result.where((c) => c.category == _selectedCategory).toList();
     }

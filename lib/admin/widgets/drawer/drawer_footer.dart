@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_menu_item.dart';
 import '../../theme/admin_colors.dart';
 
@@ -19,9 +20,9 @@ class AppDrawerFooter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: const BoxDecoration(
-        color: AdminColors.surface,
+        color: AppColors.surface,
         border: Border(
-          top: BorderSide(color: AdminColors.border, width: 1),
+          top: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: Column(
@@ -30,26 +31,26 @@ class AppDrawerFooter extends StatelessWidget {
           // Collapse Toggle Button
           InkWell(
             onTap: onToggleCollapse,
-            borderRadius: BorderRadius.circular(AdminColors.borderRadius),
+            borderRadius: BorderRadius.circular(AppColors.borderRadius),
             child: Container(
               height: 40,
               padding: EdgeInsets.symmetric(horizontal: isCollapsed ? 0 : 12),
               decoration: BoxDecoration(
-                color: AdminColors.background,
-                borderRadius: BorderRadius.circular(AdminColors.borderRadius),
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(AppColors.borderRadius),
               ),
               child: isCollapsed
                   ? const Center(
-                      child: Icon(Icons.chevron_right_rounded, color: AdminColors.textPrimary, size: 20),
+                      child: Icon(Icons.chevron_right_rounded, color: AppColors.textPrimary, size: 20),
                     )
                   : const Row(
                       children: [
-                        Icon(Icons.chevron_left_rounded, color: AdminColors.textPrimary, size: 20),
+                        Icon(Icons.chevron_left_rounded, color: AppColors.textPrimary, size: 20),
                         SizedBox(width: 8),
                         Text(
                           'Collapse Sidebar',
                           style: TextStyle(
-                            color: AdminColors.textPrimary,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -67,15 +68,15 @@ class AppDrawerFooter extends StatelessWidget {
                 Expanded(
                   child: TextButton.icon(
                     onPressed: () => onSelectMenu(AdminMenuItem.generalSettings),
-                    icon: const Icon(Icons.settings_outlined, size: 16, color: AdminColors.textSecondary),
-                    label: const Text('Settings', style: TextStyle(color: AdminColors.textSecondary, fontSize: 12)),
+                    icon: const Icon(Icons.settings_outlined, size: 16, color: AppColors.textSecondary),
+                    label: const Text('Settings', style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
                   ),
                 ),
                 Expanded(
                   child: TextButton.icon(
                     onPressed: () => _confirmLogout(context),
-                    icon: const Icon(Icons.logout_rounded, size: 16, color: AdminColors.danger),
-                    label: const Text('Logout', style: TextStyle(color: AdminColors.danger, fontSize: 12)),
+                    icon: const Icon(Icons.logout_rounded, size: 16, color: AppColors.danger),
+                    label: const Text('Logout', style: TextStyle(color: AppColors.danger, fontSize: 12)),
                   ),
                 ),
               ],
@@ -84,7 +85,7 @@ class AppDrawerFooter extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.logout_rounded, size: 18, color: AdminColors.danger),
+                  icon: const Icon(Icons.logout_rounded, size: 18, color: AppColors.danger),
                   onPressed: () => _confirmLogout(context),
                   tooltip: 'Logout',
                 ),
@@ -108,7 +109,7 @@ class AppDrawerFooter extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AdminColors.danger),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
             onPressed: () {
               Navigator.pop(ctx);
               ScaffoldMessenger.of(context).showSnackBar(

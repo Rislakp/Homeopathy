@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_data_models.dart';
 import '../../models/admin_menu_item.dart';
 import '../../theme/admin_colors.dart';
@@ -23,14 +24,14 @@ class DashboardScreen extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+                colors: [Color.fromARGB(255, 10, 5, 100),Color.fromARGB(255, 139, 137, 175),],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(AdminColors.cardRadius),
+              borderRadius: BorderRadius.circular(AppColors.cardRadius),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF10B981).withOpacity(0.3),
+                  color: Color.fromARGB(255, 126, 123, 182).withOpacity(0.3),
                   blurRadius: 16,
                   offset: const Offset(0, 6),
                 ),
@@ -129,9 +130,9 @@ class DashboardScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: constraints.maxWidth < 600 ? 2.2 : 1.7,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: constraints.maxWidth < 600 ? 3.0 : 2.2,
                 ),
                 itemCount: stats.length,
                 itemBuilder: (context, index) {
@@ -151,9 +152,9 @@ class DashboardScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AdminColors.surface,
-                    borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-                    border: Border.all(color: AdminColors.border),
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(AppColors.cardRadius),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,28 +179,28 @@ class DashboardScreen extends StatelessWidget {
                         'Dr. Aris Thorne joined Materia Medica 101',
                         '5 mins ago',
                         Icons.person_add_rounded,
-                        AdminColors.primary,
+                        AppColors.primary,
                       ),
                       _buildActivityTile(
                         'Webinar live session',
                         'Live case study session started by Prof. Smith',
                         '24 mins ago',
                         Icons.live_tv_rounded,
-                        AdminColors.info,
+                        AppColors.info,
                       ),
                       _buildActivityTile(
                         'Payment received',
                         'Course fee \$450 processed for Homeopathy Fundamentals',
                         '1 hour ago',
                         Icons.payments_rounded,
-                        AdminColors.warning,
+                        AppColors.warning,
                       ),
                       _buildActivityTile(
                         'Exam published',
                         'Final Pathology Mock Exam published by Admin',
                         '3 hours ago',
                         Icons.assignment_turned_in_rounded,
-                        AdminColors.primaryDark,
+                        AppColors.primaryDark,
                       ),
                     ],
                   ),
@@ -212,11 +213,11 @@ class DashboardScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: AdminColors.surface,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(
-                        AdminColors.cardRadius,
+                        AppColors.cardRadius,
                       ),
-                      border: Border.all(color: AdminColors.border),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,14 +289,14 @@ class DashboardScreen extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
-                    color: AdminColors.textPrimary,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 Text(
                   desc,
                   style: const TextStyle(
                     fontSize: 12,
-                    color: AdminColors.textSecondary,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -303,7 +304,7 @@ class DashboardScreen extends StatelessWidget {
           ),
           Text(
             time,
-            style: const TextStyle(fontSize: 11, color: AdminColors.textMuted),
+            style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
           ),
         ],
       ),
@@ -323,20 +324,20 @@ class DashboardScreen extends StatelessWidget {
             context,
           ).showSnackBar(SnackBar(content: Text('Action: $label triggered.')));
         },
-        icon: Icon(icon, size: 18, color: AdminColors.primary),
+        icon: Icon(icon, size: 18, color: AppColors.primary),
         label: Align(
           alignment: Alignment.centerLeft,
           child: Text(
             label,
             style: const TextStyle(
-              color: AdminColors.textPrimary,
+              color: AppColors.textPrimary,
               fontSize: 13,
             ),
           ),
         ),
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, 44),
-          side: const BorderSide(color: AdminColors.border),
+          side: const BorderSide(color: AppColors.border),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

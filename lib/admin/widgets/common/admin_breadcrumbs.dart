@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_menu_item.dart';
 import '../../theme/admin_colors.dart';
 
@@ -16,13 +17,13 @@ class AdminBreadcrumbs extends StatelessWidget {
           const Icon(
             Icons.home_outlined,
             size: 16,
-            color: AdminColors.textMuted,
+            color: AppColors.textMuted,
           ),
           const SizedBox(width: 6),
           Text(
             'Portal',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
               fontSize: 12,
             ),
           ),
@@ -31,13 +32,13 @@ class AdminBreadcrumbs extends StatelessWidget {
             child: Icon(
               Icons.chevron_right_rounded,
               size: 16,
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
             ),
           ),
           Text(
             menuItem.section.title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
               fontSize: 12,
             ),
           ),
@@ -46,13 +47,13 @@ class AdminBreadcrumbs extends StatelessWidget {
             child: Icon(
               Icons.chevron_right_rounded,
               size: 16,
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
             ),
           ),
           Text(
             menuItem.label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AdminColors.primary,
+              color: AppColors.primary,
               fontWeight: FontWeight.w600,
               fontSize: 12,
             ),

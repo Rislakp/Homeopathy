@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_menu_item.dart';
 import '../../theme/admin_colors.dart';
 
@@ -21,7 +22,7 @@ class DrawerSectionHeader extends StatelessWidget {
     if (isCollapsed) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
-        child: Divider(height: 1, color: AdminColors.border),
+        child: Divider(height: 1, color: AppColors.border),
       );
     }
 
@@ -35,7 +36,7 @@ class DrawerSectionHeader extends StatelessWidget {
             Text(
               section.title,
               style: const TextStyle(
-                color: AdminColors.textMuted,
+                color: AppColors.textMuted,
                 fontSize: 11,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.1,
@@ -44,7 +45,7 @@ class DrawerSectionHeader extends StatelessWidget {
             Icon(
               isExpanded ? Icons.keyboard_arrow_down_rounded : Icons.keyboard_arrow_right_rounded,
               size: 16,
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
             ),
           ],
         ),

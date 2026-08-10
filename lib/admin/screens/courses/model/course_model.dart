@@ -9,7 +9,14 @@ class CourseModel {
 
   final String status; // 'Published', 'Draft', 'Archived'
   final String description;
-  final String image; // Icon or illustration code/identifier
+  final String image;
+  final String status;
+  final int students;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  // Compatibility getter
+  String get courseTitle => title;
 
   const CourseModel({
     required this.id,
@@ -28,13 +35,16 @@ class CourseModel {
     String? id,
     String? courseId,
     String? title,
+    String? courseTitle,
     String? instructor,
     String? category,
     double? price,
-    int? students,
-    String? status,
     String? description,
     String? image,
+    String? status,
+    int? students,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return CourseModel(
       id: id ?? this.id,
@@ -43,13 +53,16 @@ class CourseModel {
       instructor: instructor ?? this.instructor,
       category: category ?? this.category,
       price: price ?? this.price,
-      students: students ?? this.students,
-      status: status ?? this.status,
       description: description ?? this.description,
       image: image ?? this.image,
+      status: status ?? this.status,
+      students: students ?? this.students,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
+  // toJson ONLY sends the backend-required fields to prevent validation failures
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -58,10 +71,6 @@ class CourseModel {
       'instructor': instructor,
       'category': category,
       'price': price,
-      'students': students,
-      'status': status,
-      'description': description,
-      'image': image,
     };
   }
 

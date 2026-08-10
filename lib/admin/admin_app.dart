@@ -28,3 +28,4 @@ class WhiteCoatAdminPortal extends StatelessWidget {
     );
   }
 }
+

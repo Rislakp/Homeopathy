@@ -53,7 +53,7 @@ class _CoursesScreenContent extends StatelessWidget {
                     const SizedBox(height: 32),
                     
                     // Courses Grid
-                    const CourseGrid(),
+                    const CourseGrid(courses: [],),
                   ],
                 ),
               ),

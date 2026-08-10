@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 import '../../theme/admin_colors.dart';
 
 class AdminEmptyState extends StatelessWidget {
@@ -18,9 +19,9 @@ class AdminEmptyState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       decoration: BoxDecoration(
-        color: AdminColors.surface,
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-        border: Border.all(color: AdminColors.border),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -28,13 +29,13 @@ class AdminEmptyState extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
-              color: AdminColors.background,
+              color: AppColors.background,
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.search_off_rounded,
               size: 48,
-              color: AdminColors.textMuted,
+              color: AppColors.textMuted,
             ),
           ),
           const SizedBox(height: 16),
@@ -42,7 +43,7 @@ class AdminEmptyState extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AdminColors.textPrimary,
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                 ),
           ),
@@ -53,7 +54,7 @@ class AdminEmptyState extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AdminColors.textSecondary,
+                    color: AppColors.textSecondary,
                   ),
             ),
           ),
