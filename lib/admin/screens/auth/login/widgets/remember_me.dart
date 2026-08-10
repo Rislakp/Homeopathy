@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 
 class RememberMeSection extends StatelessWidget {
   final bool value;
@@ -15,7 +16,7 @@ class RememberMeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color(0xFF08B653);
+    final Color primaryColor = AppColors.adminBlue;
     const Color darkColor = Color(0xFF101828);
 
     return Row(

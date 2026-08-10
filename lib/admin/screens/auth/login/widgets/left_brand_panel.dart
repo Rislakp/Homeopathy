@@ -1,12 +1,12 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
-
+import 'package:homeopathy/utils/app_colors.dart';
 
 class LeftBrandPanel extends StatelessWidget {
   const LeftBrandPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const Color brandColor = Color(0xFF08B653);
+    final Color brandColor = AppColors.adminBlue;
 
     return Container(
       color: brandColor,
@@ -87,7 +87,7 @@ class LeftBrandPanel extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Icon(
                                       Icons.medical_services_rounded,
                                       color: brandColor,
@@ -171,8 +171,8 @@ class LeftBrandPanel extends StatelessWidget {
 
   // Pure Flutter Flat Vector Illustration of a Medical Card
   Widget _buildMedicalCardIllustration() {
-    const Color brandColor = Color(0xFF08B653);
-    const Color medicalPlusColor = Color(0xFF08B653);
+    final Color brandColor = AppColors.adminBlue;
+    final Color medicalPlusColor = AppColors.adminBlue;
 
     return SizedBox(
       width: 320,
@@ -231,7 +231,7 @@ class LeftBrandPanel extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: brandColor.withOpacity(0.1),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.person_rounded,
                             color: brandColor,
@@ -287,12 +287,12 @@ class LeftBrandPanel extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFECFDF3),
+                              color: AppColors.adminBlueLight,
                               borderRadius: BorderRadius.circular(100),
                             ),
                             child: Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.add_circle,
                                   color: brandColor,
                                   size: 14,
@@ -344,7 +344,7 @@ class LeftBrandPanel extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.add_rounded,
                 color: medicalPlusColor,
                 size: 20,
@@ -394,7 +394,7 @@ class LeftBrandPanel extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.check_circle_rounded,
                 color: brandColor,
                 size: 14,

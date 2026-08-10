@@ -3,7 +3,6 @@ import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/app_colour.dart';
 import 'package:provider/provider.dart';
 
-
 import 'add_course_dialog.dart';
 
 class CourseSearchFilter extends StatefulWidget {
@@ -34,7 +33,7 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CourseProvider>();
-    
+
     // Keep search field text synchronized
     if (_searchController.text != provider.searchQuery) {
       _searchController.text = provider.searchQuery;
@@ -59,7 +58,11 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
                 value: cat,
                 child: Text(
                   cat,
-                  style: const TextStyle(fontSize: 13, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               );
             }).toList(),
@@ -68,7 +71,10 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
                 provider.filterCategory(val);
               }
             },
-            icon: const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: AppColors.textSecondary,
+            ),
             style: const TextStyle(fontSize: 13),
           ),
         ),
@@ -86,8 +92,15 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
             onChanged: (val) => provider.searchCourses(val),
             decoration: InputDecoration(
               hintText: 'Search courses...',
-              hintStyle: const TextStyle(fontSize: 13, color: AppColors.textLight),
-              prefixIcon: const Icon(Icons.search, size: 18, color: AppColors.textLight),
+              hintStyle: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textLight,
+              ),
+              prefixIcon: const Icon(
+                Icons.search,
+                size: 18,
+                color: AppColors.textLight,
+              ),
               suffixIcon: provider.searchQuery.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.close, size: 16),
@@ -108,7 +121,10 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                borderSide: const BorderSide(
+                  color: AppColors.primary,
+                  width: 1.5,
+                ),
               ),
             ),
             style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
@@ -124,14 +140,21 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
       // Add Course Button
       ElevatedButton.icon(
         onPressed: () {
+          final courseProvider = context.read<CourseProvider>();
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const AddCourseDialog(),
+            builder: (_) => ChangeNotifierProvider.value(
+              value: courseProvider,
+              child: const AddCourseDialog(),
+            ),
           );
         },
         icon: const Icon(Icons.add, size: 18),
-        label: const Text('Add Course', style: TextStyle(fontWeight: FontWeight.bold)),
+        label: const Text(
+          'Add Course',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -155,9 +178,7 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: filterWidgets,
             )
-          : Row(
-              children: filterWidgets,
-            ),
+          : Row(children: filterWidgets),
     );
   }
 }

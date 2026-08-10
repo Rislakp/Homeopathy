@@ -5,6 +5,12 @@ class AppColors {
   static const Color primaryHover = Color(0xFF15803D);
   static const Color primaryLight = Color(0xFFDCFCE7);
 
+  // Admin Login Screen Blue + White Theme
+  static const Color adminBlue = Color(0xFF1E40AF); // Primary Blue (Blue 800)
+  static const Color adminBlueHover = Color(0xFF1D4ED8); // Blue 700
+  static const Color adminBlueLight = Color(0xFFEFF6FF); // Very light blue background (Blue 50)
+  static const Color adminBlueBorder = Color(0xFFBFDBFE); // Light blue border (Blue 200)
+
   static const Color background = Color(0xFFF8FAFC); // Very light grey background
   static const Color cardBackground = Colors.white;
   static const Color border = Color(0xFFE2E8F0); // Light grey border
@@ -23,5 +29,5 @@ class AppColors {
   static const Color archivedBg = Color(0xFFFEE2E2);
   static const Color archivedText = Color(0xFFB91C1C);
 
-  static get primaryGreen => null;
+  static Color? get primaryGreen => null;
 }

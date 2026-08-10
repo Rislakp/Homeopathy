@@ -23,6 +23,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
   String _status = 'Published';
   String _description = '';
   String _image = 'menu_book'; // Default Icon code
+  bool _isSaving = false;
 
   final List<String> _categories = [
     'Anatomy',
@@ -54,33 +55,56 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
     'gavel': Icons.gavel,
   };
 
-  void _onSave() {
+  void _onSave() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
 
-    final provider = context.read<CourseProvider>();
-    final newCourse = CourseModel(
-      id: '',
-      title: _title,
-      instructor: _instructor,
-      category: _category,
-      price: _price,
-      students: _students,
-      status: _status,
-      description: _description,
-      image: _image,
-    );
+    setState(() {
+      _isSaving = true;
+    });
 
-    provider.addCourse(newCourse);
-    Navigator.of(context).pop();
+    try {
+      final provider = context.read<CourseProvider>();
+      final newCourse = CourseModel(courseId: '',
+        id: '',
+        title: _title,
+        instructor: _instructor,
+        category: _category,
+        price: _price,
+        students: _students,
+        status: _status,
+        description: _description,
+        image: _image,
+      );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Course added successfully!'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      await provider.addCourse(newCourse);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Course added successfully!'),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add course: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
   }
 
   @override
@@ -227,7 +251,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: _isSaving ? null : () => Navigator.of(context).pop(),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.border),
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -237,7 +261,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton(
-                    onPressed: _onSave,
+                    onPressed: _isSaving ? null : _onSave,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -245,7 +269,16 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       elevation: 0,
                     ),
-                    child: const Text('Save'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text('Save'),
                   ),
                 ],
               ),
