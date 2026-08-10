@@ -1,5 +1,6 @@
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart' hide CourseProvider;
-import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
+import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'screens/courses/provider/course_provider.dart' hide CourseProvider;
+import 'providers/course_details_provider.dart';
 
 class WhiteCoatAdminPortal extends StatelessWidget {
   const WhiteCoatAdminPortal({super.key});
@@ -11,12 +12,12 @@ class WhiteCoatAdminPortal extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DrawerProvider()),
         ChangeNotifierProvider(create: (_) => AdminDataProvider()),
         ChangeNotifierProvider(create: (_)=> CourseManagementNotifier()),
+        ChangeNotifierProvider(create: (_) => CourseProvider()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
         ChangeNotifierProvider(create: (_) => LiveClassProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionPlanProvider()),
-        ChangeNotifierProvider(create: (_) => CourseProvider()),
-       // ChangeNotifierProvider(create: (_) => CourseDetailsViewProvider()),
-     
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => CourseDetailsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

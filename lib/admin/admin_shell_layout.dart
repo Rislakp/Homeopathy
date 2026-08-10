@@ -77,8 +77,8 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
         return const DashboardScreen();
 
       // Academics
-      case AdminMenuItem.teachers:
-        return const TeachersScreen();
+      //case AdminMenuItem.teachers:
+      //  return const TeachersScreen();
       case AdminMenuItem.students:
         return const StudentsScreen();
       case AdminMenuItem.courses:

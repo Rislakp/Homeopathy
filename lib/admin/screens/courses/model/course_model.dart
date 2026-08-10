@@ -1,12 +1,13 @@
 class CourseModel {
-  final String id;
-  final String courseId;
+  final String id; // Internal MongoDB _id (e.g. "64e5c7...")
+  final String courseId; // Custom display ID (e.g. "CRS-000012")
   final String title;
   final String instructor;
   final String category;
   final double price;
-  
-  // Compatibility fields for the frontend UI
+  final int students;
+
+  final String status; // 'Published', 'Draft', 'Archived'
   final String description;
   final String image;
   final String status;
@@ -24,12 +25,10 @@ class CourseModel {
     required this.instructor,
     required this.category,
     required this.price,
-    this.description = 'Homeopathy foundational and advanced modules.',
-    this.image = 'menu_book',
-    this.status = 'Published',
     this.students = 0,
-    this.createdAt,
-    this.updatedAt,
+    required this.status,
+    required this.description,
+    required this.image,
   });
 
   CourseModel copyWith({
@@ -50,7 +49,7 @@ class CourseModel {
     return CourseModel(
       id: id ?? this.id,
       courseId: courseId ?? this.courseId,
-      title: title ?? courseTitle ?? this.title,
+      title: title ?? this.title,
       instructor: instructor ?? this.instructor,
       category: category ?? this.category,
       price: price ?? this.price,
@@ -66,7 +65,9 @@ class CourseModel {
   // toJson ONLY sends the backend-required fields to prevent validation failures
   Map<String, dynamic> toJson() {
     return {
-      'courseTitle': title,
+      'id': id,
+      'courseId': courseId,
+      'title': title,
       'instructor': instructor,
       'category': category,
       'price': price,
@@ -75,22 +76,16 @@ class CourseModel {
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
-      id: json['_id']?.toString() ?? '',
-      courseId: json['courseId']?.toString() ?? json['_id']?.toString() ?? '',
-      title: (json['courseTitle'] ?? json['title'] ?? '') as String,
-      instructor: (json['instructor'] ?? '') as String,
-      category: (json['category'] ?? '') as String,
-      price: (json['price'] as num? ?? 0.0).toDouble(),
-      description: (json['description'] ?? 'Homeopathy foundational and advanced modules.') as String,
-      image: (json['image'] ?? 'menu_book') as String,
-      status: (json['status'] ?? 'Published') as String,
-      students: (json['students'] as num? ?? 0).toInt(),
-      createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String)
-          : null,
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.tryParse(json['updatedAt'] as String)
-          : null,
+      id: json['id'] as String? ?? '',
+      courseId: json['courseId'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      instructor: json['instructor'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0, 
+      students: json['students'] as int? ?? 0,
+      status: json['status'] as String? ?? 'Published',
+      description: json['description'] as String? ?? '',
+      image: json['image'] as String? ?? 'menu_book',
     );
   }
 }

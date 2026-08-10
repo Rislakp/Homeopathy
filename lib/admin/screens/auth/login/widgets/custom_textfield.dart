@@ -1,4 +1,5 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final String label;
@@ -7,6 +8,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final TextInputType keyboardType;
   final TextEditingController controller;
+  final String? errorText;
 
   const CustomTextField({
     super.key,
@@ -16,6 +18,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     required this.controller,
+    this.errorText,
   });
 
   @override
@@ -48,10 +51,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color(0xFF08B653);
+    final Color primaryColor = AppColors.adminBlue;
     const Color darkColor = Color(0xFF101828);
     const Color textGrey = Color(0xFF667085);
-    const Color borderColor = Color(0xFFD0D5DD);
+    final Color borderColor = widget.errorText != null ? Colors.red.shade400 : const Color(0xFFD0D5DD);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,13 +77,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: _isFocused ? primaryColor : borderColor,
+              color: _isFocused ? (widget.errorText != null ? Colors.red.shade600 : primaryColor) : borderColor,
               width: _isFocused ? 1.8 : 1.0,
             ),
             boxShadow: [
               if (_isFocused)
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.08),
+                  color: (widget.errorText != null ? Colors.red : primaryColor).withOpacity(0.08),
                   blurRadius: 4,
                   spreadRadius: 3,
                   offset: const Offset(0, 1),
@@ -105,7 +108,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
               prefixIcon: Icon(
                 widget.prefixIcon,
-                color: _isFocused ? primaryColor : textGrey,
+                color: _isFocused 
+                    ? (widget.errorText != null ? Colors.red.shade600 : primaryColor) 
+                    : textGrey,
                 size: 20,
               ),
               suffixIcon: widget.isPassword
@@ -138,6 +143,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           ),
         ),
+        if (widget.errorText != null) ...[
+          const SizedBox(height: 6),
+          Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Text(
+              widget.errorText!,
+              style: GoogleFonts.inter(
+                color: Colors.red.shade700,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import '../admin/screens/courses/model/course_model.dart';
 import '../utils/app_colors.dart';
 
 class ViewCourseDialog extends StatelessWidget {
@@ -10,6 +10,24 @@ class ViewCourseDialog extends StatelessWidget {
     super.key,
     required this.course,
   });
+
+  IconData _getIconData(String key) {
+    switch (key) {
+      case 'menu_book': return Icons.menu_book;
+      case 'auto_stories': return Icons.auto_stories;
+      case 'troubleshoot': return Icons.troubleshoot;
+      case 'history_edu': return Icons.history_edu;
+      case 'accessibility': return Icons.accessibility;
+      case 'favorite': return Icons.favorite;
+      case 'biotech': return Icons.biotech;
+      case 'groups': return Icons.groups;
+      case 'vaccines': return Icons.vaccines;
+      case 'local_hospital': return Icons.local_hospital;
+      case 'content_cut': return Icons.content_cut;
+      case 'gavel': return Icons.gavel;
+      default: return Icons.book;
+    }
+  }
 
   Widget _buildMetaBlock(String label, String value, IconData icon) {
     return Container(
@@ -62,7 +80,7 @@ class ViewCourseDialog extends StatelessWidget {
               height: 140,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
+                  colors: [AppColors.primary, AppColors.primaryHover],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -73,7 +91,7 @@ class ViewCourseDialog extends StatelessWidget {
                   CircleAvatar(
                     radius: 32,
                     backgroundColor: Colors.white.withOpacity(0.2),
-                    child: const Icon(Icons.menu_book_outlined, size: 36, color: Colors.white),
+                    child: Icon(_getIconData(course.image), size: 36, color: Colors.white),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -82,7 +100,7 @@ class ViewCourseDialog extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          course.courseTitle,
+                          course.title,
                           style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -107,7 +125,7 @@ class ViewCourseDialog extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Meta Info Grid with Category and Price
+                  // Meta Info Grid
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -117,8 +135,33 @@ class ViewCourseDialog extends StatelessWidget {
                     childAspectRatio: 2.8,
                     children: [
                       _buildMetaBlock('Category', course.category, Icons.category_outlined),
+                      _buildMetaBlock('Status', course.status, Icons.verified_outlined),
                       _buildMetaBlock('Price', currencyFormat.format(course.price), Icons.currency_rupee),
+                      _buildMetaBlock('Enrollments', '${course.students} Students', Icons.people_outline),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Description label & text
+                  const Text(
+                    'COURSE DESCRIPTION',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textLight),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    constraints: const BoxConstraints(maxHeight: 120),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        course.description.isNotEmpty ? course.description : 'No description provided.',
+                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.5),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 24),
 

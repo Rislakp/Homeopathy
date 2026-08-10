@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import '../../../service/course/course_api_service.dart';
 import '../model/course_model.dart';
 
 class CourseProvider extends ChangeNotifier {
-  static const String _baseUrl = 'https://homeopathybackend-1.onrender.com/api/courses';
+  final CourseApiService _apiService = CourseApiService();
 
   List<CourseModel> _allCourses = [];
   List<CourseModel> _filteredCourses = [];
@@ -34,147 +34,68 @@ class CourseProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(Uri.parse(_baseUrl));
-      if (response.statusCode == 200) {
-        final decoded = json.decode(response.body);
-        List<dynamic> rawData = [];
-
-        // Safely handle both Map { "data": [...] } and direct List [...] responses
-        if (decoded is Map<String, dynamic>) {
-          rawData = decoded['data'] ?? decoded['courses'] ?? [];
-        } else if (decoded is List) {
-          rawData = decoded;
-        }
-
-        _allCourses.clear();
-
-        // Safely parse each item so one bad database entry doesn't break the whole app
-        for (var item in rawData) {
-          try {
-            _allCourses.add(CourseModel.fromJson(item));
-          } catch (e) {
-            debugPrint('Skipped corrupted course entry: $e');
-          }
-        }
-      } else {
-        throw Exception('Failed to load courses. Status: ${response.statusCode}');
+      final response = await _apiService.getCourses();
+      if (response.success) {
+        _allCourses = response.data.map((apiCourse) {
+          return CourseModel(
+            id: apiCourse.id ?? '',
+            courseId: apiCourse.courseId,
+            title: apiCourse.courseTitle,
+            instructor: apiCourse.instructor,
+            category: apiCourse.category ?? 'Materia Medica',
+            price: apiCourse.price,
+            status: 'Published',
+            description: 'Course by ${apiCourse.instructor}',
+            image: 'menu_book',
+            students: 0,
+          );
+        }).toList();
+        _applyFilters();
       }
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      debugPrint('Error fetching courses in CourseProvider: $e');
+      debugPrint('Error loading courses: $e');
     } finally {
       _isLoading = false;
-      _applyFilters();
       notifyListeners();
     }
   }
 
-  // Alias for backward compatibility
-  Future<void> loadCourses() async {
-    await fetchCourses();
-  }
-
-  // ==========================================
-  // Create a new course (POST)
-  // ==========================================
-  Future<bool> addCourse(CourseModel course) async {
-    _isCreating = true;
+  // CRUD Operations
+  Future<void> addCourse(CourseModel course) async {
     _isLoading = true;
-    _errorMessage = null;
-    bool success = false;
     notifyListeners();
 
     try {
-      final response = await http.post(
-        Uri.parse(_baseUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(course.toJson()),
+      final response = await _apiService.createCourse(
+        courseTitle: course.title,
+        instructor: course.instructor,
+        category: course.category,
+        price: course.price,
       );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        final decoded = json.decode(response.body);
-        final Map<String, dynamic> data = (decoded is Map<String, dynamic> && decoded.containsKey('data')) 
-            ? decoded['data'] 
-            : decoded;
-            
-        final newCourse = CourseModel.fromJson(data);
-        
-        _allCourses.insert(0, newCourse);
+      if (response.success) {
+        final createdCourse = CourseModel(
+          id: response.data.id ?? '',
+          courseId: response.data.courseId,
+          title: response.data.courseTitle,
+          instructor: response.data.instructor,
+          category: response.data.category ?? course.category,
+          price: response.data.price,
+          status: course.status,
+          description: course.description,
+          image: course.image,
+          students: course.students,
+        );
+        _allCourses.insert(0, createdCourse);
         _applyFilters();
-        success = true;
-      } else {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        _errorMessage = responseData['message'] ?? 'Failed to save course. Status: ${response.statusCode}';
       }
     } catch (e) {
-      _errorMessage = 'Network error: $e';
-      debugPrint('Error adding course in CourseProvider: $e');
+      debugPrint('Error adding course: $e');
+      rethrow;
     } finally {
-      _isCreating = false;
       _isLoading = false;
       notifyListeners();
     }
-    
-    return success;
-  }
-
-  // Legacy createCourse helper
- Future<bool> createCourse({
-  required String courseTitle,
-  required String instructor,
-  required String category,
-  required double price,
-}) async {
-  _isCreating = true;
-  _isLoading = true;
-  _errorMessage = null;
-
-  notifyListeners();
-
-  try {
-    print('Creating course: $courseTitle');
-
-    final response = await http.post(
-      Uri.parse(_baseUrl),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'courseTitle': courseTitle,
-        'instructor': instructor,
-        'category': category,
-        'price': price,
-      }),
-    );
-
-    print('POST STATUS: ${response.statusCode}');
-    print('POST RESPONSE: ${response.body}');
-
-    final responseData = jsonDecode(response.body);
-
-    if (response.statusCode == 200 ||
-        response.statusCode == 201) {
-      await fetchCourses();
-      return true;
-    }
-
-    _errorMessage =
-        responseData['message'] ?? 'Failed to create course';
-
-    return false;
-  } catch (e) {
-    _errorMessage = 'Network error: $e';
-
-    debugPrint('CREATE COURSE ERROR: $e');
-
-    return false;
-  } finally {
-    _isCreating = false;
-    _isLoading = false;
-
-    notifyListeners();
   }
 }
 
@@ -186,84 +107,58 @@ class CourseProvider extends ChangeNotifier {
     CourseModel updatedCourse;
     bool success = false;
 
-    if (arg2 == null && arg1 is CourseModel) {
-      updatedCourse = arg1;
-      courseId = arg1.courseId.isNotEmpty ? arg1.courseId : arg1.id;
-    } else if (arg1 is String && arg2 is CourseModel) {
-      courseId = arg1;
-      updatedCourse = arg2;
-    } else {
-      _errorMessage = 'Invalid arguments to updateCourse';
-      notifyListeners();
-      return false;
-    }
-
+  Future<void> updateCourse(CourseModel course) async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await http.put(
-        Uri.parse('$_baseUrl/$courseId'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(updatedCourse.toJson()),
+      final response = await _apiService.updateCourse(
+        courseId: course.courseId,
+        courseTitle: course.title,
+        instructor: course.instructor,
+        price: course.price,
       );
 
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        final index = _allCourses.indexWhere((c) => c.courseId == courseId || c.id == courseId);
+      if (response.success) {
+        final index = _allCourses.indexWhere((c) => c.courseId == course.courseId);
         if (index != -1) {
-          _allCourses[index] = updatedCourse;
+          _allCourses[index] = course.copyWith(
+            id: response.data.id ?? course.id,
+            courseId: response.data.courseId,
+            title: response.data.courseTitle,
+            instructor: response.data.instructor,
+            price: response.data.price,
+            category: response.data.category ?? course.category,
+          );
+          _applyFilters();
         }
-        _applyFilters();
-        success = true;
-      } else {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        _errorMessage = responseData['message'] ?? 'Failed to update course. Status: ${response.statusCode}';
       }
     } catch (e) {
-      _errorMessage = 'Network error: $e';
-      debugPrint('Error updating course in CourseProvider: $e');
+      debugPrint('Error updating course: $e');
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-    
-    return success;
   }
 
-  // ==========================================
-  // Delete a course (DELETE)
-  // ==========================================
-  Future<bool> deleteCourse(String courseId) async {
+  Future<void> deleteCourse(String id) async {
     _isLoading = true;
-    _errorMessage = null;
-    bool success = false;
     notifyListeners();
 
     try {
-      final response = await http.delete(
-        Uri.parse('$_baseUrl/$courseId'),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        _allCourses.removeWhere((c) => c.courseId == courseId || c.id == courseId);
+      final response = await _apiService.deleteCourse(id);
+      if (response.success) {
+        _allCourses.removeWhere((c) => c.courseId == id || c.id == id);
         _applyFilters();
-        success = true;
-      } else {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        _errorMessage = responseData['message'] ?? 'Failed to delete course. Status: ${response.statusCode}';
       }
     } catch (e) {
-      _errorMessage = 'Network error: $e';
-      debugPrint('Error deleting course in CourseProvider: $e');
+      debugPrint('Error deleting course: $e');
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-    
-    return success;
   }
 
   // ==========================================

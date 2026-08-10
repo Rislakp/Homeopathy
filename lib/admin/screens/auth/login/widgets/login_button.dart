@@ -1,13 +1,16 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:homeopathy/utils/app_colors.dart';
 
 class LoginButton extends StatefulWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
+  final bool isLoading;
 
   const LoginButton({
     super.key,
     required this.onPressed,
     required this.text,
+    this.isLoading = false,
   });
 
   @override
@@ -20,9 +23,9 @@ class _LoginButtonState extends State<LoginButton> {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color(0xFF08B653);
-    const Color hoverColor = Color(0xFF07A24A); 
-    const Color pressedColor = Color(0xFF068E40); 
+    final Color primaryColor = AppColors.adminBlue;
+    final Color hoverColor = AppColors.adminBlueHover;
+    final Color pressedColor = AppColors.adminBlue.withOpacity(0.85);
 
     // Define colors & shadows dynamically based on interaction states
     Color buttonColor = primaryColor;
@@ -35,7 +38,12 @@ class _LoginButtonState extends State<LoginButton> {
       ),
     ];
 
-    if (_isPressed) {
+    final bool isDisabled = widget.onPressed == null || widget.isLoading;
+
+    if (isDisabled) {
+      buttonColor = primaryColor.withOpacity(0.6);
+      shadows = [];
+    } else if (_isPressed) {
       buttonColor = pressedColor;
       scale = 0.97;
       shadows = [
@@ -58,13 +66,33 @@ class _LoginButtonState extends State<LoginButton> {
     }
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      onEnter: (_) {
+        if (!isDisabled) {
+          setState(() => _isHovered = true);
+        }
+      },
+      onExit: (_) {
+        if (!isDisabled) {
+          setState(() => _isHovered = false);
+        }
+      },
       child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.onPressed,
+        onTapDown: (_) {
+          if (!isDisabled) {
+            setState(() => _isPressed = true);
+          }
+        },
+        onTapUp: (_) {
+          if (!isDisabled) {
+            setState(() => _isPressed = false);
+          }
+        },
+        onTapCancel: () {
+          if (!isDisabled) {
+            setState(() => _isPressed = false);
+          }
+        },
+        onTap: isDisabled ? null : widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeInOut,
@@ -78,15 +106,24 @@ class _LoginButtonState extends State<LoginButton> {
             boxShadow: shadows,
           ),
           alignment: Alignment.center,
-          child: Text(
-            widget.text,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              letterSpacing: 0.2,
-            ),
-          ),
+          child: widget.isLoading
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Text(
+                  widget.text,
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    letterSpacing: 0.2,
+                  ),
+                ),
         ),
       ),
     );

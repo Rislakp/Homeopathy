@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../student_portal/pages/courses/widgets/course_card.dart';
-
-
+import '../model/course_model.dart';
+import 'course_card.dart';
 
 class CourseGrid extends StatelessWidget {
-  final List<dynamic> courses;
+  final List<CourseModel> courses;
 
   const CourseGrid({
     super.key,
@@ -41,9 +40,7 @@ class CourseGrid extends StatelessWidget {
             childAspectRatio: childAspectRatio,
           ),
           itemBuilder: (context, index) {
-            // courses may be admin-side CourseModel instances; cast to dynamic to
-            // avoid cross-package type mismatch when passing into CourseCard.
-            return CourseCard(course: courses[index] as dynamic);
+            return CourseCard(course: courses[index]);
           },
         );
       },

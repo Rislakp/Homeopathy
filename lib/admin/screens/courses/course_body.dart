@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
+import 'package:homeopathy/admin/screens/courses/widgets/course_grid.dart';
+import 'package:homeopathy/admin/screens/courses/widgets/course_header.dart';
+import 'package:homeopathy/admin/screens/courses/widgets/course_search_filter.dart';
 import 'package:homeopathy/admin/screens/live_classes/widgets/loading_widget.dart';
 import 'package:homeopathy/widgets/empty_course_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../../utils/app_colors.dart';
-import '../widgets/course_grid.dart';
-import '../widgets/course_header.dart';
-import '../widgets/course_search_filter.dart';
 
 
 class CourseBody extends StatefulWidget {

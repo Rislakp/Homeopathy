@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/screens/courses/widgets/edit%20course_dialog.dart' show EditCourseDialog;
-import 'package:homeopathy/student_portal/pages/courses/models/course_model.dart';
+import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
+import '../provider/course_provider.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/app_colour.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'delete_course_dialog.dart';
+import 'edit course_dialog.dart';
+import '../screens/course_details_screen.dart';
 
 
 
@@ -96,13 +99,13 @@ class CourseCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getStatusBg('Published'),
+                    color: _getStatusBg(course.status),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    'Published',
+                    course.status,
                     style: TextStyle(
-                      color: _getStatusText('Published'),
+                      color: _getStatusText(course.status),
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
                     ),
@@ -193,7 +196,7 @@ class CourseCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   // Instructor
                   Text(
-                    'Instructor: ${((course as dynamic).instructor ?? '')}',
+                    'Instructor: ${course.instructor}',
                     style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 12,
@@ -225,10 +228,12 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (_) => ViewCourseDialog(course: course),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => CourseDetailsScreen(courseId: course.courseId),
+                              ),
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: AppColors.border),
@@ -246,10 +251,14 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
+                            final courseProvider = context.read<CourseProvider>();
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-                              builder: (_) => EditCourseDialog(course: course as dynamic),
+                              builder: (_) => ChangeNotifierProvider.value(
+                                value: courseProvider,
+                                child: EditCourseDialog(course: course),
+                              ),
                             );
                           },
                           style: OutlinedButton.styleFrom(
@@ -268,9 +277,13 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final courseProvider = context.read<CourseProvider>();
                             showDialog(
                               context: context,
-                              builder: (_) => DeleteCourseDialog(course: course as dynamic),
+                              builder: (_) => ChangeNotifierProvider.value(
+                                value: courseProvider,
+                                child: DeleteCourseDialog(course: course),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(

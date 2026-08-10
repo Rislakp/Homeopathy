@@ -31,6 +31,7 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
   late String _status;
   late String _description;
   late String _image;
+  bool _isSaving = false;
 
   final List<String> _categories = [
     'Anatomy',
@@ -70,38 +71,62 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
     _instructor = c.instructor;
     _category = c.category;
     _price = c.price;
-    _students = c.students;
+  
     _status = c.status;
     _description = c.description;
     _image = c.image;
+    _students = c.students;
   }
 
-  void _onSave() {
+  void _onSave() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
 
-    final provider = context.read<CourseProvider>();
-    final updated = widget.course.copyWith(
-      title: _title,
-      instructor: _instructor,
-      category: _category,
-      price: _price,
-      students: _students,
-      status: _status,
-      description: _description,
-      image: _image,
-    );
+    setState(() {
+      _isSaving = true;
+    });
 
-    provider.updateCourse(updated as CourseModel);
-    Navigator.of(context).pop();
+    try {
+      final provider = context.read<CourseProvider>();
+      final updated = widget.course.copyWith(
+        title: _title,
+        instructor: _instructor,
+        category: _category,
+        price: _price,
+        students: _students,
+        status: _status,
+        description: _description,
+        image: _image,
+      );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Course updated successfully!'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      await provider.updateCourse(updated);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Course updated successfully!'),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update course: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
   }
 
   @override
@@ -253,7 +278,7 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: _isSaving ? null : () => Navigator.of(context).pop(),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.border),
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -263,7 +288,7 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton(
-                    onPressed: _onSave,
+                    onPressed: _isSaving ? null : _onSave,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
@@ -271,7 +296,16 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       elevation: 0,
                     ),
-                    child: const Text('Save Changes'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text('Save Changes'),
                   ),
                 ],
               ),

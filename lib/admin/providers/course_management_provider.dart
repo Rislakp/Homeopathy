@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/screens/courses/model/course_model.dart';
-import 'package:homeopathy/services/course_api_service.dart';
+import 'package:homeopathy/admin/models/course_management_model.dart';
+import '../models/course_api_models.dart';
+import '../service/course/course_api_service.dart';
 
 class CourseManagementNotifier extends ChangeNotifier {
   final CourseApiService _apiService = CourseApiService();
 
-  List<CourseModel> _courses = [];
+  CourseDetailModel? selectedCourseData;
+
   bool _isLoading = false;
-  String? _errorMessage;
+  bool get isLoading => _isLoading;
 
   String searchQuery = '';
   String selectedCategory = 'All Categories';
@@ -75,27 +77,44 @@ class CourseManagementNotifier extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+  CourseManagementNotifier() {
+    loadCourses();
+  }
+
+  Future<void> loadCourses() async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
-      final newCourse = await _apiService.createCourse(
-        courseTitle: courseTitle,
-        instructor: instructor,
-        category: category,
-        price: price,
-      );
-      _courses.insert(0, newCourse);
-      notifyListeners();
-      return true;
+      final response = await _apiService.getCourses();
+      if (response.success) {
+        _courses.clear();
+        _courses.addAll(response.data.map((apiCourse) {
+          return CourseItem(
+            id: apiCourse.courseId,
+            name: apiCourse.courseTitle,
+            category: apiCourse.category ?? 'Materia Medica',
+            instructor: apiCourse.instructor,
+            duration: '32 Hours',
+            price: '₹${apiCourse.price.toStringAsFixed(0)}',
+            students: 0,
+            rating: 5.0,
+            status: 'Published',
+            thumbnailIcon: Icons.menu_book_rounded,
+            thumbnailBgColor: const Color(0xFF16A34A),
+          );
+        }));
+      }
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      notifyListeners();
-      return false;
+      debugPrint('Error loading courses in CourseManagementNotifier: $e');
+
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  List<CourseModel> get filteredCourses {
+  List<CourseItem> get filteredCourses {
     return _courses.where((c) {
       final matchSearch = searchQuery.isEmpty ||
           c.courseTitle.toLowerCase().contains(searchQuery.toLowerCase()) ||
@@ -114,25 +133,78 @@ class CourseManagementNotifier extends ChangeNotifier {
   void setLanguage(String val) { selectedLanguage = val; notifyListeners(); }
   void setSort(String val) { selectedSort = val; notifyListeners(); }
 
-  // API Mock CRUD fallback
-  void addCourse(CourseModel item) {
+  void addCourse(CourseItem item) {
     _courses.insert(0, item);
     notifyListeners();
   }
 
-  void deleteCourse(String id) {
-    _courses.removeWhere((c) => c.id == id);
+  Future<void> updateCourse(CourseItem course) async {
+    _isLoading = true;
     notifyListeners();
-  }
-}
-class ActivityLog {
-  final String text;
-  final String time;
-  final IconData icon;
 
-  const ActivityLog({
-    required this.text,
-    required this.time,
-    required this.icon,
-  });
+    try {
+      final priceStr = course.price.replaceAll(RegExp(r'[^0-9.]'), '');
+      final priceDouble = double.tryParse(priceStr) ?? 0.0;
+
+      final response = await _apiService.updateCourse(
+        courseId: course.id,
+        courseTitle: course.name,
+        instructor: course.instructor,
+        price: priceDouble,
+      );
+
+      if (response.success) {
+        final index = _courses.indexWhere((c) => c.id == course.id);
+        if (index != -1) {
+          _courses[index] = course;
+        }
+      }
+    } catch (e) {
+      debugPrint('Error updating course in CourseManagementNotifier: $e');
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteCourse(String id) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _apiService.deleteCourse(id);
+      if (response.success) {
+        _courses.removeWhere((c) => c.id == id);
+      }
+    } catch (e) {
+      debugPrint('Error deleting course in CourseManagementNotifier: $e');
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchCourseDetails(String courseId) async {
+    _isLoading = true;
+    selectedCourseData = null;
+    notifyListeners();
+
+    try {
+      final course = await _apiService.getCourseDetail(courseId);
+      final modules = await _apiService.getCourseModules(courseId);
+
+      selectedCourseData = CourseDetailModel(
+        course: course,
+        modules: modules,
+      );
+    } catch (e) {
+      debugPrint('Error fetching course details: $e');
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

@@ -39,9 +39,15 @@ class AppColors {
   static const Color border = Color(0xFFE5E7EB);
   static const Color divider = Color(0xFFF3F4F6);
 
-  // ============================================================
-  // Status Colors
-  // ============================================================
+  // Admin Login Screen Blue + White Theme
+  static const Color adminBlue = Color(0xFF1E40AF); // Primary Blue (Blue 800)
+  static const Color adminBlueHover = Color(0xFF1D4ED8); // Blue 700
+  static const Color adminBlueLight = Color(0xFFEFF6FF); // Very light blue background (Blue 50)
+  static const Color adminBlueBorder = Color(0xFFBFDBFE); // Light blue border (Blue 200)
+
+  static const Color background = Color(0xFFF8FAFC); // Very light grey background
+  static const Color cardBackground = Colors.white;
+  static const Color border = Color(0xFFE2E8F0); // Light grey border
 
   // Success / Published
   static const Color success = Color(0xFF10B981);
@@ -74,27 +80,6 @@ class AppColors {
   static const Color archivedBg = Color(0xFFFEE2E2);
   static const Color archivedText = Color(0xFFB91C1C);
 
-  // ============================================================
-  // Shadows & Radius
-  // ============================================================
-
-  static const double borderRadius = 14.0;
-  static const double cardRadius = 16.0;
-
-  static final List<BoxShadow> softShadow = [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.04),
-      blurRadius: 12,
-      offset: const Offset(0, 4),
-    ),
-  ];
-
-  static final List<BoxShadow> hoverShadow = [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.08),
-      blurRadius: 16,
-      offset: const Offset(0, 6),
-    ),
-  ];
+  static Color? get primaryGreen => null;
 }
 
