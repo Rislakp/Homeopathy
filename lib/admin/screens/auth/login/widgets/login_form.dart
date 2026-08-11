@@ -1,5 +1,4 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
-import 'package:homeopathy/utils/app_colors.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

@@ -1,14 +1,18 @@
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/courses/courses_screen.dart';
+import 'package:homeopathy/admin/theme/admin_colors.dart';
+import 'package:provider/provider.dart';
+import 'models/admin_menu_item.dart';
+import 'providers/drawer_provider.dart';
+import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/grandmocktest/exams_screen.dart';
+import 'widgets/common/admin_header.dart';
+import 'widgets/drawer/app_drawer.dart';
+import 'widgets/responsive/responsive_layout.dart';
 
-class AdminShellLayout extends StatefulWidget {
+class AdminShellLayout extends StatelessWidget {
   const AdminShellLayout({super.key});
 
-  @override
-  State<AdminShellLayout> createState() => _AdminShellLayoutState();
-}
-
-class _AdminShellLayoutState extends State<AdminShellLayout> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final drawerProvider = context.watch<DrawerProvider>();
@@ -16,8 +20,6 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
     final isMobile = ResponsiveLayout.isMobile(context);
 
     return Scaffold(
-      key: _scaffoldKey,
-
       backgroundColor: AdminColors.background,
       drawer: isMobile ? const Drawer(child: AppDrawer()) : null,
       body: Row(
@@ -33,10 +35,10 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
                 AdminHeader(
                   title: selectedMenu.label,
                   showMenuButton: isMobile,
-                  subtitle: '',
                   onMenuPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
+                    Scaffold.of(context).openDrawer();
                   },
+                  subtitle: '',
                 ),
 
                 // Animated Active Screen Container
@@ -77,13 +79,13 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
         return const DashboardScreen();
 
       // Academics
-      //case AdminMenuItem.teachers:
-      //  return const TeachersScreen();
-      case AdminMenuItem.students:
-        return const StudentsScreen();
+      // case AdminMenuItem.teachers:
+      //   return const TeachersScreen();
+      //   case AdminMenuItem.students:
+      //   return const StudentsScreen();
       case AdminMenuItem.courses:
         return const CourseManagementPage();
-      // return const CoursesScreen();
+      // // return const CoursesScreen();
       // case AdminMenuItem.categories:
       //   return const CategoriesScreen();
       // case AdminMenuItem.videos:
@@ -94,14 +96,13 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
       //   return const LiveClassesScreen();
       // case AdminMenuItem.recordedClasses:
       //   return const RecordedClassesScreen();
-      // case AdminMenuItem.assignments:
-      //   return const AssignmentsScreen();
+     
       // case AdminMenuItem.notes:
       //   return const NotesScreen();
-      case AdminMenuItem.questionBank:
-        return const QuestionBankScreen();
-      // case AdminMenuItem.exams:
-      //   return const ExamsScreen();
+      // case AdminMenuItem.questionBank:
+      //   return const QuestionBankScreen();
+      case AdminMenuItem.grandmocktest:
+        return const GrandMockPage();
       // case AdminMenuItem.admissions:
       //   return const AdmissionsScreen();
       // case AdminMenuItem.fees:
@@ -120,37 +121,18 @@ class _AdminShellLayoutState extends State<AdminShellLayout> {
       // Communication
       // case AdminMenuItem.notifications:
       //   return const NotificationsScreen();
-      // case AdminMenuItem.announcements:
-      //   return const AnnouncementsScreen();
-      // case AdminMenuItem.messages:
-      //   return const MessagesScreen();
-      // case AdminMenuItem.supportTickets:
-      //   return const SupportScreen();
-      // case AdminMenuItem.reports:
-      //   return const ReportsScreen();
-      // case AdminMenuItem.analytics:
-      //   return const AnalyticsScreen();
 
-      // Finance
-      // case AdminMenuItem.payments:
-      //   return const PaymentsScreen();
-      // case AdminMenuItem.revenue:
-      //   return const RevenueScreen();
+      // // Finance
+     
       // case AdminMenuItem.subscriptions:
       //   return const SubscriptionPlansScreen();
-      // case AdminMenuItem.coupons:
-      //   return const CouponsScreen();
-      // case AdminMenuItem.refunds:
-      //   return const RefundsScreen();
-
-      // User Management
+    
+      // // User Management
       // case AdminMenuItem.admins:
       //   return const AdminsScreen();
       // case AdminMenuItem.roles:
       //   return const RolesScreen();
-      // case AdminMenuItem.permissions:
-      //   return const PermissionsScreen();
-
+      
       // Settings
       // case AdminMenuItem.generalSettings:
       //   return const GeneralSettingsScreen();

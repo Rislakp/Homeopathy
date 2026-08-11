@@ -118,11 +118,14 @@ class CourseApiService {
         if (data.isEmpty) {
           return CourseModel(
             id: id,
-            courseId: '',
             title: courseTitle,
             instructor: instructor,
             category: category,
             price: price,
+            students: 0,
+            status: 'Published',
+            description: '',
+            image: '',
           );
         }
         return CourseModel.fromJson(data);

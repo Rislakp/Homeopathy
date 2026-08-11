@@ -38,8 +38,6 @@ class _DemoVideoCardState extends State<DemoVideoCard> {
             ),
           ),
           const SizedBox(height: 12),
-
-          // Player Mockup
           Container(
             height: 180,
             decoration: BoxDecoration(
@@ -53,14 +51,12 @@ class _DemoVideoCardState extends State<DemoVideoCard> {
             ),
             child: Stack(
               children: [
-                // Inner green shade overlay
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.teal.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                // Play/Pause Button
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -79,7 +75,6 @@ class _DemoVideoCardState extends State<DemoVideoCard> {
                     ),
                   ),
                 ),
-                // Timer & Controls Overlay
                 Positioned(
                   bottom: 8,
                   left: 12,
@@ -87,7 +82,6 @@ class _DemoVideoCardState extends State<DemoVideoCard> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Slider Mockup
                       SliderTheme(
                         data: SliderTheme.of(context).copyWith(
                           trackHeight: 2,
@@ -126,10 +120,7 @@ class _DemoVideoCardState extends State<DemoVideoCard> {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Action Button
           OutlinedButton.icon(
             onPressed: () {
               setState(() {

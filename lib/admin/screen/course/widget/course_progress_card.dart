@@ -12,7 +12,6 @@ class CourseProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 68% completion rate as requested
     const double progressPercent = 0.68;
 
     return Container(
@@ -54,8 +53,6 @@ class CourseProgressCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-
-          // Linear Progress Indicator
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: const LinearProgressIndicator(
@@ -65,10 +62,7 @@ class CourseProgressCard extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Detailed Stat Rows
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

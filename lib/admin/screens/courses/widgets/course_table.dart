@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/providers/course_management_provider.dart';
 import 'package:provider/provider.dart';
-import '../../../../widgets/view_course_dialog.dart';
-import '../model/course_model.dart';
-import '../screens/course_details_screen.dart';
-import '../screens/edit_course_screen.dart';
+import '../../../screen/course/course_details_screen.dart';
 
 class CourseTableSection extends StatelessWidget {
-  const CourseTableSection({super.key});
+  const CourseTableSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -303,123 +300,41 @@ class CourseTableSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // ---- UPDATED ACTIONS CELL ----
                     DataCell(
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // View Button
-                          IconButton(
-                            icon: const Icon(
-                              Icons.visibility_outlined,
-                              color: Colors.blue,
-                              size: 20,
-                            ),
-                            tooltip: 'View Course',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => CourseDetailsScreen(courseId: course.id),
-                                ),
-                              );
-                            },
+                      PopupMenuButton<String>(
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Color(0xFF64748B),
+                          size: 20,
+                        ),
+                        onSelected: (val) {
+                          if (val == 'view') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    CourseDetailsScreen(courseId: course.id),
+                              ),
+                            );
+                          } else if (val == 'delete') {
+                            notifier.deleteCourse(course.id);
+                          }
+                        },
+                        itemBuilder: (ctx) => [
+                          const PopupMenuItem(
+                            value: 'view',
+                            child: Text('View'),
                           ),
-                          // Edit Button
-                          IconButton(
-                            icon: const Icon(
-                              Icons.edit_outlined,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            tooltip: 'Edit Course',
-                            onPressed: () {
-                              final courseManagementNotifier = context
-                                  .read<CourseManagementNotifier>();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ChangeNotifierProvider.value(
-                                    value: courseManagementNotifier,
-                                    child: EditCourseScreen(courseId: course),
-                                  ),
-                                ),
-                              );
-                            },
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Text('Edit'),
                           ),
-                          // Delete Button
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete_outline,
-                              color: Colors.red,
-                              size: 20,
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
                             ),
-                            tooltip: 'Delete Course',
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text('Confirm Delete'),
-                                  content: Text(
-                                    'Are you sure you want to delete "${course.name}"? This action cannot be undone.',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(ctx),
-                                      child: const Text(
-                                        'Cancel',
-                                        style: TextStyle(
-                                          color: Color(0xFF64748B),
-                                        ),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white,
-                                      ),
-                                      onPressed: () async {
-                                        Navigator.pop(ctx);
-                                        try {
-                                          await notifier.deleteCourse(
-                                            course.id,
-                                          );
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Course "${course.name}" deleted successfully.',
-                                                ),
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          }
-                                        } catch (e) {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Failed to delete course: $e',
-                                                ),
-                                                backgroundColor: Colors.red,
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-                                      child: const Text('Delete'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
                           ),
                         ],
                       ),

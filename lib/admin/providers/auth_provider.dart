@@ -1,60 +1,74 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../../api/auth_api_service.dart';
-import '../../models/auth_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/constants/api_constants.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthApiService _apiService;
-
-  AuthProvider({AuthApiService? apiService})
-      : _apiService = apiService ?? AuthApiService();
-
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  bool _isSuccess = false;
-  bool get isSuccess => _isSuccess;
-
+  String? _token;
   String? _errorMessage;
+
+  bool get isLoading => _isLoading;
+  String? get token => _token;
   String? get errorMessage => _errorMessage;
 
-  String? _token;
-  String? get token => _token;
-
-  AuthUser? _user;
-  AuthUser? get user => _user;
-
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String username, String password) async {
     _isLoading = true;
-    _isSuccess = false;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await _apiService.login(email, password);
-      _token = response.token;
-      _user = response.user;
-      _isSuccess = true;
-      _isLoading = false;
-      notifyListeners();
-      return true;
-    } on ApiException catch (e) {
-      _errorMessage = e.message;
-      _isLoading = false;
-      notifyListeners();
-      return false;
+      final response = await http.post(
+        Uri.parse(ApiConstants.login),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'username': username,
+          'password': password,
+        }),
+      );
+
+      final Map<String, dynamic> resData = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Handle various response layouts
+        final success = resData['success'] == true;
+        final fetchedToken = resData['token'] ?? resData['data']?['token'] ?? (success ? 'authenticated_token' : null);
+        
+        if (fetchedToken != null) {
+          _token = fetchedToken;
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('admin_token', _token!);
+          return true;
+        } else {
+          throw Exception(resData['message'] ?? 'Invalid credentials');
+        }
+      } else {
+        throw Exception(resData['message'] ?? 'Failed to authenticate: ${response.statusCode}');
+      }
     } catch (e) {
-      _errorMessage = 'Something went wrong. Please try again.';
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      rethrow;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
     _token = null;
-    _user = null;
-    _isSuccess = false;
-    _errorMessage = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('admin_token');
     notifyListeners();
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('admin_token')) {
+      _token = prefs.getString('admin_token');
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 }

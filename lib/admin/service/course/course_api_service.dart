@@ -1,283 +1,97 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../../../core/constants/api_constants.dart';
-import '../../models/course_api_models.dart';
+import '../../../models/course_model.dart';
 
 class CourseApiService {
-  final http.Client _client;
+  // GET: Fetch list of courses
+  Future<List<CourseModel>> getCourses() async {
+    try {
+      final response = await http.get(Uri.parse(ApiConstants.courses));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data['success'] == true) {
+          final List<dynamic> list = data['data'];
+          return list.map((item) => CourseModel.fromJson(item)).toList();
+        }
+      }
+      throw Exception('Failed to load courses: ${response.body}');
+    } catch (e) {
+      throw Exception('Error loading courses: $e');
+    }
+  }
 
-  CourseApiService({http.Client? client}) : _client = client ?? http.Client();
-
-  Map<String, String> get _headers => {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+  // POST: Create a new course
+  Future<CourseModel> createCourse(CourseModel course) async {
+    try {
+      final body = {
+        'courseTitle': course.title,
+        'instructor': course.instructor,
+        'category': course.category,
+        'price': course.price,
       };
 
-  // 1. CREATE COURSE LIST (POST)
-  Future<CourseCreateResponse> createCourse({
-    required String courseTitle,
-    required String instructor,
-    required String category,
-    required double price,
-  }) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courses}');
-
-    try {
-      final response = await _client.post(
-        url,
-        headers: _headers,
-        body: jsonEncode({
-          'courseTitle': courseTitle,
-          'instructor': instructor,
-          'category': category,
-          'price': price,
-        }),
+      final response = await http.post(
+        Uri.parse(ApiConstants.courses),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
       );
-
-      final dynamic body = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (body is Map<String, dynamic>) {
-          return CourseCreateResponse.fromJson(body);
-        } else {
-          throw const HttpException('Unexpected response format');
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data['success'] == true) {
+          return CourseModel.fromJson(data['data']);
         }
-      } else {
-        String errorMessage = 'Failed to create course';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        } else if (body is Map && body.containsKey('error')) {
-          errorMessage = body['error'].toString();
-        }
-        throw HttpException(errorMessage);
       }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
+      throw Exception('Failed to create course: ${response.body}');
+    } catch (e) {
+      throw Exception('Error creating course: $e');
     }
   }
 
-  // 2. COURSE LIST (GET)
-  Future<CourseListResponse> getCourses() async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courses}');
-
+  // PUT: Update an existing course
+  Future<CourseModel> updateCourse(CourseModel course) async {
     try {
-      final response = await _client.get(
-        url,
-        headers: _headers,
-      );
+      final body = {
+        'courseId': course.id,
+        'courseTitle': course.title,
+        'instructor': course.instructor,
+        'category': course.category,
+        'price': course.price,
+      };
 
-      final dynamic body = jsonDecode(response.body);
+      final response = await http.put(
+        Uri.parse('${ApiConstants.courses}/${course.id}'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body),
+      );
 
       if (response.statusCode == 200) {
-        if (body is Map<String, dynamic>) {
-          return CourseListResponse.fromJson(body);
-        } else {
-          throw const HttpException('Unexpected response format');
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data['success'] == true) {
+          return CourseModel.fromJson(data['data']);
         }
-      } else {
-        String errorMessage = 'Failed to load courses';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        } else if (body is Map && body.containsKey('error')) {
-          errorMessage = body['error'].toString();
-        }
-        throw HttpException(errorMessage);
       }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
+      throw Exception('Failed to update course: ${response.body}');
+    } catch (e) {
+      throw Exception('Error updating course: $e');
     }
   }
 
-  // 3. UPDATE COURSE (PUT)
-  Future<CourseUpdateResponse> updateCourse({
-    required String courseId,
-    required String courseTitle,
-    required String instructor,
-    required double price,
-  }) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courseDetail(courseId)}');
-
+  // DELETE: Delete a course
+  Future<bool> deleteCourse(String courseId) async {
     try {
-      final response = await _client.put(
-        url,
-        headers: _headers,
-        body: jsonEncode({
-          'courseId': courseId,
-          'courseTitle': courseTitle,
-          'instructor': instructor,
-          'price': price,
-        }),
+      final response = await http.delete(
+        Uri.parse('${ApiConstants.courses}/$courseId'),
       );
-
-      final dynamic body = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        if (body is Map<String, dynamic>) {
-          return CourseUpdateResponse.fromJson(body);
-        } else {
-          throw const HttpException('Unexpected response format');
-        }
-      } else {
-        String errorMessage = 'Failed to update course';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        } else if (body is Map && body.containsKey('error')) {
-          errorMessage = body['error'].toString();
-        }
-        throw HttpException(errorMessage);
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data['success'] == true;
       }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
-    }
-  }
-
-  // 4. DELETE COURSE (DELETE)
-  Future<CourseDeleteResponse> deleteCourse(String courseId) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courseDetail(courseId)}');
-
-    try {
-      final response = await _client.delete(
-        url,
-        headers: _headers,
-      );
-
-      final dynamic body = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        if (body is Map<String, dynamic>) {
-          return CourseDeleteResponse.fromJson(body);
-        } else {
-          throw const HttpException('Unexpected response format');
-        }
-      } else {
-        String errorMessage = 'Failed to delete course';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        } else if (body is Map && body.containsKey('error')) {
-          errorMessage = body['error'].toString();
-        }
-        throw HttpException(errorMessage);
-      }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
-    }
-  }
-
-  // 5. CREATE MODULE (POST)
-  Future<ModuleCreateResponse> createModule({
-    required String courseId,
-    required String lessonTitle,
-    required String uploadFileOrLink,
-    required String lessonType,
-  }) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courseModules(courseId)}');
-
-    try {
-      final response = await _client.post(
-        url,
-        headers: _headers,
-        body: jsonEncode({
-          'lessonTitle': lessonTitle,
-          'uploadFileOrLink': uploadFileOrLink,
-          'lessonType': lessonType,
-        }),
-      );
-
-      final dynamic body = jsonDecode(response.body);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        if (body is Map<String, dynamic>) {
-          return ModuleCreateResponse.fromJson(body);
-        } else {
-          throw const HttpException('Unexpected response format');
-        }
-      } else {
-        String errorMessage = 'Failed to create module';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        } else if (body is Map && body.containsKey('error')) {
-          errorMessage = body['error'].toString();
-        }
-        throw HttpException(errorMessage);
-      }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
-    }
-  }
-
-  // 6. GET COURSE DETAIL (GET)
-  Future<ApiCourse> getCourseDetail(String courseId) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courseDetail(courseId)}');
-
-    try {
-      final response = await _client.get(
-        url,
-        headers: _headers,
-      );
-
-      final dynamic body = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        if (body is Map<String, dynamic> && body['data'] is Map<String, dynamic>) {
-          return ApiCourse.fromJson(body['data']);
-        } else {
-          throw const HttpException('Unexpected response format');
-        }
-      } else {
-        String errorMessage = 'Failed to load course details';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        }
-        throw HttpException(errorMessage);
-      }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
-    }
-  }
-
-  // 7. GET COURSE MODULES (GET)
-  Future<List<ApiModule>> getCourseModules(String courseId) async {
-    final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courseModules(courseId)}');
-
-    try {
-      final response = await _client.get(
-        url,
-        headers: _headers,
-      );
-
-      final dynamic body = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        if (body is Map<String, dynamic> && body['data'] is List) {
-          final list = body['data'] as List;
-          return list.map((e) => ApiModule.fromJson(e as Map<String, dynamic>)).toList();
-        } else {
-          throw const HttpException('Unexpected response format');
-        }
-      } else {
-        String errorMessage = 'Failed to load course modules';
-        if (body is Map && body.containsKey('message')) {
-          errorMessage = body['message'].toString();
-        }
-        throw HttpException(errorMessage);
-      }
-    } on SocketException {
-      throw const HttpException('No internet connection');
-    } on FormatException {
-      throw const HttpException('Invalid response format');
+      throw Exception('Failed to delete course: ${response.body}');
+    } catch (e) {
+      throw Exception('Error deleting course: $e');
     }
   }
 }

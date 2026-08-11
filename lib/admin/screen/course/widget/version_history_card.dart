@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../models/course_details_model.dart';
+import '../../../models/course_management_model.dart';
 
 class VersionHistoryCard extends StatelessWidget {
   final List<VersionHistoryItem> history;
@@ -37,7 +37,6 @@ class VersionHistoryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
           if (history.isEmpty)
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -61,7 +60,6 @@ class VersionHistoryCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Timeline Column
                       Column(
                         children: [
                           Container(
@@ -86,8 +84,6 @@ class VersionHistoryCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(width: 16),
-
-                      // Text Content Column
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),

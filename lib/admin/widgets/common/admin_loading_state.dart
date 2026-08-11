@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/utils/app_colors.dart';
 import '../../theme/admin_colors.dart';
 
 class AdminLoadingState extends StatelessWidget {
@@ -41,3 +40,4 @@ class AdminLoadingState extends StatelessWidget {
     );
   }
 }
+

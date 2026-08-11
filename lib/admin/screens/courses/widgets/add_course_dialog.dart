@@ -65,7 +65,7 @@ class _AddCourseDialogState extends State<AddCourseDialog> {
 
     try {
       final provider = context.read<CourseProvider>();
-      final newCourse = CourseModel(courseId: '',
+      final newCourse = CourseModel(
         id: '',
         title: _title,
         instructor: _instructor,

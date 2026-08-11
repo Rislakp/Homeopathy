@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../models/course_details_model.dart';
-import '../../../../providers/course_details_provider.dart';
+import '../../../models/course_management_model.dart';
+import '../../../providers/course_management_provider.dart';
 
 class LessonListTile extends StatelessWidget {
   final String moduleId;
-  final LessonDetail lesson;
+  final LessonDetailModel lesson;
 
   const LessonListTile({
     super.key,
@@ -19,7 +19,7 @@ class LessonListTile extends StatelessWidget {
         return Icons.play_circle_outline_rounded;
       case LessonType.live:
         return Icons.sensors_rounded;
-      case LessonType.pdf:
+      case LessonType.file:
         return Icons.picture_as_pdf_outlined;
     }
   }
@@ -29,9 +29,9 @@ class LessonListTile extends StatelessWidget {
       case LessonType.video:
         return Colors.teal;
       case LessonType.live:
-        return const Color(0xFFEF4444); // Red for live
-      case LessonType.pdf:
-        return const Color(0xFF3B82F6); // Blue for PDF
+        return const Color(0xFFEF4444);
+      case LessonType.file:
+        return const Color(0xFF3B82F6);
     }
   }
 
@@ -59,7 +59,7 @@ class LessonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<CourseDetailsProvider>();
+    final provider = context.read<CourseManagementNotifier>();
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -71,7 +71,6 @@ class LessonListTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Drag handle/indicator (subtle line)
           Container(
             width: 3,
             height: 32,
@@ -81,16 +80,12 @@ class LessonListTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-
-          // Lesson Type Icon
           Icon(
             _getIconData(lesson.type),
             color: _getIconColor(lesson.type),
             size: 20,
           ),
           const SizedBox(width: 16),
-
-          // Lesson Title & Subtitle
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,10 +110,7 @@ class LessonListTile extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(width: 16),
-
-          // Status Chip
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
@@ -134,19 +126,13 @@ class LessonListTile extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(width: 12),
-
-          // Lock Status
           Icon(
             lesson.isLocked ? Icons.lock_outline_rounded : Icons.lock_open_rounded,
             size: 16,
             color: lesson.isLocked ? const Color(0xFF94A3B8) : Colors.teal,
           ),
-
           const SizedBox(width: 16),
-
-          // Action Buttons
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -154,7 +140,7 @@ class LessonListTile extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Previewing lesson: ${lesson.title}'),
+                      content: Text('Previewing: ${lesson.title}'),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
@@ -168,7 +154,7 @@ class LessonListTile extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Edit feature space for: ${lesson.title}'),
+                      content: Text('Edit feature for: ${lesson.title}'),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
@@ -180,7 +166,6 @@ class LessonListTile extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  // Confirm delete
                   final confirm = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
@@ -200,7 +185,7 @@ class LessonListTile extends StatelessWidget {
                     ),
                   );
                   if (confirm == true) {
-                    await provider.deleteLesson(moduleId, lesson.id);
+                    provider.deleteLesson(moduleId, lesson.id);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

@@ -24,7 +24,6 @@ class CourseDetailsHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Breadcrumbs & Navigation
           Expanded(
             child: Row(
               children: [
@@ -73,8 +72,6 @@ class CourseDetailsHeader extends StatelessWidget {
               ],
             ),
           ),
-
-          // Search Bar
           if (showSearch) ...[
             const SizedBox(width: 24),
             SizedBox(
@@ -101,10 +98,7 @@ class CourseDetailsHeader extends StatelessWidget {
               ),
             ),
           ],
-
           const SizedBox(width: 16),
-
-          // Action Icons
           IconButton(
             onPressed: () {},
             tooltip: 'Toggle Theme',
@@ -120,10 +114,7 @@ class CourseDetailsHeader extends StatelessWidget {
             tooltip: 'Messages',
             icon: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF64748B), size: 20),
           ),
-
           const SizedBox(width: 16),
-
-          // Profile Container
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(

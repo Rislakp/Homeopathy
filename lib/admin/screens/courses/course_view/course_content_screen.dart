@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:homeopathy/utils/app_colors.dart';
+import 'package:homeopathy/admin/theme/admin_colors.dart';
 import 'add_lessons/add_lesson_dialog.dart';
 
 // =============================================================================

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../models/course_details_model.dart';
-import '../../../../providers/course_details_provider.dart';
+import '../../../models/course_management_model.dart';
+import '../../../providers/course_management_provider.dart';
 
 class QuickActionsCard extends StatelessWidget {
-  final CourseDetail course;
+  final CourseDetailModel course;
 
   const QuickActionsCard({
     super.key,
@@ -13,7 +13,7 @@ class QuickActionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<CourseDetailsProvider>();
+    final provider = context.watch<CourseManagementNotifier>();
 
     return Container(
       decoration: BoxDecoration(
@@ -41,8 +41,6 @@ class QuickActionsCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
-          // Course Status Quick Dropdown Selector
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -68,14 +66,16 @@ class QuickActionsCard extends StatelessWidget {
                       ),
                     ),
                     style: const TextStyle(fontSize: 12, color: Color(0xFF0F172A), fontWeight: FontWeight.bold),
-                    items: const [
-                      DropdownMenuItem(value: 'Published', child: Text('Published')),
-                      DropdownMenuItem(value: 'Draft', child: Text('Draft')),
-                      DropdownMenuItem(value: 'Archived', child: Text('Archived')),
-                    ],
+                    items: (() {
+                      final statuses = ['Published', 'Draft', 'Archived'];
+                      if (!statuses.contains(course.status)) {
+                        statuses.add(course.status);
+                      }
+                      return statuses.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList();
+                    })(),
                     onChanged: (val) {
                       if (val != null) {
-                        provider.updateCourseStatus(course.courseId, val);
+                        provider.updateCourseStatus(course.id, val);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Course status updated to $val'),
@@ -90,10 +90,7 @@ class QuickActionsCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 20),
-
-          // Edit Course Button (Outlined)
           OutlinedButton.icon(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -115,10 +112,7 @@ class QuickActionsCard extends StatelessWidget {
               textStyle: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-
           const SizedBox(height: 12),
-
-          // Manage Videos Button (Outlined)
           OutlinedButton.icon(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -140,17 +134,13 @@ class QuickActionsCard extends StatelessWidget {
               textStyle: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-
           const SizedBox(height: 16),
           const Divider(color: Color(0xFFF1F5F9), height: 1),
           const SizedBox(height: 16),
-
-          // Delete Course Button (Red Background)
           ElevatedButton.icon(
             onPressed: provider.isLoading
                 ? null
                 : () async {
-                    // Show double confirmation for security
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
@@ -174,8 +164,8 @@ class QuickActionsCard extends StatelessWidget {
                     );
 
                     if (confirm == true) {
-                      final success = await provider.deleteCourse(course.courseId);
-                      if (success && context.mounted) {
+                      provider.deleteCourse(course.id);
+                      if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Course "${course.title}" deleted successfully.'),
@@ -183,15 +173,7 @@ class QuickActionsCard extends StatelessWidget {
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
-                        Navigator.pop(context); // Go back to courses table list
-                      } else if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Failed to delete course.'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
+                        Navigator.pop(context);
                       }
                     }
                   },

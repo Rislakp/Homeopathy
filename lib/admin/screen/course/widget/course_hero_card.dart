@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../models/course_details_model.dart';
+import '../../../models/course_management_model.dart';
 
 class CourseHeroCard extends StatelessWidget {
-  final CourseDetail course;
+  final CourseDetailModel course;
 
   const CourseHeroCard({
     super.key,
@@ -42,7 +42,6 @@ class CourseHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyFormat = NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
     final isMobile = MediaQuery.of(context).size.width < 640;
 
     return Container(
@@ -62,7 +61,6 @@ class CourseHeroCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Banner
           Container(
             height: 180,
             decoration: const BoxDecoration(
@@ -86,7 +84,6 @@ class CourseHeroCard extends StatelessWidget {
                   left: 16,
                   child: Row(
                     children: [
-                      // Published Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
@@ -122,7 +119,6 @@ class CourseHeroCard extends StatelessWidget {
                       ),
                       if (course.isBestseller) ...[
                         const SizedBox(width: 8),
-                        // Bestseller Badge
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
@@ -146,23 +142,20 @@ class CourseHeroCard extends StatelessWidget {
               ],
             ),
           ),
-
-          // Content
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Category Tag
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.teal.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(
-                    course.category.toUpperCase(),
-                    style: const TextStyle(
+                  child: const Text(
+                    'MATERIA MEDICA',
+                    style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Colors.teal,
@@ -171,8 +164,6 @@ class CourseHeroCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                // Title
                 Text(
                   course.title,
                   style: const TextStyle(
@@ -183,8 +174,6 @@ class CourseHeroCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                // Description
                 Text(
                   course.description,
                   style: const TextStyle(
@@ -194,11 +183,8 @@ class CourseHeroCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
                 const Divider(color: Color(0xFFF1F5F9), height: 1),
                 const SizedBox(height: 24),
-
-                // Meta Info Grid/Row
                 if (isMobile)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -208,9 +194,9 @@ class CourseHeroCard extends StatelessWidget {
                           CircleAvatar(
                             radius: 16,
                             backgroundColor: Colors.teal.withOpacity(0.2),
-                            child: Text(
-                              course.instructorAvatar,
-                              style: const TextStyle(
+                            child: const Text(
+                              'DR',
+                              style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.teal,
@@ -219,7 +205,7 @@ class CourseHeroCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            course.instructorName,
+                            course.instructor,
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
@@ -247,7 +233,7 @@ class CourseHeroCard extends StatelessWidget {
                           ),
                           _buildMetaChip(
                             icon: Icons.currency_rupee_rounded,
-                            text: currencyFormat.format(course.price),
+                            text: course.price,
                             iconColor: const Color(0xFF059669),
                             bgColor: const Color(0xFFECFDF5),
                           ),
@@ -259,15 +245,14 @@ class CourseHeroCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Instructor
                       Row(
                         children: [
                           CircleAvatar(
                             radius: 18,
                             backgroundColor: Colors.teal.withOpacity(0.15),
-                            child: Text(
-                              course.instructorAvatar,
-                              style: const TextStyle(
+                            child: const Text(
+                              'DR',
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.teal,
@@ -288,7 +273,7 @@ class CourseHeroCard extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                course.instructorName,
+                                course.instructor,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -299,7 +284,6 @@ class CourseHeroCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Meta details group
                       Wrap(
                         spacing: 12,
                         children: [
@@ -317,7 +301,7 @@ class CourseHeroCard extends StatelessWidget {
                           ),
                           _buildMetaChip(
                             icon: Icons.currency_rupee_rounded,
-                            text: currencyFormat.format(course.price),
+                            text: course.price,
                             iconColor: const Color(0xFF059669),
                             bgColor: const Color(0xFFECFDF5),
                           ),

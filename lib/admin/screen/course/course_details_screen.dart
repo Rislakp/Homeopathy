@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/admin/providers/course_management_provider.dart';
-import 'package:homeopathy/admin/screen/course/widget/course_content_section.dart';
-import 'package:homeopathy/admin/screen/course/widget/course_hero_card.dart';
-import 'package:homeopathy/admin/screen/course/widget/course_progress_card.dart';
-import 'package:homeopathy/admin/screen/course/widget/demo_video_card.dart';
-import 'package:homeopathy/admin/screen/course/widget/quick_actions_card.dart';
-import 'package:homeopathy/admin/screen/course/widget/top_header.dart';
-import 'package:homeopathy/admin/screen/course/widget/version_history_card.dart';
 import 'package:provider/provider.dart';
-import '../../../../widgets/loading_widget.dart';
+import '../../../widgets/loading_widget.dart';
+import '../../models/course_management_model.dart';
+import '../../providers/course_management_provider.dart';
+import 'widget/top_header.dart';
+import 'widget/course_hero_card.dart';
+import 'widget/course_content_section.dart';
+import 'widget/demo_video_card.dart';
+import 'widget/course_progress_card.dart';
+import 'widget/version_history_card.dart';
+import 'widget/quick_actions_card.dart';
 
 class CourseDetailsScreen extends StatefulWidget {
   final String courseId;

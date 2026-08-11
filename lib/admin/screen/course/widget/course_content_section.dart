@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../models/course_details_model.dart';
-import '../../../../providers/course_details_provider.dart';
+import '../../../models/course_management_model.dart';
+import '../../../providers/course_management_provider.dart';
 import 'lesson_list_tile.dart';
 
 class CourseContentSection extends StatefulWidget {
-  final CourseDetail course;
+  final CourseDetailModel course;
 
   const CourseContentSection({
     super.key,
@@ -17,20 +17,18 @@ class CourseContentSection extends StatefulWidget {
 }
 
 class _CourseContentSectionState extends State<CourseContentSection> {
-  // Store expanded state for modules
   final Map<String, bool> _expandedModules = {};
 
   @override
   void initState() {
     super.initState();
-    // Initially expand the first module
     if (widget.course.modules.isNotEmpty) {
       _expandedModules[widget.course.modules.first.id] = true;
     }
   }
 
   void _showAddLessonDialog(BuildContext context) {
-    final provider = context.read<CourseDetailsProvider>();
+    final provider = context.read<CourseManagementNotifier>();
     final modules = widget.course.modules;
 
     if (modules.isEmpty) {
@@ -68,7 +66,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Target Module Dropdown
                     DropdownButtonFormField<String>(
                       value: selectedModuleId,
                       decoration: const InputDecoration(labelText: 'Select Module'),
@@ -88,8 +85,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                       },
                     ),
                     const SizedBox(height: 16),
-
-                    // Lesson Name
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Lesson Name',
@@ -99,15 +94,13 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                       onSaved: (v) => title = v ?? '',
                     ),
                     const SizedBox(height: 16),
-
-                    // Lesson Type Dropdown
                     DropdownButtonFormField<LessonType>(
                       value: type,
                       decoration: const InputDecoration(labelText: 'Lesson Type'),
                       items: const [
                         DropdownMenuItem(value: LessonType.video, child: Text('Video Lesson')),
                         DropdownMenuItem(value: LessonType.live, child: Text('Live Session')),
-                        DropdownMenuItem(value: LessonType.pdf, child: Text('PDF Document')),
+                        DropdownMenuItem(value: LessonType.file, child: Text('File Document')),
                       ],
                       onChanged: (v) {
                         if (v != null) {
@@ -118,11 +111,9 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                       },
                     ),
                     const SizedBox(height: 16),
-
-                    // Subtitle / Info
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: type == LessonType.pdf
+                        labelText: type == LessonType.file
                             ? 'File Size (e.g. 2.4 MB)'
                             : type == LessonType.live
                                 ? 'Date/Time (e.g. Aug 30, 3:00 PM)'
@@ -133,8 +124,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                       onSaved: (v) => subtitle = v ?? '',
                     ),
                     const SizedBox(height: 16),
-
-                    // Status Dropdown
                     DropdownButtonFormField<String>(
                       value: status,
                       decoration: const InputDecoration(labelText: 'Status'),
@@ -147,8 +136,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                       },
                     ),
                     const SizedBox(height: 16),
-
-                    // Lock Switch
                     SwitchListTile(
                       title: const Text('Require Enrollment Lock', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       subtitle: const Text('Students must buy course to unlock this lesson', style: TextStyle(fontSize: 11)),
@@ -172,21 +159,20 @@ class _CourseContentSectionState extends State<CourseContentSection> {
               child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
             ),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 if (!formKey.currentState!.validate()) return;
                 formKey.currentState!.save();
 
-                // Format subtitle depending on type
                 String finalSubtitle = subtitle;
-                if (type == LessonType.pdf && !subtitle.toLowerCase().contains('document')) {
+                if (type == LessonType.file && !subtitle.toLowerCase().contains('document')) {
                   finalSubtitle = 'PDF Document • $subtitle';
                 } else if (type == LessonType.live && !subtitle.toLowerCase().contains('live')) {
                   finalSubtitle = 'Live Session • $subtitle';
                 } else if (type == LessonType.video && !subtitle.toLowerCase().contains('video')) {
-                  finalSubtitle = 'Video • $subtitle';
+                  finalSubtitle = 'Recorded Video • $subtitle';
                 }
 
-                final newLesson = LessonDetail(
+                final newLesson = LessonDetailModel(
                   id: 'LES-${DateTime.now().millisecondsSinceEpoch}',
                   title: title,
                   subtitle: finalSubtitle,
@@ -195,10 +181,9 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                   isLocked: isLocked,
                 );
 
-                await provider.addLesson(selectedModuleId, newLesson);
+                provider.addLesson(selectedModuleId, newLesson);
                 Navigator.pop(ctx);
 
-                // Auto-expand that module so user can see it
                 setState(() {
                   _expandedModules[selectedModuleId] = true;
                 });
@@ -242,7 +227,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -283,10 +267,7 @@ class _CourseContentSectionState extends State<CourseContentSection> {
               ),
             ],
           ),
-
           const SizedBox(height: 24),
-
-          // Modules Expandable List
           if (widget.course.modules.isEmpty)
             Container(
               padding: const EdgeInsets.symmetric(vertical: 40),
@@ -316,7 +297,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                   clipBehavior: Clip.antiAlias,
                   child: Column(
                     children: [
-                      // Module Header/Title Bar
                       InkWell(
                         onTap: () {
                           setState(() {
@@ -362,8 +342,6 @@ class _CourseContentSectionState extends State<CourseContentSection> {
                           ),
                         ),
                       ),
-
-                      // Module Lessons List
                       if (isExpanded)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

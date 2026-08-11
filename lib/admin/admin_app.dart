@@ -1,6 +1,17 @@
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
-import 'screens/courses/provider/course_provider.dart' hide CourseProvider;
-import 'providers/course_details_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/providers/video_provider.dart';
+import 'package:homeopathy/admin/providers/course_management_provider.dart';
+import 'package:homeopathy/admin/providers/live_class_provider.dart';
+import 'package:homeopathy/admin/providers/subscription_plan_provider.dart';
+import 'package:homeopathy/admin/screens/grandmocktest/provider/test_provider.dart';
+import 'package:provider/provider.dart';
+import 'admin_shell_layout.dart';
+import 'screens/auth/login_screen.dart';
+import 'providers/auth_provider.dart';
+
+import 'providers/admin_data_provider.dart';
+import 'providers/drawer_provider.dart';
+import 'theme/admin_theme.dart';
 
 class WhiteCoatAdminPortal extends StatelessWidget {
   const WhiteCoatAdminPortal({super.key});
@@ -11,21 +22,19 @@ class WhiteCoatAdminPortal extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => DrawerProvider()),
         ChangeNotifierProvider(create: (_) => AdminDataProvider()),
-        ChangeNotifierProvider(create: (_)=> CourseManagementNotifier()),
-        ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => CourseManagementNotifier()),
         ChangeNotifierProvider(create: (_) => VideoProvider()),
         ChangeNotifierProvider(create: (_) => LiveClassProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionPlanProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => CourseDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => GrandMockProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'White Coat Academy - Admin Portal',
         theme: AdminTheme.lightTheme,
-        home: const LoginScreen(),
+        home: const AdminLoginScreen(),
       ),
     );
   }
 }
-

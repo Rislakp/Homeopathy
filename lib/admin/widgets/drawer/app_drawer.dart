@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../models/admin_menu_item.dart';
 import '../../providers/drawer_provider.dart';
@@ -61,11 +60,11 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // 4. Bottom Footer
-          AppDrawerFooter(
-            isCollapsed: isCollapsed,
-            onToggleCollapse: () => drawerProvider.toggleCollapse(),
-            onSelectMenu: (menu) => drawerProvider.selectMenu(menu),
-          ),
+          // AppDrawerFooter(
+          //   isCollapsed: isCollapsed,
+          //   onToggleCollapse: () => drawerProvider.toggleCollapse(),
+          //   onSelectMenu: (menu) => drawerProvider.selectMenu(menu),
+          // ),
         ],
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/utils/app_colors.dart';
 import '../../theme/admin_colors.dart';
 
 class AdminSearchFilterBar extends StatelessWidget {
@@ -155,3 +154,4 @@ class AdminSearchFilterBar extends StatelessWidget {
     );
   }
 }
+

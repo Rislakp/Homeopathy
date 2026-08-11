@@ -1,68 +1,52 @@
 import 'package:flutter/material.dart';
-import '../../../service/course/course_api_service.dart';
-import '../model/course_model.dart';
+import '../models/course_model.dart';
+import '../admin/service/course/course_api_service.dart';
 
 class CourseProvider extends ChangeNotifier {
   final CourseApiService _apiService = CourseApiService();
 
   List<CourseModel> _allCourses = [];
   List<CourseModel> _filteredCourses = [];
-  
   bool _isLoading = false;
-  bool _isCreating = false; 
-  String? _errorMessage;
 
-  // Filter and Search States
+  // Filter States
   String _searchQuery = '';
   String _selectedCategory = 'All Categories';
 
   // Getters
   bool get isLoading => _isLoading;
-  bool get isCreating => _isCreating;
-  String? get errorMessage => _errorMessage;
   List<CourseModel> get courses => _filteredCourses;
   String get searchQuery => _searchQuery;
   String get selectedCategory => _selectedCategory;
 
-  // ==========================================
-  // Fetch all courses (GET)
-  // ==========================================
-  Future<void> fetchCourses() async {
+  // Load courses via API
+  Future<void> loadCourses() async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await _apiService.getCourses();
-      _allCourses = response;
-      _applyFilters();
+      _allCourses = await _apiService.getCourses();
     } catch (e) {
-      debugPrint('Error loading courses: $e');
-      _errorMessage = e.toString();
+      debugPrint('Error loading courses from API: $e');
     } finally {
       _isLoading = false;
+      _applyFilters();
       notifyListeners();
     }
   }
 
-  Future<void> loadCourses() => fetchCourses();
-
   // CRUD Operations
   Future<void> addCourse(CourseModel course) async {
-    _isCreating = true;
     _isLoading = true;
     notifyListeners();
-
     try {
-      final response = await _apiService.createCourse(course);
-      _allCourses.insert(0, response);
-      _applyFilters();
+      final created = await _apiService.createCourse(course);
+      _allCourses.insert(0, created);
     } catch (e) {
       debugPrint('Error adding course: $e');
-      rethrow;
     } finally {
-      _isCreating = false;
       _isLoading = false;
+      _applyFilters();
       notifyListeners();
     }
   }
@@ -70,19 +54,17 @@ class CourseProvider extends ChangeNotifier {
   Future<void> updateCourse(CourseModel course) async {
     _isLoading = true;
     notifyListeners();
-
     try {
-      final response = await _apiService.updateCourse(course);
+      final updated = await _apiService.updateCourse(course);
       final index = _allCourses.indexWhere((c) => c.id == course.id);
       if (index != -1) {
-        _allCourses[index] = response;
-        _applyFilters();
+        _allCourses[index] = updated;
       }
     } catch (e) {
       debugPrint('Error updating course: $e');
-      rethrow;
     } finally {
       _isLoading = false;
+      _applyFilters();
       notifyListeners();
     }
   }
@@ -90,37 +72,35 @@ class CourseProvider extends ChangeNotifier {
   Future<void> deleteCourse(String id) async {
     _isLoading = true;
     notifyListeners();
-
     try {
       final success = await _apiService.deleteCourse(id);
       if (success) {
         _allCourses.removeWhere((c) => c.id == id);
-        _applyFilters();
       }
     } catch (e) {
       debugPrint('Error deleting course: $e');
-      rethrow;
     } finally {
       _isLoading = false;
+      _applyFilters();
       notifyListeners();
     }
   }
 
-  // ==========================================
-  // Search & Filtering Logic
-  // ==========================================
+  // Search
   void searchCourses(String query) {
     _searchQuery = query;
     _applyFilters();
     notifyListeners();
   }
 
+  // Category Filtering
   void filterCategory(String category) {
     _selectedCategory = category;
     _applyFilters();
     notifyListeners();
   }
 
+  // Reset Filters
   void clearFilters() {
     _searchQuery = '';
     _selectedCategory = 'All Categories';
@@ -128,9 +108,11 @@ class CourseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Helper filter executor
   void _applyFilters() {
     List<CourseModel> result = List.from(_allCourses);
 
+    // Search by title, instructor, or category
     if (_searchQuery.trim().isNotEmpty) {
       final q = _searchQuery.toLowerCase().trim();
       result = result.where((c) {
@@ -140,6 +122,7 @@ class CourseProvider extends ChangeNotifier {
       }).toList();
     }
 
+    // Filter by Category Dropdown
     if (_selectedCategory != 'All Categories') {
       result = result.where((c) => c.category == _selectedCategory).toList();
     }

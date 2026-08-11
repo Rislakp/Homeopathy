@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/utils/app_colors.dart';
 import '../../models/admin_data_models.dart';
 import '../../theme/admin_colors.dart';
 
@@ -237,3 +236,4 @@ class AdminDataTable extends StatelessWidget {
     );
   }
 }
+
