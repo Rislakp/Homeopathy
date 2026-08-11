@@ -27,10 +27,15 @@ class CoursesHeroSection extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
-            crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            crossAxisAlignment: isMobile
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF16A34A).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(30),
@@ -46,7 +51,7 @@ class CoursesHeroSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               Text(
                 "Every course you need to\nclear your homeopathy\nexam.",
                 textAlign: isMobile ? TextAlign.center : TextAlign.start,
@@ -58,7 +63,7 @@ class CoursesHeroSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: Text(

@@ -28,9 +28,9 @@ class AdminSearchFilterBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AdminColors.surface,
-        borderRadius: BorderRadius.circular(AdminColors.cardRadius),
-        border: Border.all(color: AdminColors.border),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
       ),
       child: isMobile
           ? Column(
@@ -75,20 +75,20 @@ class AdminSearchFilterBar extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'Search records...',
           hintStyle: const TextStyle(
-            color: AdminColors.textMuted,
+            color: AppColors.textMuted,
             fontSize: 13,
           ),
           prefixIcon: const Icon(
             Icons.search_rounded,
             size: 20,
-            color: AdminColors.textMuted,
+            color: AppColors.textMuted,
           ),
           suffixIcon: searchQuery.isNotEmpty
               ? IconButton(
                   icon: const Icon(
                     Icons.clear_rounded,
                     size: 18,
-                    color: AdminColors.textMuted,
+                    color: AppColors.textMuted,
                   ),
                   onPressed: () => onSearchChanged(''),
                 )
@@ -108,20 +108,20 @@ class AdminSearchFilterBar extends StatelessWidget {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: AdminColors.surface,
-        borderRadius: BorderRadius.circular(AdminColors.borderRadius),
-        border: Border.all(color: AdminColors.border),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.border),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: filters.contains(activeFilter) ? activeFilter : 'All',
           icon: const Icon(
             Icons.filter_list_rounded,
-            color: AdminColors.textSecondary,
+            color: AppColors.textSecondary,
             size: 20,
           ),
           style: const TextStyle(
-            color: AdminColors.textPrimary,
+            color: AppColors.textPrimary,
             fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
@@ -154,3 +154,4 @@ class AdminSearchFilterBar extends StatelessWidget {
     );
   }
 }
+

@@ -141,7 +141,7 @@ class StudentBody extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Student "${result.name}" updated successfully.'),
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor:Color.fromARGB(255, 10, 5, 100),
           behavior: SnackBarBehavior.floating,
         ),
       );

@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 
-class AdminColors {
+class AppColors {
   // Primary Palette
-  static const Color primary = Color(0xFF10B981); // Emerald Green
-  static const Color primaryDark = Color(0xFF059669);
-  static const Color primaryLight = Color(0xFFD1FAE5);
-  static const Color primaryHover = Color(0xFFECFDF5);
+  static const Color primary =  Color.fromARGB(255, 10, 5, 100); 
+  static const Color primaryDark = Color.fromARGB(255, 10, 5, 100);
+  static const Color primaryLight = Color.fromARGB(255, 209, 250, 229);
+  static const Color primaryHover = Color.fromARGB(255, 236, 253, 245);
+  
+  static const Color adminBlue = Color(0xFF1E3A8A);
+  static const Color adminBlueHover = Color(0xFF172554);
+  static const Color adminBlueLight = Color(0xFFEFF6FF);
+  static const Color adminBlueBorder = Color(0xFFDBEAFE);
   
   // Neutral Colors
-  static const Color background = Color(0xFFF5F7FA);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color drawerBackground = Color(0xFFFFFFFF);
-  static const Color cardBackground = Color(0xFFFFFFFF);
+  static const Color background = Color.fromARGB(255, 245, 247, 250);
+  static const Color surface = Color.fromARGB(255, 255, 255, 255);
+  static const Color drawerBackground = Color.fromARGB(255, 255, 255, 255);
+  static const Color cardBackground = Color.fromARGB(255, 255, 255, 255);
   
   // Text Colors
-  static const Color textPrimary = Color(0xFF111827);
-  static const Color textSecondary = Color(0xFF4B5563);
+  static const Color textPrimary = Color.fromARGB(255, 17, 24, 39);
+  static const Color textSecondary = Color.fromARGB(255, 75, 85, 99);
   static const Color textMuted = Color(0xFF9CA3AF);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
   
@@ -53,3 +58,5 @@ class AdminColors {
     ),
   ];
 }
+
+typedef AdminColors = AppColors;

@@ -9,6 +9,12 @@ class AppColors {
   static const Color cardBackground = Colors.white;
   static const Color border = Color(0xFFE2E8F0); // Light grey border
 
+  // Admin Login Screen Blue + White Theme
+  static const Color adminBlue = Color(0xFF1E40AF); // Primary Blue (Blue 800)
+  static const Color adminBlueHover = Color(0xFF1D4ED8); // Blue 700
+  static const Color adminBlueLight = Color(0xFFEFF6FF); // Very light blue background (Blue 50)
+  static const Color adminBlueBorder = Color(0xFFBFDBFE); // Light blue border (Blue 200)
+
   static const Color textPrimary = Color(0xFF0F172A); // Slate 900
   static const Color textSecondary = Color(0xFF475569); // Slate 600
   static const Color textLight = Color(0xFF94A3B8); // Slate 400

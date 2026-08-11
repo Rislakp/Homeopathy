@@ -1,5 +1,5 @@
 import 'package:homeopathy/admin/theme/admin_colors.dart';
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:flutter/material.dart';
 
 class AdminHeader extends StatelessWidget {
   final String title;
@@ -109,7 +109,7 @@ class AdminHeader extends StatelessWidget {
     children: [
       CircleAvatar(
         radius: 18,
-        backgroundColor:AdminColors.primaryDark,
+        backgroundColor:AppColors.primaryDark,
         child: const Text(
           "DR",
           style: TextStyle(
@@ -157,3 +157,4 @@ class AdminHeader extends StatelessWidget {
     );
   }
 }
+

@@ -7,12 +7,15 @@ import '../../core/constants/api_constants.dart';
 class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _token;
+  String? _errorMessage;
 
   bool get isLoading => _isLoading;
   String? get token => _token;
+  String? get errorMessage => _errorMessage;
 
   Future<bool> login(String username, String password) async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
 
     try {
@@ -44,6 +47,7 @@ class AuthProvider extends ChangeNotifier {
         throw Exception(resData['message'] ?? 'Failed to authenticate: ${response.statusCode}');
       }
     } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
       rethrow;
     } finally {
       _isLoading = false;

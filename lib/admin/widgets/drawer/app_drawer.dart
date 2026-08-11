@@ -22,9 +22,9 @@ class AppDrawer extends StatelessWidget {
       curve: Curves.fastOutSlowIn,
       width: width,
       decoration: const BoxDecoration(
-        color: AdminColors.drawerBackground,
+        color: AppColors.drawerBackground,
         border: Border(
-          right: BorderSide(color: AdminColors.border, width: 1),
+          right: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: Column(
@@ -42,10 +42,10 @@ class AppDrawer extends StatelessWidget {
                   onChanged: (val) => drawerProvider.setDrawerSearchQuery(val),
                   decoration: InputDecoration(
                     hintText: 'Filter menu...',
-                    hintStyle: const TextStyle(fontSize: 12, color: AdminColors.textMuted),
-                    prefixIcon: const Icon(Icons.search_rounded, size: 16, color: AdminColors.textMuted),
+                    hintStyle: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                    prefixIcon: const Icon(Icons.search_rounded, size: 16, color: AppColors.textMuted),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    fillColor: AdminColors.background,
+                    fillColor: AppColors.background,
                   ),
                 ),
               ),

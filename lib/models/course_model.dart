@@ -9,6 +9,8 @@ class CourseModel {
   final String description;
   final String image; // Icon or illustration code/identifier
 
+  String get courseId => id;
+
   const CourseModel({
     required this.id,
     required this.title,

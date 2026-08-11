@@ -18,7 +18,7 @@ class HeroSection extends StatelessWidget {
             "India's #1 Homeopathy Learning Platform",
              style: 
             TextStyle(
-              color: Color(0xff009B5A),
+              color: Color.fromARGB(255, 10, 5, 100),
               fontWeight: FontWeight.w600,
               fontFamily: 'Inter',
             ),

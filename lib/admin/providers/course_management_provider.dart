@@ -323,4 +323,12 @@ class CourseManagementNotifier extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+  Future<void> updateCourse(CourseItem course) async {
+    final index = _courses.indexWhere((c) => c.id == course.id);
+    if (index != -1) {
+      _courses[index] = course;
+      notifyListeners();
+    }
+  }
 }
