@@ -14,14 +14,7 @@ class CourseSearchFilter extends StatefulWidget {
 class _CourseSearchFilterState extends State<CourseSearchFilter> {
   final TextEditingController _searchController = TextEditingController();
 
-  final List<String> _categories = [
-    'Anatomy',
-    'Physiology',
-    'Pathology',
-    'Materia Medica',
-    'Repertory',
-    'Organon',
-  ];
+
 
   @override
   void dispose() {
@@ -42,6 +35,16 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
     final bool isMobile = width < 768;
 
     Widget buildDropdown() {
+      final List<String> categories = ['All Categories'];
+      for (final c in provider.courses) {
+        if (c.category.isNotEmpty && !categories.contains(c.category)) {
+          categories.add(c.category);
+        }
+      }
+      if (!categories.contains(provider.selectedCategory)) {
+        categories.add(provider.selectedCategory);
+      }
+
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
@@ -52,7 +55,7 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
             value: provider.selectedCategory,
-            items: ['All Categories', ..._categories].map((String cat) {
+            items: categories.map((String cat) {
               return DropdownMenuItem<String>(
                 value: cat,
                 child: Text(
@@ -122,10 +125,14 @@ class _CourseSearchFilterState extends State<CourseSearchFilter> {
       // Add Course Button
       ElevatedButton.icon(
         onPressed: () {
+          final courseProvider = context.read<CourseProvider>();
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => const AddCourseDialog(),
+            builder: (_) => ChangeNotifierProvider.value(
+              value: courseProvider,
+              child: const AddCourseDialog(),
+            ),
           );
         },
         icon: const Icon(Icons.add, size: 18),

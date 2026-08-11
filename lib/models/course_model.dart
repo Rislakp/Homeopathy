@@ -47,8 +47,8 @@ class CourseModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'title': title,
+      'courseId': id,
+      'courseTitle': title,
       'instructor': instructor,
       'category': category,
       'price': price,
@@ -61,15 +61,15 @@ class CourseModel {
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      instructor: json['instructor'] as String,
-      category: json['category'] as String,
-      price: (json['price'] as num).toDouble(),
-      students: json['students'] as int,
-      status: json['status'] as String,
-      description: json['description'] as String,
-      image: json['image'] as String,
+      id: (json['courseId'] ?? json['id'] ?? '') as String,
+      title: (json['courseTitle'] ?? json['title'] ?? '') as String,
+      instructor: (json['instructor'] ?? '') as String,
+      category: (json['category'] ?? '') as String,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      students: (json['students'] ?? 0) as int,
+      status: (json['status'] ?? 'Published') as String,
+      description: (json['description'] ?? '') as String,
+      image: (json['image'] ?? 'menu_book') as String,
     );
   }
 }

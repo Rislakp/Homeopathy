@@ -12,18 +12,31 @@ class DeleteCourseDialog extends StatelessWidget {
     required this.course,
   });
 
-  void _onDelete(BuildContext context) {
+  void _onDelete(BuildContext context) async {
     final provider = context.read<CourseProvider>();
-    provider.deleteCourse(course.id);
-    Navigator.of(context).pop();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Course "${course.title}" deleted successfully.'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    try {
+      await provider.deleteCourse(course.id);
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Course "${course.title}" deleted successfully.'),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   @override

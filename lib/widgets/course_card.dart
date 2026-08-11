@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:homeopathy/admin/screen/course/course_details_screen.dart';
 import '../models/course_model.dart';
+import '../providers/course_provider.dart';
 import '../utils/app_colors.dart';
 import 'delete_course_dialog.dart';
 import 'edit_course_dialog.dart';
@@ -224,10 +227,12 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (_) => ViewCourseDialog(course: course),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => CourseDetailsScreen(courseId: course.id),
+                              ),
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: AppColors.border),
@@ -245,10 +250,14 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
+                            final courseProvider = context.read<CourseProvider>();
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-                              builder: (_) => EditCourseDialog(course: course),
+                              builder: (_) => ChangeNotifierProvider.value(
+                                value: courseProvider,
+                                child: EditCourseDialog(course: course),
+                              ),
                             );
                           },
                           style: OutlinedButton.styleFrom(
@@ -267,9 +276,13 @@ class CourseCard extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final courseProvider = context.read<CourseProvider>();
                             showDialog(
                               context: context,
-                              builder: (_) => DeleteCourseDialog(course: course),
+                              builder: (_) => ChangeNotifierProvider.value(
+                                value: courseProvider,
+                                child: DeleteCourseDialog(course: course),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(

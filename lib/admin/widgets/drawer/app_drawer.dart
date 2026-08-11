@@ -60,11 +60,11 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // 4. Bottom Footer
-          AppDrawerFooter(
-            isCollapsed: isCollapsed,
-            onToggleCollapse: () => drawerProvider.toggleCollapse(),
-            onSelectMenu: (menu) => drawerProvider.selectMenu(menu),
-          ),
+          // AppDrawerFooter(
+          //   isCollapsed: isCollapsed,
+          //   onToggleCollapse: () => drawerProvider.toggleCollapse(),
+          //   onSelectMenu: (menu) => drawerProvider.selectMenu(menu),
+          // ),
         ],
       ),
     );

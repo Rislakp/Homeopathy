@@ -70,9 +70,19 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
     _status = c.status;
     _description = c.description;
     _image = c.image;
+
+    if (!_categories.contains(_category)) {
+      _categories.add(_category);
+    }
+    if (!_statuses.contains(_status)) {
+      _statuses.add(_status);
+    }
+    if (!_iconOptions.containsKey(_image)) {
+      _iconOptions[_image] = Icons.book;
+    }
   }
 
-  void _onSave() {
+  void _onSave() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
 
@@ -88,16 +98,29 @@ class _EditCourseDialogState extends State<EditCourseDialog> {
       image: _image,
     );
 
-    provider.updateCourse(updated);
-    Navigator.of(context).pop();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Course updated successfully!'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    try {
+      await provider.updateCourse(updated);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Course updated successfully!'),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   @override

@@ -6,7 +6,7 @@ class DrawerProvider extends ChangeNotifier {
   bool _isCollapsed = false;
   final Set<AdminMenuSection> _expandedSections = {
     AdminMenuSection.overview,
-    AdminMenuSection.academics,
+   
   };
   String _drawerSearchQuery = '';
 

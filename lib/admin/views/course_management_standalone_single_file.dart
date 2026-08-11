@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../screen/course/course_details_screen.dart';
 
 
 
@@ -659,7 +660,16 @@ class _CourseTableSection extends StatelessWidget {
                     DataCell(PopupMenuButton<String>(
                       icon: const Icon(Icons.more_vert_rounded, color: Color(0xFF64748B), size: 20),
                       onSelected: (val) {
-                        if (val == 'delete') notifier.deleteCourse(course.id);
+                        if (val == 'view') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CourseDetailsScreen(courseId: course.id),
+                            ),
+                          );
+                        } else if (val == 'delete') {
+                          notifier.deleteCourse(course.id);
+                        }
                       },
                       itemBuilder: (ctx) => [
                         const PopupMenuItem(value: 'view', child: Text('View')),

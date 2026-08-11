@@ -57,3 +57,79 @@ class ActivityLog {
     required this.icon,
   });
 }
+
+enum LessonType {
+  file,
+  video,
+  live,
+}
+
+class LessonDetailModel {
+  final String id;
+  final String title;
+  final String subtitle;
+  final LessonType type;
+  final String status;
+  final bool isLocked;
+
+  const LessonDetailModel({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.type,
+    required this.status,
+    required this.isLocked,
+  });
+}
+
+class ModuleDetailModel {
+  final String id;
+  final String title;
+  final List<LessonDetailModel> lessons;
+
+  const ModuleDetailModel({
+    required this.id,
+    required this.title,
+    required this.lessons,
+  });
+}
+
+class CourseDetailModel {
+  final String id;
+  final String title;
+  final String description;
+  final String instructor;
+  final String duration;
+  final int students;
+  final String price;
+  final String status;
+  final bool isBestseller;
+  final List<ModuleDetailModel> modules;
+
+  const CourseDetailModel({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.instructor,
+    required this.duration,
+    required this.students,
+    required this.price,
+    required this.status,
+    required this.isBestseller,
+    required this.modules,
+  });
+}
+
+class VersionHistoryItem {
+  final String id;
+  final String action;
+  final String author;
+  final String timestamp;
+
+  const VersionHistoryItem({
+    required this.id,
+    required this.action,
+    required this.author,
+    required this.timestamp,
+  });
+}
