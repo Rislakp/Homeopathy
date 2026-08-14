@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/auth/sign_up_screen.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import 'package:homeopathy/student_portal/pages/courses/courses_screen.dart';
-import 'package:homeopathy/student_portal/pages/live_classes/live_classes_page.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
 class DashboardMobile extends StatelessWidget {
@@ -16,35 +17,41 @@ class DashboardMobile extends StatelessWidget {
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
+            icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
         title: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 16,
-              backgroundColor: Color.fromARGB(255, 10, 5, 100),
-              child: const Icon(Icons.water_drop, color: Colors.white, size: 16),
+              backgroundColor: AppColors.primary,
+              child: Icon(Icons.local_hospital_rounded, color: Colors.white, size: 16),
             ),
             const SizedBox(width: 8),
             Text(
               "White Coat",
-              style: GoogleFonts.outfit(
-                color: Colors.black,
+              style: GoogleFonts.inter(
+                color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.login_rounded, color: AppColors.primary),
+            onPressed: () => SignupScreen.show(context),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(color:Color.fromARGB(255, 10, 5, 100),),
+              decoration: const BoxDecoration(color: AppColors.primaryDark),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -52,12 +59,12 @@ class DashboardMobile extends StatelessWidget {
                   const CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.water_drop, color:Color.fromARGB(255, 10, 5, 100), size: 28),
+                    child: Icon(Icons.local_hospital_rounded, color: AppColors.primary, size: 28),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     "White Coat Academy",
-                    style: GoogleFonts.outfit(
+                    style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -70,6 +77,18 @@ class DashboardMobile extends StatelessWidget {
             _drawerTile(context, Icons.menu_book_rounded, "Courses", const CoursesScreen()),
             _drawerTile(context, Icons.quiz_rounded, "Mock Tests", const MockTest()),
             _drawerTile(context, Icons.monetization_on_rounded, "Pricing", const PricingScreen()),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.login_rounded, color: AppColors.primary),
+              title: Text(
+                "Sign In",
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: AppColors.primary),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                SignupScreen.show(context);
+              },
+            ),
           ],
         ),
       ),
@@ -87,7 +106,7 @@ class DashboardMobile extends StatelessWidget {
               const CategoryScreen(),
               
               const SizedBox(height: 40),
-              const SectionHeader(),
+              SectionHeader(),
               const SizedBox(height: 20),
               Consumer<CourseProvider>(
                 builder: (context, courseProvider, child) {
@@ -136,10 +155,10 @@ class DashboardMobile extends StatelessWidget {
 
   Widget _drawerTile(BuildContext context, IconData icon, String title, Widget? targetScreen) {
     return ListTile(
-      leading: Icon(icon, color: Color.fromARGB(255, 10, 5, 100)),
+      leading: Icon(icon, color: AppColors.primary),
       title: Text(
         title,
-        style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+        style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
       ),
       onTap: () {
         Navigator.pop(context); // close drawer

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../core/constants/api_constants.dart';
 
 class CourseApiService {
-  static const String _baseUrl = ApiConstants.courses;
+  static String get _baseUrl => ApiConstants.courses;
 
   // GET all courses
   Future<List<CourseModel>> getCourses() async {

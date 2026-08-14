@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import 'pricing_model.dart';
 
 class PricingCard extends StatefulWidget {
@@ -21,7 +22,6 @@ class PricingCard extends StatefulWidget {
 
 class _PricingCardState extends State<PricingCard> {
   bool _isHovered = false;
-  static const Color primaryGreen = Color(0xFF0F9D58);
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +29,24 @@ class _PricingCardState extends State<PricingCard> {
     final isSelected = widget.isSelected;
     final isPopular = widget.plan.isPopular;
 
-    // Transition values based on selection & design tokens
-    final Color cardBg = isSelected ? primaryGreen : Colors.white;
-    final Color textColor = isSelected ? Colors.white : const Color(0xFF1E293B);
-    final Color textSecColor = isSelected ? Colors.white.withOpacity(0.8) : const Color(0xFF64748B);
-    
-    final Color borderCol = isSelected 
-        ? Colors.transparent 
-        : (isPopular ? primaryGreen : const Color(0xFFE2E8F0));
+    final Color cardBg = isSelected ? AppColors.primary : Colors.white;
+    final Color textColor = isSelected ? Colors.white : AppColors.textPrimary;
+    final Color textSecColor = isSelected ? Colors.white.withValues(alpha: 0.85) : AppColors.textSecondary;
 
-    final double borderWidth = isSelected ? 0.0 : (isPopular ? 2.5 : 1.0);
+    final Color borderCol = isSelected
+        ? Colors.transparent
+        : (isPopular ? AppColors.primary : AppColors.border);
 
-    // Button states
+    final double borderWidth = isSelected ? 0.0 : (isPopular ? 2.0 : 1.0);
+
     final Color buttonBg = isSelected
         ? Colors.white
-        : (isPopular ? const Color(0xFF1E293B) : primaryGreen);
+        : (isPopular ? AppColors.secondary : AppColors.primary);
 
-    final Color buttonTextCol = isSelected ? primaryGreen : Colors.white;
+    final Color buttonTextCol = isSelected ? AppColors.primary : Colors.white;
 
-    // Hover transformation calculations
-    final double scale = _isHovered ? (isPopular ? 1.05 : 1.03) : (isPopular ? 1.02 : 1.0);
-    final double translationY = _isHovered ? -8.0 : 0.0;
+    final double scale = _isHovered ? (isPopular ? 1.03 : 1.02) : (isPopular ? 1.01 : 1.0);
+    final double translationY = _isHovered ? -6.0 : 0.0;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -57,30 +54,30 @@ class _PricingCardState extends State<PricingCard> {
       cursor: SystemMouseCursors.click,
       child: AnimatedScale(
         scale: scale,
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
           transform: Matrix4.translationValues(0, translationY, 0),
           padding: EdgeInsets.symmetric(
             horizontal: 24,
-            vertical: isPopular ? 36 : 28,
+            vertical: isPopular ? 34 : 26,
           ),
           decoration: BoxDecoration(
             color: cardBg,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: borderCol,
               width: borderWidth,
             ),
             boxShadow: [
               BoxShadow(
-                color: isSelected 
-                    ? primaryGreen.withOpacity(_isHovered ? 0.35 : 0.15)
-                    : Colors.black.withOpacity(_isHovered ? 0.12 : 0.05),
-                blurRadius: _isHovered ? 30 : 15,
-                offset: Offset(0, _isHovered ? 12 : 6),
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: _isHovered ? 0.35 : 0.15)
+                    : const Color(0xFF0F172A).withValues(alpha: _isHovered ? 0.10 : 0.04),
+                blurRadius: _isHovered ? 24 : 12,
+                offset: Offset(0, _isHovered ? 10 : 4),
               ),
             ],
           ),
@@ -90,18 +87,18 @@ class _PricingCardState extends State<PricingCard> {
               // Floating Popular Badge
               if (isPopular)
                 Positioned(
-                  top: -50,
+                  top: -46,
                   left: 0,
                   right: 0,
                   child: Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
-                        color: primaryGreen,
+                        color: AppColors.primary,
                         borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
-                            color: primaryGreen.withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -109,9 +106,9 @@ class _PricingCardState extends State<PricingCard> {
                       ),
                       child: Text(
                         "MOST POPULAR",
-                        style: GoogleFonts.outfit(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white,
                           letterSpacing: 1.0,
                         ),
@@ -127,14 +124,14 @@ class _PricingCardState extends State<PricingCard> {
                   // Plan Level Title
                   Text(
                     widget.plan.name.toUpperCase(),
-                    style: GoogleFonts.outfit(
-                      fontSize: 13,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
                       fontWeight: FontWeight.w800,
                       color: textSecColor,
                       letterSpacing: 1.0,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
                   // Pricing Layout
                   Row(
@@ -143,8 +140,8 @@ class _PricingCardState extends State<PricingCard> {
                     children: [
                       Text(
                         currencyFormatter.format(widget.plan.price),
-                        style: GoogleFonts.outfit(
-                          fontSize: 34,
+                        style: GoogleFonts.inter(
+                          fontSize: 32,
                           fontWeight: FontWeight.w900,
                           color: textColor,
                         ),
@@ -152,7 +149,7 @@ class _PricingCardState extends State<PricingCard> {
                       const SizedBox(width: 4),
                       Text(
                         '/ ${widget.plan.duration}',
-                        style: GoogleFonts.outfit(
+                        style: GoogleFonts.inter(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: textSecColor,
@@ -160,14 +157,14 @@ class _PricingCardState extends State<PricingCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
                   Divider(
                     height: 1,
                     thickness: 1,
-                    color: isSelected ? Colors.white24 : Colors.black12,
+                    color: isSelected ? Colors.white24 : AppColors.border,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
                   // Features check list
                   Expanded(
@@ -175,7 +172,7 @@ class _PricingCardState extends State<PricingCard> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: widget.plan.features.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (context, index) {
                         final feature = widget.plan.features[index];
                         return Row(
@@ -183,16 +180,16 @@ class _PricingCardState extends State<PricingCard> {
                           children: [
                             Icon(
                               Icons.check_circle_rounded,
-                              size: 18,
-                              color: isSelected ? Colors.white : primaryGreen,
+                              size: 16,
+                              color: isSelected ? Colors.white : AppColors.primary,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 feature,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14,
-                                  color: textColor.withOpacity(0.9),
+                                style: GoogleFonts.inter(
+                                  fontSize: 13,
+                                  color: textColor.withValues(alpha: 0.9),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -202,12 +199,12 @@ class _PricingCardState extends State<PricingCard> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Choose/Selected button
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: 46,
                     child: _CardActionButton(
                       text: isSelected ? "Selected" : "Choose Plan",
                       backgroundColor: buttonBg,
@@ -256,44 +253,40 @@ class _CardActionButtonState extends State<_CardActionButton> {
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
             color: widget.backgroundColor,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               if (_isHovered && !widget.isSelected)
                 BoxShadow(
-                  color: widget.backgroundColor.withOpacity(0.35),
-                  blurRadius: 12,
-                  offset: const Offset(0, 5),
+                  color: widget.backgroundColor.withValues(alpha: 0.30),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
             ],
           ),
           child: Center(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (widget.isSelected) ...[
-                    Icon(
-                      Icons.check_rounded,
-                      color: widget.textColor,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 6),
-                  ],
-                  Text(
-                    widget.text,
-                    key: ValueKey<String>(widget.text),
-                    style: GoogleFonts.outfit(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: widget.textColor,
-                    ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.isSelected) ...[
+                  Icon(
+                    Icons.check_rounded,
+                    color: widget.textColor,
+                    size: 16,
                   ),
+                  const SizedBox(width: 6),
                 ],
-              ),
+                Text(
+                  widget.text,
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: widget.textColor,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

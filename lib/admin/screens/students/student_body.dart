@@ -5,109 +5,16 @@ import 'provider/student_provider.dart';
 import 'model/student_model.dart';
 import 'widgets/search_filter_bar.dart';
 import 'widgets/student_table.dart';
-import 'widgets/student_row.dart';
-import 'widgets/status_chip.dart';
 import 'widgets/add_edit_student_dialog.dart';
 import 'widgets/delete_confirmation_dialog.dart';
+import 'widgets/view_student_scores_dialog.dart';
 
 class StudentBody extends StatelessWidget {
   const StudentBody({super.key});
 
-  void _viewStudentDetails(BuildContext context, StudentModel student) {
-    final avatarColor = StudentRow.getAvatarBgColor(student.name);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Container(
-            padding: const EdgeInsets.all(28),
-            constraints: const BoxConstraints(maxWidth: 440),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Student Profile Details',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Color(0xFF9CA3AF)),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Center(
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: avatarColor.withOpacity(0.12),
-                        child: Text(
-                          student.avatarText,
-                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: avatarColor),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        student.name,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111827)),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        student.email,
-                        style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 28),
-                const Divider(height: 1, color: Color(0xFFE5E7EB)),
-                const SizedBox(height: 16),
-                _detailItem('Phone Number', student.phone),
-                _detailItem('Enrolled Course', student.course),
-                _detailItem('Subscription Tier', student.subscription),
-                _detailItem('Account Status', student.status, isStatus: true),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _detailItem(String label, String value, {bool isStatus = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF6B7280),
-            ),
-          ),
-          isStatus
-              ? StatusChip(status: value)
-              : Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF111827),
-                  ),
-                ),
-        ],
-      ),
-    );
+  /// Opens the View Scores modal dialog for the selected student.
+  void _viewStudentScores(BuildContext context, StudentModel student) {
+    ViewStudentScoresDialog.show(context, student);
   }
 
   void _showAddStudentDialog(BuildContext context) async {
@@ -141,7 +48,7 @@ class StudentBody extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Student "${result.name}" updated successfully.'),
-          backgroundColor:Color.fromARGB(255, 10, 5, 100),
+          backgroundColor: const Color.fromARGB(255, 10, 5, 100),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -182,7 +89,6 @@ class StudentBody extends StatelessWidget {
     final provider = context.watch<StudentProvider>();
     final students = provider.students;
 
-    // Use responsive extensions from project context
     final double padding = context.responsiveValue<double>(
       mobile: 16.0,
       tablet: 20.0,
@@ -206,42 +112,165 @@ class StudentBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Students',
-            style: TextStyle(
-              fontSize: titleSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF111827),
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Manage enrolled students and their subscriptions.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF6B7280),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Students',
+                    style: TextStyle(
+                      fontSize: titleSize,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF111827),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Manage enrolled students, subscriptions, and view exam performance.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh_rounded, color: Color(0xFF4B5563)),
+                tooltip: 'Refresh Students',
+                onPressed: () => provider.refresh(),
+              ),
+            ],
           ),
           SizedBox(height: spacing),
-          
+
           SearchFilterBar(
             onExportPressed: () => _showExportSnackbar(context),
             onAddStudentPressed: () => _showAddStudentDialog(context),
           ),
           SizedBox(height: spacing),
-          
-          Expanded(
-            child: SingleChildScrollView(
-              child: StudentTable(
-                students: students,
-                onView: (student) => _viewStudentDetails(context, student),
-                onEdit: (student) => _showEditStudentDialog(context, student),
-                onDelete: (student) => _showDeleteConfirmation(context, student),
-                onClearFilters: () => provider.resetFilters(),
-              ),
+
+          if (provider.isLoading && students.isNotEmpty)
+            const LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
+              minHeight: 3,
             ),
+
+          Expanded(
+            child: _buildMainContent(context, provider),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMainContent(BuildContext context, StudentProvider provider) {
+    if (provider.isLoading && provider.students.isEmpty) {
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 36,
+                height: 36,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Fetching students list...',
+                style: TextStyle(
+                  color: Color(0xFF6B7280),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (provider.errorMessage != null && provider.students.isEmpty) {
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          constraints: const BoxConstraints(maxWidth: 450),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFEF4444).withOpacity(0.3)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFEF2F2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  size: 40,
+                  color: Color(0xFFEF4444),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Failed to Load Students',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF111827),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                provider.errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF6B7280),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () => provider.refresh(),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: const Text('Try Again'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF10B981),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  elevation: 0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      child: StudentTable(
+        students: provider.students,
+        onView: (student) => _viewStudentScores(context, student),
+        onEdit: (student) => _showEditStudentDialog(context, student),
+        onDelete: (student) => _showDeleteConfirmation(context, student),
+        onClearFilters: () => provider.resetFilters(),
       ),
     );
   }

@@ -85,7 +85,7 @@ class CourseCard extends StatelessWidget {
                     topRight: Radius.circular(19),
                   ),
                   gradient: LinearGradient(
-                    colors: [AppColors.primary, Color(0xFF22C55E)],
+                    colors: [AppColors.primary, AppColors.primaryDark],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),

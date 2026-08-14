@@ -1,70 +1,59 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key});
+ // final VoidCallback onFilterPressed;
 
+  const SectionHeader({super.key, 
+  //required this.onFilterPressed
+  });
 
   @override
   Widget build(BuildContext context) {
-  
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isNarrow = constraints.maxWidth < 600;
-
-        final titleBlock = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _FeaturedBadge(),
-            const SizedBox(height: 16),
-            const Text(
-              'Handpicked programs to\naccelerate your prep.',
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w800,
-                height: 1.15,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Curated by our academic council. Trusted by rank holders across India.',
-              style: TextStyle(fontSize: 15, color: Colors.grey),
-            ),
-          ],
-        );
-
-        final browseButton = OutlinedButton.icon(
-          onPressed: () {},
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.black87,
-            side: BorderSide(color: Colors.grey.shade300),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          ),
-          icon: const Text(
-            'Browse all courses',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          label: const Icon(Icons.arrow_forward, size: 18),
-        );
-
-        if (isNarrow) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              titleBlock,
-              const SizedBox(height: 16),
-              Align(alignment: Alignment.centerLeft, child: browseButton),
-            ],
-          );
-        }
+        final isMobile = constraints.maxWidth < 600;
 
         return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Expanded(child: titleBlock),
-            browseButton,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _FeaturedBadge(),
+                const SizedBox(height: 12),
+                Text(
+                  'Popular Courses',
+                  style: GoogleFonts.inter(
+                    fontSize: isMobile ? 24 : 32,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Explore top-rated medical entrance preparation courses',
+                  style: GoogleFonts.inter(
+                    fontSize: isMobile ? 13 : 15,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+            if (!isMobile)
+              OutlinedButton.icon(
+                onPressed: (){},
+                icon: const Icon(Icons.filter_list_rounded, size: 18),
+                label: const Text('Filters'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.border),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
           ],
         );
       },
@@ -80,18 +69,19 @@ class _FeaturedBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F5EC),
+        color: AppColors.primaryLight,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryBorder),
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.circle, size: 8, color: Color(0xFF2E7D4F)),
-          const SizedBox(width: 6),
-          const Text(
+          Icon(Icons.circle, size: 8, color: AppColors.primary),
+          SizedBox(width: 6),
+          Text(
             'Featured Courses',
             style: TextStyle(
-              color: Color(0xFF2E7D4F),
+              color: AppColors.primaryDark,
               fontWeight: FontWeight.bold,
               fontSize: 13,
             ),

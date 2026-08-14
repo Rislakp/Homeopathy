@@ -45,7 +45,7 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       rating: 4.9,
       studentsCount: 1420,
       imagePath: 'assets/demo/demo1.jpg',
-      gradientColors: [Color(0xFF00A86B), Color(0xFF005C3E)],
+      gradientColors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
       isLive: true,
     ),
     DemoItem(
@@ -55,7 +55,7 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       rating: 4.8,
       studentsCount: 980,
       imagePath: 'assets/demo/demo2.jpg',
-      gradientColors: [Color(0xFF22C55E), Color(0xFF15803D)],
+      gradientColors: [Color(0xFF0284C7), Color(0xFF0369A1)],
     ),
     DemoItem(
       title: 'Organon Masterclass',
@@ -64,7 +64,7 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       rating: 4.9,
       studentsCount: 1250,
       imagePath: 'assets/demo/demo3.jpg',
-      gradientColors: [Color(0xFF10B981), Color(0xFF065F46)],
+      gradientColors: [Color(0xFF4F46E5), Color(0xFF3730A3)],
       isLive: true,
     ),
     DemoItem(
@@ -73,9 +73,8 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       duration: '2.5 Hours Preview',
       rating: 4.7,
       studentsCount: 1100,
-    
       imagePath: 'assets/demo/demo4.jpg',
-      gradientColors: [Color(0xFF14B8A6), Color(0xFF0F766E)],
+      gradientColors: [Color(0xFF0EA5E9), Color(0xFF0284C7)],
     ),
     DemoItem(
       title: 'Anatomy Foundation',
@@ -83,9 +82,8 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       duration: '1.5 Hours Preview',
       rating: 4.6,
       studentsCount: 670,
-     
       imagePath: 'assets/demo/demo5.jpg',
-      gradientColors: [Color(0xFF06B6D4), Color(0xFF0891B2)],
+      gradientColors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
     ),
     DemoItem(
       title: 'Repertory Essentials',
@@ -93,9 +91,8 @@ class _DemoClassVideoState extends State<DemoClassVideo> {
       duration: '1.2 Hours Preview',
       rating: 4.8,
       studentsCount: 720,
-     
       imagePath: 'assets/demo/demo6.jpg',
-      gradientColors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+      gradientColors: [Color(0xFF1E3A8A), Color(0xFF0F172A)],
     ),
   ];
 

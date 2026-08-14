@@ -1,7 +1,9 @@
+import 'package:homeopathy/admin/screens/auth/login/widgets/left_brand_panel.dart';
+import 'package:homeopathy/admin/screens/auth/login/widgets/login_form.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class AdminLoginScreen extends StatelessWidget {
+  const AdminLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

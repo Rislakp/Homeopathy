@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/course_details_model.dart';
+import 'package:homeopathy/admin/model/course_details_model.dart';
 
 class CourseDetailsProvider extends ChangeNotifier {
   bool _isLoading = false;

@@ -11,15 +11,9 @@ class JourneyCard extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.green.shade100),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.withOpacity(.08),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+        boxShadow: AppColors.softShadow,
       ),
       child: Stack(
         children: [
@@ -29,9 +23,9 @@ class JourneyCard extends StatelessWidget {
             child: Text(
               step.number.toString().padLeft(2, "0"),
               style: TextStyle(
-                fontSize: 54,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade200,
+                fontSize: 48,
+                fontWeight: FontWeight.w800,
+                color: AppColors.border,
               ),
             ),
           ),
@@ -41,30 +35,29 @@ class JourneyCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: const Color(0xff009B5A),
-                child: Icon(step.icon, color: Colors.white),
+                backgroundColor: AppColors.primary,
+                child: Icon(step.icon, color: Colors.white, size: 20),
               ),
 
-            
-              AppSpacing.h25,
+              AppSpacing.h20,
 
               Text(
                 step.title,
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
                 ),
               ),
 
-             
-              AppSpacing.h16,
+              AppSpacing.h12,
 
               Text(
                 step.description,
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.grey.shade700,
-                  height: 1.6,
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                  height: 1.5,
                 ),
               ),
             ],

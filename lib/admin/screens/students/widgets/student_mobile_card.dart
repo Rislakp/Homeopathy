@@ -3,6 +3,7 @@ import '../model/student_model.dart';
 import 'status_chip.dart';
 import 'action_buttons.dart';
 import 'student_row.dart';
+import 'view_student_scores_dialog.dart';
 
 class StudentMobileCard extends StatelessWidget {
   final StudentModel student;
@@ -79,6 +80,38 @@ class StudentMobileCard extends StatelessWidget {
             _buildInfoRow('Phone', student.phone),
             const SizedBox(height: 8),
             _buildInfoRow('Course', student.course, isHighlight: true),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Score',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => ViewStudentScoresDialog.show(context, student),
+                  icon: const Icon(Icons.visibility_outlined, size: 14, color: Color(0xFF3B82F6)),
+                  label: const Text(
+                    'View Scores',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF3B82F6),
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    side: const BorderSide(color: Color(0xFF3B82F6)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    minimumSize: const Size(60, 28),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
             _buildInfoRow('Subscription', student.subscription, isBadge: true),
             const Divider(height: 24, color: Color(0xFFF3F4F6)),

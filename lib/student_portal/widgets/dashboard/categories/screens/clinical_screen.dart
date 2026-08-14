@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class ClinicalScreen extends StatelessWidget {
   const ClinicalScreen({super.key});
@@ -6,20 +7,19 @@ class ClinicalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F8F6),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xff2E7D32)),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "Clinical Practice & Medicine",
           style: TextStyle(
-            color: Color(0xff1B5E20),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
           ),
         ),
       ),
@@ -31,7 +31,7 @@ class ClinicalScreen extends StatelessWidget {
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xffE8F5E9), Color(0xffC8E6C9)],
+                  colors: [AppColors.primaryLight, Color(0xFFDBEAFE)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -43,7 +43,7 @@ class ClinicalScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xff2E7D32),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
@@ -61,76 +61,98 @@ class ClinicalScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1B5E20),
-                      fontFamily: 'Poppins',
+                      color: AppColors.textPrimary,
+                      height: 1.2,
                     ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    "Practical training in physical diagnosis, clinical examinations, laboratory interpretation, and real homoeopathic case discussions.",
+                    "Practical patient management, bedside clinical methods, diagnostic differentials, lab test interpretation, and acute prescribing strategies.",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xff33691E),
+                      color: AppColors.textSecondary,
                       height: 1.5,
                     ),
                   ),
+                  const SizedBox(height: 28),
+                  Wrap(
+                    spacing: 16,
+                    runSpacing: 12,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text("Join Clinical Batch", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 900 ? 4 : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 3.5,
-                children: [
-                  _buildStatCard(Icons.menu_book, "29 Courses", "Covering general medicine & cases"),
-                  _buildStatCard(Icons.play_circle_fill, "220+ Lectures", "Video recordings of clinic sessions"),
-                  _buildStatCard(Icons.quiz, "45+ Case Study Tests", "Diagnostic quizzes"),
-                  _buildStatCard(Icons.people, "8.4k Students", "Enrolled interns"),
-                ],
-              ),
-            ),
+
             const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: const Text(
-                "Course Syllabus Structure",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff1B5E20),
-                  fontFamily: 'Poppins',
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildCurriculumTile(
-                    "01",
-                    "Physical Examination & Systemic Diagnosis",
-                    "Cardiovascular, respiratory, gastrointestinal, and neurological bedside examinations.",
-                    "10 Courses",
+                  const Text(
+                    "Course Highlights",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
-                  _buildCurriculumTile(
-                    "02",
-                    "Lab Investigations & Radiology",
-                    "Interpret blood panels, thyroid tests, X-Rays, CT scans, and MRI results effectively.",
-                    "9 Courses",
+                  const SizedBox(height: 20),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isMobile = constraints.maxWidth < 700;
+                      return GridView.count(
+                        crossAxisCount: isMobile ? 1 : 3,
+                        shrinkWrap: true,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: isMobile ? 3 : 2.5,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          _buildStatCard(Icons.local_hospital_outlined, "120+ Real Cases", "Complete Patient Workups"),
+                          _buildStatCard(Icons.biotech_outlined, "Lab & ECG", "Interpretation Masterclass"),
+                          _buildStatCard(Icons.medical_services_outlined, "Emergency Care", "Acute Prescribing Protocol"),
+                        ],
+                      );
+                    },
                   ),
-                  _buildCurriculumTile(
-                    "03",
-                    "Homoeopathic Case Discussions",
-                    "Analyzing complex chronic pathologies, tracking treatment response, and managing suppression.",
-                    "10 Courses",
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 40),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Clinical Modules",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
+                  const SizedBox(height: 20),
+                  _buildCurriculumTile("01", "Cardiovascular & Respiratory Disorders", "Bedside examination, differential diagnosis, and therapeutic management.", "25 Sessions"),
+                  _buildCurriculumTile("02", "Gastrointestinal & Hepatic Conditions", "Chronic gastritis, IBS, cirrhosis, gall stones, and homoeopathic therapeutics.", "30 Sessions"),
+                  _buildCurriculumTile("03", "Dermatology & Immunology", "Psoriasis, eczema, autoimmune conditions, and miasmatic evaluation.", "20 Sessions"),
                 ],
               ),
             ),
@@ -147,24 +169,18 @@ class ClinicalScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff2E7D32).withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: const Color(0xffE8F5E9)),
+        boxShadow: AppColors.softShadow,
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
-              color: Color(0xffE8F5E9),
+              color: AppColors.primaryLight,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: const Color(0xff2E7D32), size: 24),
+            child: Icon(icon, color: AppColors.primary, size: 24),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -174,11 +190,11 @@ class ClinicalScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff1B5E20)),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
                 ),
                 Text(
                   subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -196,36 +212,36 @@ class ClinicalScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xffE8F5E9)),
+        border: Border.all(color: AppColors.border),
       ),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(0xffE8F5E9),
+          backgroundColor: AppColors.primaryLight,
           child: Text(
             num,
-            style: const TextStyle(color: Color(0xff2E7D32), fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1B5E20)),
+          style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
         ),
-        subtitle: Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        subtitle: Text(duration, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 72, right: 24, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(desc, style: const TextStyle(color: Colors.black87, height: 1.4)),
+                Text(desc, style: const TextStyle(color: AppColors.textSecondary, height: 1.4)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff2E7D32),
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const Text("Enter Clinic Study", style: TextStyle(color: Colors.white)),
+                  child: const Text("Start Studying", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

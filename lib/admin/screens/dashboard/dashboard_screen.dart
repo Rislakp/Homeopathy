@@ -5,8 +5,8 @@ import '../../theme/admin_colors.dart';
 import '../../widgets/common/admin_breadcrumbs.dart';
 import '../../widgets/common/admin_stat_card.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+class AdminDashboardScreen extends StatelessWidget {
+  const AdminDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

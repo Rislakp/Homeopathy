@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import '../provider/course_provider.dart';
 
 class CoursesSearchBar extends StatefulWidget {
@@ -40,20 +41,14 @@ class _CoursesSearchBarState extends State<CoursesSearchBar> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            border: Border.all(color: AppColors.border),
+            boxShadow: AppColors.softShadow,
           ),
           padding: const EdgeInsets.all(6.0),
           child: Row(
             children: [
               const SizedBox(width: 12),
-              const Icon(Icons.search_rounded, color: Color(0xFF6B7280)),
+              const Icon(Icons.search_rounded, color: AppColors.textMuted),
               const SizedBox(width: 12),
               Expanded(
                 child: TextField(
@@ -63,12 +58,12 @@ class _CoursesSearchBarState extends State<CoursesSearchBar> {
                   },
                   style: GoogleFonts.inter(
                     fontSize: 15,
-                    color: const Color(0xFF111827),
+                    color: AppColors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: "Search courses, subjects, faculty...",
                     hintStyle: GoogleFonts.inter(
-                      color: const Color(0xFF9CA3AF),
+                      color: AppColors.textMuted,
                       fontSize: 14,
                     ),
                     border: InputBorder.none,
@@ -81,7 +76,7 @@ class _CoursesSearchBarState extends State<CoursesSearchBar> {
                   context.read<CourseProvider>().setSearchQuery(_controller.text);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF16A34A),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
