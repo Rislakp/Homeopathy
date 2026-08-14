@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import '../models/course_model.dart';
 import 'badge_chip.dart';
 
@@ -29,21 +30,21 @@ class _CourseCardState extends State<CourseCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()..translate(0.0, _isHovered ? -8.0 : 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -6.0 : 0.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFE5E7EB)),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(_isHovered ? 0.08 : 0.04),
-              blurRadius: _isHovered ? 24 : 12,
-              offset: const Offset(0, 8),
+              color: const Color(0xFF0F172A).withValues(alpha: _isHovered ? 0.08 : 0.03),
+              blurRadius: _isHovered ? 20 : 10,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -51,7 +52,7 @@ class _CourseCardState extends State<CourseCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top Image Container with Green Gradient
+                  // Top Image Container with Medical Blue Gradient
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Stack(
@@ -59,7 +60,7 @@ class _CourseCardState extends State<CourseCard> {
                         Container(
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Color(0xFFE0F2FE), Color(0xFFF0FDF4), Color(0xFFDCFCE7)],
+                              colors: [Color(0xFFDBEAFE), Color(0xFFBFDBFE)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -68,7 +69,7 @@ class _CourseCardState extends State<CourseCard> {
                             child: Icon(
                               Icons.menu_book_rounded,
                               size: 40,
-                              color: const Color(0xFF16A34A).withOpacity(0.4),
+                              color: AppColors.primary.withValues(alpha: 0.4),
                             ),
                           ),
                         ),
@@ -86,12 +87,12 @@ class _CourseCardState extends State<CourseCard> {
                           child: Material(
                             color: Colors.white,
                             shape: const CircleBorder(),
-                            elevation: 2,
+                            elevation: 1,
                             shadowColor: Colors.black26,
                             child: IconButton(
                               icon: Icon(
                                 _isBookmarked ? Icons.bookmark_rounded : Icons.bookmark_outline_rounded,
-                                color: _isBookmarked ? const Color(0xFF16A34A) : Colors.black54,
+                                color: _isBookmarked ? AppColors.primary : AppColors.textMuted,
                                 size: 18,
                               ),
                               onPressed: () {
@@ -126,19 +127,19 @@ class _CourseCardState extends State<CourseCard> {
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF16A34A),
+                                  color: AppColors.primaryDark,
                                   letterSpacing: 0.5,
                                 ),
                               ),
                               Row(
                                 children: [
-                                  const Icon(Icons.schedule_rounded, size: 12, color: Color(0xFF6B7280)),
+                                  const Icon(Icons.schedule_rounded, size: 12, color: AppColors.textMuted),
                                   const SizedBox(width: 4),
                                   Text(
                                     widget.course.duration,
                                     style: GoogleFonts.inter(
                                       fontSize: 11,
-                                      color: const Color(0xFF6B7280),
+                                      color: AppColors.textMuted,
                                     ),
                                   ),
                                 ],
@@ -154,7 +155,7 @@ class _CourseCardState extends State<CourseCard> {
                             style: GoogleFonts.inter(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: const Color(0xFF111827),
+                              color: AppColors.textPrimary,
                               height: 1.3,
                             ),
                           ),
@@ -166,21 +167,21 @@ class _CourseCardState extends State<CourseCard> {
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.inter(
                               fontSize: 13,
-                              color: const Color(0xFF6B7280),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           const Spacer(),
 
                           Row(
                             children: [
-                              const Icon(Icons.star_rounded, size: 16, color: Color(0xFFF59E0B)),
+                              const Icon(Icons.star_rounded, size: 16, color: Colors.amber),
                               const SizedBox(width: 4),
                               Text(
                                 widget.course.rating.toStringAsFixed(1),
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF111827),
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                               const SizedBox(width: 4),
@@ -188,7 +189,7 @@ class _CourseCardState extends State<CourseCard> {
                                 "(${widget.course.students}+)",
                                 style: GoogleFonts.inter(
                                   fontSize: 12,
-                                  color: const Color(0xFF6B7280),
+                                  color: AppColors.textMuted,
                                 ),
                               ),
                               const Spacer(),
@@ -196,13 +197,13 @@ class _CourseCardState extends State<CourseCard> {
                                 widget.course.language,
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
-                                  color: const Color(0xFF6B7280),
+                                  color: AppColors.textMuted,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
-                          const Divider(height: 20, color: Color(0xFFE5E7EB)),
+                          const Divider(height: 20, color: AppColors.border),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,7 +215,7 @@ class _CourseCardState extends State<CourseCard> {
                                     "₹${originalPrice.toInt()}",
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
-                                      color: const Color(0xFF9CA3AF),
+                                      color: AppColors.textMuted,
                                       decoration: TextDecoration.lineThrough,
                                     ),
                                   ),
@@ -223,7 +224,7 @@ class _CourseCardState extends State<CourseCard> {
                                     style: GoogleFonts.inter(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: const Color(0xFF16A34A),
+                                      color: AppColors.primary,
                                     ),
                                   ),
                                 ],
@@ -231,12 +232,12 @@ class _CourseCardState extends State<CourseCard> {
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF16A34A),
+                                  backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: Text(

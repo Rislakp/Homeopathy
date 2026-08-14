@@ -64,7 +64,7 @@ class StudentTable extends StatelessWidget {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              headingRowColor: MaterialStateProperty.all(const Color(0xFFF9FAFB)),
+              headingRowColor: WidgetStateProperty.all(const Color(0xFFF9FAFB)),
               dataRowMinHeight: 60,
               dataRowMaxHeight: 64,
               headingRowHeight: 52,
@@ -81,6 +81,7 @@ class StudentTable extends StatelessWidget {
                 DataColumn(label: Text('Email', style: _headerStyle)),
                 DataColumn(label: Text('Phone', style: _headerStyle)),
                 DataColumn(label: Text('Course', style: _headerStyle)),
+                DataColumn(label: Text('Score', style: _headerStyle)),
                 DataColumn(label: Text('Subscription', style: _headerStyle)),
                 DataColumn(label: Text('Status', style: _headerStyle)),
                 DataColumn(label: Text('Actions', style: _headerStyle)),

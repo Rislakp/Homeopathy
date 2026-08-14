@@ -10,27 +10,47 @@ class SearchBarWidget extends StatelessWidget {
         Expanded(
           child: TextField(
             decoration: InputDecoration(
-              hintText: "Search AIAPGET, Organon...",
-              hintStyle: (
-                AppFonts.mediumMedium
-                ),
-              prefixIcon: const Icon(Icons.search),
+              hintText: "Search AIAPGET, Organon, Pathology...",
+              hintStyle: GoogleFonts.inter(
+                color: AppColors.textMuted,
+                fontSize: 14,
+              ),
+              prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textMuted),
+              filled: true,
+              fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: const BorderSide(color: AppColors.border),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             ),
           ),
         ),
-        AppSpacing.w20,
+       // AppSpacing.w16,
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor:  Color(0xff009B5A),
+            backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
           onPressed: () {},
           child: Text(
             "Find Courses",
-            style: AppFonts.mediumMedium,
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
           ),
         ),
       ],

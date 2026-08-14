@@ -8,19 +8,13 @@ class LiveSessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 360, // Fixed width for each card
-      padding: const EdgeInsets.all(20),
+      width: 360,
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+        boxShadow: AppColors.softShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,19 +26,19 @@ class LiveSessionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
+                  color: AppColors.dangerBg,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.circle, size: 6, color: Colors.red),
+                    Icon(Icons.circle, size: 6, color: AppColors.danger),
                     SizedBox(width: 6),
                     Text(
                       "LIVE",
                       style: TextStyle(
-                        color: Colors.red,
+                        color: AppColors.danger,
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontSize: 11,
                       ),
                     ),
                   ],
@@ -52,77 +46,79 @@ class LiveSessionCard extends StatelessWidget {
               ),
               Text(
                 session.date,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
+                style: GoogleFonts.inter(
+                  color: AppColors.textMuted,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
             ],
           ),
-          
+
           const SizedBox(height: 12),
 
           // Title
           Text(
             session.title,
-            style: const TextStyle(
-              fontSize: 20,
+            style: GoogleFonts.inter(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
               height: 1.3,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 6),
 
           // Instructor
           Text(
             session.instructor,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey.shade600,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              color: AppColors.textSecondary,
             ),
           ),
-          
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 16),
 
           // Countdown Timer Box
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              borderRadius: BorderRadius.circular(20),
+              color: AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.primaryBorder),
             ),
             child: Column(
               children: [
                 Text(
                   "STARTS IN",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
-                    color: Colors.grey.shade600,
+                    color: AppColors.primaryDark,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   session.countdown,
-                  style: const TextStyle(
-                    fontSize: 20,
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: AppColors.textPrimary,
                     letterSpacing: 2.0,
                   ),
                 ),
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
 
           // Register Button
@@ -132,17 +128,17 @@ class LiveSessionCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF009050), // Main green color
+                backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 "Register Free",
-                style: TextStyle(
-                  fontSize: 16,
+                style: GoogleFonts.inter(
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),

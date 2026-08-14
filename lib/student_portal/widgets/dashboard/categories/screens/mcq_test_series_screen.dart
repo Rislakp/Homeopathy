@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class MCQTestSeriesScreen extends StatelessWidget {
   const MCQTestSeriesScreen({super.key});
@@ -6,20 +7,19 @@ class MCQTestSeriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F8F6),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xff2E7D32)),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          "MCQ Test Series",
+          "MCQ & Grand Mock Test Series",
           style: TextStyle(
-            color: Color(0xff1B5E20),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
           ),
         ),
       ),
@@ -31,7 +31,7 @@ class MCQTestSeriesScreen extends StatelessWidget {
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xffE8F5E9), Color(0xffC8E6C9)],
+                  colors: [AppColors.primaryLight, Color(0xFFDBEAFE)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -43,11 +43,11 @@ class MCQTestSeriesScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xff2E7D32),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      "Mock Practice Exams & Performance Analysis",
+                      "Standard Simulated Practice",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -57,80 +57,56 @@ class MCQTestSeriesScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    "60+ Premium MCQ Tests",
+                    "All India Test Series & Grand Mocks",
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1B5E20),
-                      fontFamily: 'Poppins',
+                      color: AppColors.textPrimary,
+                      height: 1.2,
                     ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    "Simulate actual exam interfaces with comprehensive answer keys, clinical explanation rationales, and detailed subject analytics.",
+                    "Full-length exam simulations, chapter-wise practice tests, negative marking calculator, and deep performance analytics.",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xff33691E),
+                      color: AppColors.textSecondary,
                       height: 1.5,
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 900 ? 4 : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 3.5,
-                children: [
-                  _buildStatCard(Icons.assignment, "60+ Full Tests", "Subject-wise & grand tests"),
-                  _buildStatCard(Icons.question_answer, "5000+ MCQs", "High-yield premium questions"),
-                  _buildStatCard(Icons.analytics, "Real-time Analytics", "Track accuracy & pace"),
-                  _buildStatCard(Icons.emoji_events, "All India Rank", "Compare with live peers"),
+                  const SizedBox(height: 28),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text("Attempt Free Test", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: const Text(
-                "Available Test Types",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff1B5E20),
-                  fontFamily: 'Poppins',
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildCurriculumTile(
-                    "01",
-                    "Grand Full-Syllabus Mock Tests",
-                    "3-hour simulated test papers matching current exam models (AIAPGET, UPSC/PSC) exactly.",
-                    "15 Grand Tests Available",
+                  const Text(
+                    "Test Packages",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
-                  _buildCurriculumTile(
-                    "02",
-                    "Subject-Wise Practice Tests",
-                    "Targeted papers for Materia Medica, Organon of Medicine, Repertory, and Pharmacy.",
-                    "30 Subject Tests Available",
-                  ),
-                  _buildCurriculumTile(
-                    "03",
-                    "Allied Medical Sciences Tests",
-                    "Surgical questions, diagnostic criteria, anatomy, physiology, and pathology papers.",
-                    "20 Allied Tests Available",
-                  ),
+                  const SizedBox(height: 20),
+                  _buildCurriculumTile("01", "Full Length Grand Mock Exams", "120/100 questions timed simulations with negative marking.", "25 Mocks"),
+                  _buildCurriculumTile("02", "Subject-wise Unit Tests", "Chapter specific drills covering Organon, MM, Repertory & Allied.", "100+ Tests"),
+                  _buildCurriculumTile("03", "Previous 10-Year Question Tests", "AIAPGET, UPSC MO, State PSC solved past year exams.", "40 Tests"),
                 ],
               ),
             ),
@@ -141,91 +117,42 @@ class MCQTestSeriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(IconData icon, String title, String subtitle) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff2E7D32).withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: const Color(0xffE8F5E9)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Color(0xffE8F5E9),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: const Color(0xff2E7D32), size: 24),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff1B5E20)),
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCurriculumTile(String num, String title, String desc, String duration) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xffE8F5E9)),
+        border: Border.all(color: AppColors.border),
       ),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(0xffE8F5E9),
+          backgroundColor: AppColors.primaryLight,
           child: Text(
             num,
-            style: const TextStyle(color: Color(0xff2E7D32), fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1B5E20)),
+          style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
         ),
-        subtitle: Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        subtitle: Text(duration, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 72, right: 24, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(desc, style: const TextStyle(color: Colors.black87, height: 1.4)),
+                Text(desc, style: const TextStyle(color: AppColors.textSecondary, height: 1.4)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff2E7D32),
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const Text("Start MCQ Exam", style: TextStyle(color: Colors.white)),
+                  child: const Text("Attempt Test", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

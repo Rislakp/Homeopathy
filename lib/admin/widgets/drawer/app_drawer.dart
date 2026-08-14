@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/screens/auth/login/screen/admin_login_screen.dart';
+import 'package:homeopathy/admin/screens/auth/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../../models/admin_menu_item.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/drawer_provider.dart';
 import '../../theme/admin_colors.dart';
 import 'drawer_footer.dart';
@@ -23,9 +26,7 @@ class AppDrawer extends StatelessWidget {
       width: width,
       decoration: const BoxDecoration(
         color: AppColors.drawerBackground,
-        border: Border(
-          right: BorderSide(color: AppColors.border, width: 1),
-        ),
+        border: Border(right: BorderSide(color: AppColors.border, width: 1)),
       ),
       child: Column(
         children: [
@@ -42,9 +43,19 @@ class AppDrawer extends StatelessWidget {
                   onChanged: (val) => drawerProvider.setDrawerSearchQuery(val),
                   decoration: InputDecoration(
                     hintText: 'Filter menu...',
-                    hintStyle: const TextStyle(fontSize: 12, color: AppColors.textMuted),
-                    prefixIcon: const Icon(Icons.search_rounded, size: 16, color: AppColors.textMuted),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    hintStyle: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textMuted,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search_rounded,
+                      size: 16,
+                      color: AppColors.textMuted,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 10,
+                    ),
                     fillColor: AppColors.background,
                   ),
                 ),
@@ -70,7 +81,10 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildNavSections(BuildContext context, DrawerProvider drawerProvider) {
+  List<Widget> _buildNavSections(
+    BuildContext context,
+    DrawerProvider drawerProvider,
+  ) {
     final isCollapsed = drawerProvider.isCollapsed;
     final query = drawerProvider.drawerSearchQuery.toLowerCase();
     final List<Widget> widgets = [];
@@ -78,12 +92,15 @@ class AppDrawer extends StatelessWidget {
     for (final section in AdminMenuSection.values) {
       final sectionItems = AdminMenuItem.values
           .where((item) => item.section == section)
-          .where((item) => query.isEmpty || item.label.toLowerCase().contains(query))
+          .where(
+            (item) => query.isEmpty || item.label.toLowerCase().contains(query),
+          )
           .toList();
 
       if (sectionItems.isEmpty) continue;
 
-      final isExpanded = drawerProvider.isSectionExpanded(section) || query.isNotEmpty;
+      final isExpanded =
+          drawerProvider.isSectionExpanded(section) || query.isNotEmpty;
 
       widgets.add(
         DrawerSectionHeader(
@@ -102,6 +119,10 @@ class AppDrawer extends StatelessWidget {
               isSelected: drawerProvider.selectedMenu == item,
               isCollapsed: isCollapsed,
               onTap: () {
+                if (item == AdminMenuItem.logout) {
+                  _confirmLogout(context);
+                  return;
+                }
                 drawerProvider.selectMenu(item);
                 // Close mobile drawer if open
                 if (Scaffold.of(context).isDrawerOpen) {
@@ -115,5 +136,49 @@ class AppDrawer extends StatelessWidget {
     }
 
     return widgets;
+  }
+
+  void _confirmLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Confirm Logout',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Are you sure you want to log out of White Coat Academy Admin Portal?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFDC2626),
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              Navigator.pop(ctx); // Close the dialog
+              await context.read<AuthProvider>().logout(); // Perform logout
+
+              // Navigate to login and clear the navigation stack
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AdminLoginScreen(),
+                  ), // Replace with your login widget
+                  (route) => false,
+                );
+              }
+            },
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
   }
 }

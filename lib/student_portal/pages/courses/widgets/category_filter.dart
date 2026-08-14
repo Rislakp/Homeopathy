@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import '../provider/course_provider.dart';
 
 class CategoryFilter extends StatelessWidget {
@@ -39,7 +40,7 @@ class CategoryFilter extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                  color: isSelected ? Colors.white : const Color(0xFF6B7280),
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
                 ),
               ),
               selected: isSelected,
@@ -48,15 +49,15 @@ class CategoryFilter extends StatelessWidget {
                   provider.setSelectedCategory(cat);
                 }
               },
-              selectedColor: const Color(0xFF16A34A),
+              selectedColor: AppColors.primary,
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
                 side: BorderSide(
-                  color: isSelected ? Colors.transparent : const Color(0xFFE5E7EB),
+                  color: isSelected ? Colors.transparent : AppColors.border,
                 ),
               ),
-              elevation: isSelected ? 2 : 0,
+              elevation: 0,
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             );
           }),
@@ -71,26 +72,19 @@ class CategoryFilter extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF6B7280),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(width: 4),
-                const Icon(Icons.tune_rounded, size: 14, color: Color(0xFF6B7280)),
+                const Icon(Icons.tune_rounded, size: 14, color: AppColors.textSecondary),
               ],
             ),
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
-              side: const BorderSide(color: Color(0xFFE5E7EB)),
+              side: const BorderSide(color: AppColors.border),
             ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Advanced filters dialog placeholder"),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-            },
+            onPressed: () {},
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           ),
         ],

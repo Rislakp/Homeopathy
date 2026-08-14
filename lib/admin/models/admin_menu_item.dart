@@ -13,7 +13,7 @@ enum AdminMenuItem {
 
   // Academics
   //teachers(AdminMenuSection.overview, 'Teachers', Icons.school_rounded),
- // students(AdminMenuSection.overview, ' Students', Icons.people,),
+  students(AdminMenuSection.overview, ' Students', Icons.people,),
   courses(AdminMenuSection.overview, 'Courses', Icons.menu_book_rounded),
   //categories(AdminMenuSection.overview, 'Categories', Icons.category_rounded),
   //videos(AdminMenuSection.overview, 'Videos', Icons.play_circle_fill_rounded),
@@ -24,6 +24,7 @@ enum AdminMenuItem {
  // notes(AdminMenuSection.overview, 'Notes', Icons.description_rounded),
  // questionBank(AdminMenuSection.overview, 'Question Bank', Icons.quiz_rounded),
   grandmocktest(AdminMenuSection.overview, 'Exams', Icons.fact_check_rounded),
+  testHistory(AdminMenuSection.overview, 'Test History', Icons.history_rounded),
   // certificates(AdminMenuSection.overview, 'Certificates', Icons.workspace_premium_rounded),
   // admissions(AdminMenuSection.overview, 'Admissions', Icons.how_to_reg_rounded),
   // attendance(AdminMenuSection.overview, 'Attendance', Icons.rule_rounded),

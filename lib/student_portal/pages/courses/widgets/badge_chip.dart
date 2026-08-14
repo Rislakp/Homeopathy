@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class BadgeChip extends StatelessWidget {
   final String label;
@@ -13,7 +14,7 @@ class BadgeChip extends StatelessWidget {
   Widget build(BuildContext context) {
     if (label.isEmpty) return const SizedBox.shrink();
 
-    Color bgColor = const Color(0xFF16A34A); // default green
+    Color bgColor = AppColors.primary;
     Color textColor = Colors.white;
 
     if (label.toUpperCase() == "BESTSELLER") {
@@ -21,7 +22,7 @@ class BadgeChip extends StatelessWidget {
     } else if (label.toUpperCase() == "TRENDING") {
       bgColor = const Color(0xFF6366F1); // Indigo
     } else if (label.toUpperCase() == "NEW") {
-      bgColor = const Color(0xFF10B981); // Emerald
+      bgColor = AppColors.primaryDark; // Navy
     }
 
     return Container(

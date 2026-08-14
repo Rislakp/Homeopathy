@@ -1,279 +1,158 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class ExitExamScreen extends StatelessWidget {
   const ExitExamScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    
-    // Responsive layout design systems
-    final bool isMobile = width < 600;
-    final bool isTablet = width >= 600 && width < 1024;
-    
-    final double horizPadding = isMobile ? 20.0 : 40.0;
-    final double bannerVerticalPadding = isMobile ? 36.0 : 50.0;
-    final double titleFontSize = isMobile ? 28.0 : 36.0;
-    final double subtitleFontSize = isMobile ? 14.0 : 16.0;
-
     return Scaffold(
-      backgroundColor: const Color(0xffF4F8F6),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xff2E7D32)),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          "Exit Exam Preparation",
+          "National Exit Test (NExT)",
           style: TextStyle(
-            color: Color(0xff1B5E20),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
           ),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. Responsive Hero Banner
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xffE8F5E9), Color(0xffC8E6C9)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColors.primaryLight, Color(0xFFDBEAFE)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                padding: EdgeInsets.symmetric(horizontal: horizPadding, vertical: bannerVerticalPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2E7D32),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        "BHMS Licensing Exit Examination",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "National Exit Exam (Next) Ready",
+                    child: const Text(
+                      "NCH Mandatory Licensure & PG Screening",
                       style: TextStyle(
-                        fontSize: titleFontSize,
+                        color: Colors.white,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xff1B5E20),
-                        fontFamily: 'Poppins',
-                        height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "Get your license to practice with confidence. Curated content strictly complying with the National Commission for Homoeopathy syllabus requirements.",
-                      style: TextStyle(
-                        fontSize: subtitleFontSize,
-                        color: const Color(0xff33691E),
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-
-              // 2. Responsive Stats Grid (Dynamically calculates height to prevent RenderFlex overflow)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizPadding),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    int columns = 1;
-                    if (width >= 1024) {
-                      columns = 4;
-                    } else if (width >= 600) {
-                      columns = 2;
-                    }
-
-                    const double gap = 16.0;
-                    const double desiredCardHeight = 88.0; // stable height fitting content perfectly
-                    
-                    final double gridWidth = constraints.maxWidth;
-                    final double cardWidth = (gridWidth - (gap * (columns - 1))) / columns;
-                    final double childAspectRatio = cardWidth / desiredCardHeight;
-
-                    return GridView.count(
-                      crossAxisCount: columns,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: gap,
-                      crossAxisSpacing: gap,
-                      childAspectRatio: childAspectRatio,
-                      children: [
-                        _buildStatCard(Icons.menu_book, "18 Courses", "Intensive Refresher modules"),
-                        _buildStatCard(Icons.play_circle_fill, "150+ Lectures", "Clinical-focused classes"),
-                        _buildStatCard(Icons.quiz, "80+ Practice Exams", "Topic-wise test series"),
-                        _buildStatCard(Icons.people, "6.5k Students", "Licensed homoeopaths-to-be"),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // 3. Syllabus Header
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizPadding),
-                child: const Text(
-                  "Course Syllabus Structure",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff1B5E20),
-                    fontFamily: 'Poppins',
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "National Exit Test (NExT) Crash Course",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Tailored program for BHMS interns and final year students to clear the National Commission for Homoeopathy Exit Exam on the first attempt.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.textSecondary,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text("Enroll in NExT Prep", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-
-              // 4. Curriculum Syllabus Tiles
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizPadding),
-                child: Column(
-                  children: [
-                    _buildCurriculumTile(
-                      "01",
-                      "Clinical Practice & Patient Safety",
-                      "Ethical considerations, clinical communication, safety procedures, and differential diagnosis.",
-                      "6 Courses",
-                      isMobile,
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Exam Components",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
                     ),
-                    _buildCurriculumTile(
-                      "02",
-                      "Therapeutics & Repertory Applications",
-                      "Application of repertorial methods to clinical cases, homoeopathic prescribing, and remedy selection.",
-                      "8 Courses",
-                      isMobile,
-                    ),
-                    _buildCurriculumTile(
-                      "03",
-                      "Allied Sciences Overview",
-                      "High-yield summaries of internal medicine, surgery, obstetrics & gynecology, and community health.",
-                      "4 Courses",
-                      isMobile,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildCurriculumTile("01", "Clinical Problem Solving", "Case vignettes, problem-based clinical questions, diagnostic pathways.", "50 Lectures"),
+                  _buildCurriculumTile("02", "Therapeutic Knowledge & Prescribing", "Homeopathic pharmacy rules, posology, drug interactions, red flags.", "35 Lectures"),
+                  _buildCurriculumTile("03", "Mock Exit Tests", "Timed full-length exam simulations with detailed analytical reports.", "20 Tests"),
+                ],
               ),
-              const SizedBox(height: 50),
-            ],
-          ),
+            ),
+            const SizedBox(height: 50),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(IconData icon, String title, String subtitle) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff2E7D32).withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: const Color(0xffE8F5E9)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Color(0xffE8F5E9),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: const Color(0xff2E7D32), size: 24),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff1B5E20)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 11),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCurriculumTile(String num, String title, String desc, String duration, bool isMobile) {
+  Widget _buildCurriculumTile(String num, String title, String desc, String duration) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xffE8F5E9)),
+        border: Border.all(color: AppColors.border),
       ),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(0xffE8F5E9),
+          backgroundColor: AppColors.primaryLight,
           child: Text(
             num,
-            style: const TextStyle(color: Color(0xff2E7D32), fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1B5E20)),
+          style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
         ),
-        subtitle: Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        subtitle: Text(duration, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
         children: [
           Padding(
-            padding: EdgeInsets.only(
-              left: isMobile ? 24.0 : 72.0, 
-              right: 24.0, 
-              bottom: 20.0,
-            ),
+            padding: const EdgeInsets.only(left: 72, right: 24, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(desc, style: const TextStyle(color: Colors.black87, height: 1.4)),
+                Text(desc, style: const TextStyle(color: AppColors.textSecondary, height: 1.4)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff2E7D32),
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const Text("Launch Exam Simulator", style: TextStyle(color: Colors.white)),
+                  child: const Text("Start Studying", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

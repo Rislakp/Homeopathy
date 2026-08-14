@@ -1,62 +1,73 @@
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
+/// Font helper styles referencing the central Medical Blue palette.
 class AppFonts {
   AppFonts._();
 
   // Large
-  static TextStyle largeBold = GoogleFonts.poppins(
-    fontSize: 72,
-    fontWeight: FontWeight.bold,
-    color:  Color(0xff009B5A),
+  static TextStyle largeBold = GoogleFonts.inter(
+    fontSize: 56,
+    fontWeight: FontWeight.w800,
+    color: AppColors.primaryDark,
+    letterSpacing: -1,
   );
 
-  static TextStyle largeSemiBold = GoogleFonts.poppins(
-    fontSize: 70,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
+  static TextStyle largeSemiBold = GoogleFonts.inter(
+    fontSize: 48,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle largeMedium = GoogleFonts.poppins(
+  static TextStyle largeMedium = GoogleFonts.inter(
     fontSize: 19,
-    fontWeight: FontWeight.w400,
-     color: Colors.black54,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
   );
 
   // Medium
-  static TextStyle mediumBold = GoogleFonts.poppins(
+  static TextStyle mediumBold = GoogleFonts.inter(
     fontSize: 20,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle mediumSemiBold = GoogleFonts.poppins(
+  static TextStyle mediumSemiBold = GoogleFonts.inter(
     fontSize: 20,
     fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle mediumMedium = GoogleFonts.poppins(
+  static TextStyle mediumMedium = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
   );
 
   // Small
-  static TextStyle smallBold = GoogleFonts.poppins(
+  static TextStyle smallBold = GoogleFonts.inter(
     fontSize: 16,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle smallSemiBold = GoogleFonts.poppins(
+  static TextStyle smallSemiBold = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
   );
 
-  static TextStyle smallMedium = GoogleFonts.poppins(
+  static TextStyle smallMedium = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
   );
 
   // Extra Small
-  static TextStyle extraSmall = GoogleFonts.poppins(
+  static TextStyle extraSmall = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w400,
+    color: AppColors.textMuted,
   );
 }

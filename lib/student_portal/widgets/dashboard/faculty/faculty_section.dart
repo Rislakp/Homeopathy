@@ -1,6 +1,5 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-
 class FacultySection extends StatelessWidget {
   const FacultySection({super.key});
 
@@ -15,8 +14,9 @@ class FacultySection extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.teal.shade50,
+                color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.primaryBorder),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -24,12 +24,12 @@ class FacultySection extends StatelessWidget {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: const BoxDecoration(color: Colors.teal, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
                   ),
-                 AppSpacing.w8,
+                  AppSpacing.w8,
                   const Text(
                     'Top Faculty',
-                    style: TextStyle(color: Colors.teal, fontWeight: FontWeight.w600, fontSize: 13),
+                    style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                 ],
               ),
@@ -40,28 +40,32 @@ class FacultySection extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    "Learn from India's finest\nhomeopathy educators.",
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, height: 1.2),
+                    "Learn from India's finest\nmedical educators.",
+                    style: GoogleFonts.inter(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () {
-                   
-                  },
+                  onPressed: () {},
                   style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                    side: BorderSide(color: Colors.grey.shade300),
+                    side: const BorderSide(color: AppColors.border),
+                    foregroundColor: AppColors.primary,
                   ),
                   label: const Text('Meet all faculty'),
-                  icon: const Icon(Icons.arrow_forward, size: 18),
+                  icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                   iconAlignment: IconAlignment.end,
                 ),
               ],
             ),
-           AppSpacing.h40,
+            AppSpacing.h40,
 
             if (facultyProvider.isLoading)
               const Center(
@@ -96,7 +100,6 @@ class FacultySection extends StatelessWidget {
             else
               LayoutBuilder(
                 builder: (context, constraints) {
-                  // Responsive column count
                   int crossAxisCount = 4;
                   if (constraints.maxWidth < 900) crossAxisCount = 2;
                   if (constraints.maxWidth < 500) crossAxisCount = 1;

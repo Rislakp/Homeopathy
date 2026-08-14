@@ -18,21 +18,23 @@ class FacultyCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: AppColors.border),
+        boxShadow: AppColors.softShadow,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 90,
-            height: 90,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.teal.shade400, Colors.cyan.shade600],
+                colors: [Color(0xFFDBEAFE), Color(0xFF93C5FD)],
               ),
               image: faculty.imageUrl != null
                   ? DecorationImage(
@@ -41,11 +43,18 @@ class FacultyCard extends StatelessWidget {
                     )
                   : null,
             ),
+            child: faculty.imageUrl == null
+                ? const Icon(Icons.person, color: AppColors.primary, size: 40)
+                : null,
           ),
-         AppSpacing.h16,
+          AppSpacing.h16,
           Text(
             faculty.name,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: GoogleFonts.inter(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -53,38 +62,37 @@ class FacultyCard extends StatelessWidget {
           AppSpacing.h4,
           Text(
             faculty.qualification,
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+            style: GoogleFonts.inter(fontSize: 13, color: AppColors.textSecondary),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-       AppSpacing.h12,
+          AppSpacing.h12,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...List.generate(5, (index) {
                 return Icon(
                   index < faculty.rating.round()
-                      ? Icons.star
-                      : Icons.star_border,
+                      ? Icons.star_rounded
+                      : Icons.star_outline_rounded,
                   size: 18,
-                  color: Colors.orange,
+                  color: Colors.amber,
                 );
               }),
-             AppSpacing.w10,
+              AppSpacing.w8,
               Text(
                 faculty.rating.toStringAsFixed(1),
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
           ),
-         
           AppSpacing.h16,
-          Divider(color: Colors.grey.shade200),
-         
+          const Divider(color: AppColors.border),
           AppSpacing.h12,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,11 +104,12 @@ class FacultyCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   Text(
                     'Experience',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
                   ),
                 ],
               ),
@@ -111,23 +120,24 @@ class FacultyCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   Text(
                     'Students',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
                   ),
                 ],
               ),
             ],
           ),
-        AppSpacing.h12,
+          AppSpacing.h12,
           Text(
             faculty.tags.join(' · '),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Colors.teal,
+              color: AppColors.primaryDark,
               letterSpacing: 0.5,
             ),
             textAlign: TextAlign.center,

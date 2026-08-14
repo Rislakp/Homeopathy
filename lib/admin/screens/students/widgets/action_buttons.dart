@@ -21,7 +21,7 @@ class ActionButtons extends StatelessWidget {
           context: context,
           icon: Icons.visibility_outlined,
           color: const Color(0xFF3B82F6), // Blue
-          tooltip: 'View Profile',
+          tooltip: 'View Exam Scores',
           onPressed: onViewPressed,
         ),
         const SizedBox(width: 8),

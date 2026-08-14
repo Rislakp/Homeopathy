@@ -10,7 +10,8 @@ class DashboardDesktop extends StatelessWidget {
     return const Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
-      body: SingleChildScrollView(
+      body: 
+      SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
           child: Column(
@@ -25,7 +26,8 @@ class DashboardDesktop extends StatelessWidget {
                   Expanded(flex: 4, child: DemoClassVideo()),
                 ],
               ),
-              SizedBox(height: 80),
+              Center(child: Text("COMMING SOON", style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold))),
+             /* SizedBox(height: 80),
               CategoryScreen(),
 
               SizedBox(height: 80),
@@ -45,7 +47,7 @@ class DashboardDesktop extends StatelessWidget {
               StatsSection(),
 
               SizedBox(height: 60),
-              PricingSection(),
+              PricingSection(), */
             ],
           ),
         ),

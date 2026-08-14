@@ -3,7 +3,6 @@ import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.da
 class LiveClassesSection extends StatelessWidget {
   LiveClassesSection({super.key});
 
-  // Dummy data matching your screenshot
   final List<LiveSessionData> sessions = [
     LiveSessionData(
       title: "AIAPGET · Organon Marathon",
@@ -34,22 +33,23 @@ class LiveClassesSection extends StatelessWidget {
         children: [
           // Top "Live Classes" Badge
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.green.shade50,
+              color: AppColors.primaryLight,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.primaryBorder),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.circle, size: 8, color: Colors.green),
+                const Icon(Icons.circle, size: 8, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Text(
                   "Live Classes",
-                  style: TextStyle(
-                    color: Colors.green.shade700,
+                  style: GoogleFonts.inter(
+                    color: AppColors.primaryDark,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: 13,
                   ),
                 ),
               ],
@@ -66,19 +66,19 @@ class LiveClassesSection extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Learn live from India's top faculty.",
-                    style: TextStyle(
-                      fontSize: 36,
+                    style: GoogleFonts.inter(
+                      fontSize: 34,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
-                      color: Colors.black87,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "Interactive sessions, doubt-solving, and recorded playback — all included.",
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                    style: GoogleFonts.inter(fontSize: 15, color: AppColors.textSecondary),
                   ),
                 ],
               ),
@@ -88,24 +88,24 @@ class LiveClassesSection extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  side: BorderSide(color: Colors.grey.shade300),
+                  side: const BorderSide(color: AppColors.border),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 12,
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "See full schedule",
-                      style: TextStyle(
-                        color: Colors.black87,
+                      style: GoogleFonts.inter(
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, size: 16, color: Colors.black87),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.textPrimary),
                   ],
                 ),
               ),

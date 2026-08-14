@@ -1,9 +1,7 @@
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
-
 class CourseCard extends StatelessWidget {
   final Course course;
-  final isSelected = false;
 
   const CourseCard({super.key, required this.course});
 
@@ -11,19 +9,15 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
+      borderRadius: BorderRadius.circular(16),
       child: Container(
         width: 300,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2E7D4F) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border),
+          boxShadow: AppColors.softShadow,
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -37,24 +31,23 @@ class CourseCard extends StatelessWidget {
                 children: [
                   Text(
                     course.instructor,
-                    style: const TextStyle(color: Colors.grey, fontSize: 13),
+                    style: GoogleFonts.inter(color: AppColors.textMuted, fontSize: 13),
                   ),
-                 //CommonTextField(controller: controller)
                   AppSpacing.h4,
                   Text(
                     course.title,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: GoogleFonts.inter(
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                
-                  AppSpacing.w10,
+                  AppSpacing.h12,
                   _CardStats(course: course),
-             
                   AppSpacing.h12,
                   const Divider(height: 1),
-                  
                   AppSpacing.h12,
                   _CardPriceRow(course: course),
                 ],
@@ -74,17 +67,16 @@ class _CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 180,
       child: Stack(
         children: [
-          // Placeholder gradient standing in for a course thumbnail.
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFFB9E4C9), Color(0xFF6FAE8A)],
+                colors: [Color(0xFFDBEAFE), Color(0xFF93C5FD)],
               ),
             ),
           ),
@@ -96,13 +88,12 @@ class _CardImage extends StatelessWidget {
                 _Badge(
                   text: course.tag,
                   background: Colors.white,
-                  textColor: Colors.black87,
+                  textColor: AppColors.textPrimary,
                 ),
-               
-                AppSpacing.w10,
+                AppSpacing.w8,
                 _Badge(
                   text: '${course.discountPercent}% OFF',
-                  background: const Color(0xFF1E5631),
+                  background: AppColors.primaryDark,
                   textColor: Colors.white,
                 ),
               ],
@@ -111,9 +102,9 @@ class _CardImage extends StatelessWidget {
           if (course.hasVideoPreview)
             const Center(
               child: CircleAvatar(
-                radius: 26,
+                radius: 24,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.play_arrow, color: Colors.black87, size: 30),
+                child: Icon(Icons.play_arrow_rounded, color: AppColors.primary, size: 28),
               ),
             ),
         ],
@@ -136,7 +127,7 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(20),
@@ -161,26 +152,25 @@ class _CardStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.access_time, size: 16, color: Colors.grey),
+        const Icon(Icons.access_time_rounded, size: 15, color: AppColors.textMuted),
         const SizedBox(width: 4),
-        AppSpacing.w4,
         Text(
           course.duration,
-          style: const TextStyle(color: Colors.grey, fontSize: 13),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
         ),
-        const SizedBox(width: 14),
-        const Icon(Icons.people_outline, size: 16, color: Colors.grey),
+        const SizedBox(width: 12),
+        const Icon(Icons.people_outline_rounded, size: 15, color: AppColors.textMuted),
         const SizedBox(width: 4),
         Text(
           course.studentsCount,
-          style: const TextStyle(color: Colors.grey, fontSize: 13),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
         ),
-        const SizedBox(width: 14),
-        const Icon(Icons.star, size: 16, color: Colors.amber),
-        const SizedBox(width: 4),
+        const SizedBox(width: 12),
+        const Icon(Icons.star_rounded, size: 16, color: Colors.amber),
+        const SizedBox(width: 2),
         Text(
-          '${course.rating} (${course.ratingCount})',
-          style: const TextStyle(color: Colors.grey, fontSize: 13),
+          '${course.rating}',
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -193,8 +183,6 @@ class _CardPriceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.watch rebuilds this widget whenever CourseProvider changes,
-    // so the button can reflect the enrolled state.
     final provider = context.watch<CourseProvider>();
     final enrolled = provider.isEnrolled(course);
 
@@ -206,13 +194,17 @@ class _CardPriceRow extends StatelessWidget {
           children: [
             Text(
               '₹${course.price}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
             ),
             Text(
               '₹${course.originalPrice}',
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.textMuted,
                 decoration: TextDecoration.lineThrough,
               ),
             ),
@@ -223,15 +215,15 @@ class _CardPriceRow extends StatelessWidget {
               ? null
               : () => context.read<CourseProvider>().enroll(course),
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2E7D4F),
+            backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
-            disabledBackgroundColor: Colors.grey.shade400,
+            disabledBackgroundColor: AppColors.border,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(10),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           ),
-          icon: Icon(enrolled ? Icons.check : Icons.arrow_forward, size: 18),
+          icon: Icon(enrolled ? Icons.check_rounded : Icons.arrow_forward_rounded, size: 16),
           label: Text(enrolled ? 'Enrolled' : 'Enroll'),
         ),
       ],

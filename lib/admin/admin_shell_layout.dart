@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/screens/courses/courses_screen.dart';
+import 'package:homeopathy/admin/screens/students/students_screen.dart';
+import 'package:homeopathy/admin/screens/test_history/test_history_screen.dart';
 import 'package:homeopathy/admin/theme/admin_colors.dart';
 import 'package:provider/provider.dart';
 import 'models/admin_menu_item.dart';
@@ -76,13 +78,13 @@ class AdminShellLayout extends StatelessWidget {
   Widget _buildBodyForMenu(AdminMenuItem menuItem) {
     switch (menuItem) {
       case AdminMenuItem.dashboard:
-        return const DashboardScreen();
+        return const AdminDashboardScreen();
 
       // Academics
       // case AdminMenuItem.teachers:
       //   return const TeachersScreen();
-      //   case AdminMenuItem.students:
-      //   return const StudentsScreen();
+        case AdminMenuItem.students:
+        return const StudentsScreen();
       case AdminMenuItem.courses:
         return const CourseManagementPage();
       // // return const CoursesScreen();
@@ -103,6 +105,8 @@ class AdminShellLayout extends StatelessWidget {
       //   return const QuestionBankScreen();
       case AdminMenuItem.grandmocktest:
         return const GrandMockPage();
+        case AdminMenuItem.testHistory:
+        return const TestHistoryScreen();
       // case AdminMenuItem.admissions:
       //   return const AdmissionsScreen();
       // case AdminMenuItem.fees:
@@ -160,7 +164,7 @@ class AdminShellLayout extends StatelessWidget {
       //   return const ActivityHistoryScreen();
 
       default:
-        return const DashboardScreen();
+        return const AdminDashboardScreen();
     }
   }
 }

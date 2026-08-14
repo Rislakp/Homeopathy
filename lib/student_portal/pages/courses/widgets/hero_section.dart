@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class CoursesHeroSection extends StatelessWidget {
   const CoursesHeroSection({super.key});
@@ -14,14 +15,14 @@ class CoursesHeroSection extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFFF3FCF7), Color(0xFFE8F9EE)],
+          colors: [AppColors.primaryLight, Color(0xFFDBEAFE)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
       padding: EdgeInsets.symmetric(
         horizontal: isMobile ? 24.0 : (isTablet ? 40.0 : 64.0),
-        vertical: isMobile ? 40.0 : 64.0,
+        vertical: isMobile ? 40.0 : 60.0,
       ),
       child: Center(
         child: ConstrainedBox(
@@ -37,15 +38,16 @@ class CoursesHeroSection extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF16A34A).withOpacity(0.1),
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: AppColors.primaryBorder),
                 ),
                 child: Text(
                   "ONLINE COURSES",
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF16A34A),
+                    color: AppColors.primaryDark,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -53,12 +55,12 @@ class CoursesHeroSection extends StatelessWidget {
               const SizedBox(height: 16),
 
               Text(
-                "Every course you need to\nclear your homeopathy\nexam.",
+                "Every course you need to\nclear your medical entrance\nexam.",
                 textAlign: isMobile ? TextAlign.center : TextAlign.start,
-                style: GoogleFonts.outfit(
-                  fontSize: isMobile ? 32 : (isTablet ? 44 : 54),
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF111827),
+                style: GoogleFonts.inter(
+                  fontSize: isMobile ? 30 : (isTablet ? 40 : 50),
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
                   height: 1.15,
                 ),
               ),
@@ -71,7 +73,7 @@ class CoursesHeroSection extends StatelessWidget {
                   textAlign: isMobile ? TextAlign.center : TextAlign.start,
                   style: GoogleFonts.inter(
                     fontSize: isMobile ? 15 : 17,
-                    color: const Color(0xFF6B7280),
+                    color: AppColors.textSecondary,
                     height: 1.5,
                     fontWeight: FontWeight.w500,
                   ),

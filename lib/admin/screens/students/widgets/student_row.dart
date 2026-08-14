@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../model/student_model.dart';
 import 'status_chip.dart';
 import 'action_buttons.dart';
+import 'view_student_scores_dialog.dart';
 
 class StudentRow {
   static Color getAvatarBgColor(String name) {
@@ -81,6 +82,35 @@ class StudentRow {
               color: Color(0xFF111827),
               fontWeight: FontWeight.w500,
               fontSize: 14,
+            ),
+          ),
+        ),
+        // Score
+        DataCell(
+          OutlinedButton.icon(
+            onPressed: () => ViewStudentScoresDialog.show(context, student),
+            icon: const Icon(
+              Icons.visibility_outlined,
+              size: 14,
+              color: Color(0xFF3B82F6),
+            ),
+            label: const Text(
+              'View',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF3B82F6),
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              side: const BorderSide(color: Color(0xFF3B82F6), width: 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              backgroundColor: const Color(0xFF3B82F6).withOpacity(0.04),
+              minimumSize: const Size(64, 30),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ),

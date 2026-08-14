@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import 'category_card.dart';
 import 'category_data.dart';
 import 'category_provider.dart';
@@ -40,42 +42,41 @@ class CategoryScreenContent extends StatelessWidget {
           children: [
             const _FeaturedBadge(),
             const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 24),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
               child: Text(
-                "Learn What you love.Master What \nyou need",
-                style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w800,
-                height: 1.15,
-              ),
+                "Learn What you love. Master What \nyou need",
+                style: GoogleFonts.inter(
+                  fontSize: constraints.maxWidth < 600 ? 26 : 34,
+                  fontWeight: FontWeight.w800,
+                  height: 1.15,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
-
-            
-               GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 150, 
-                ),
-                itemBuilder: (context, index) {
-                  return CategoryCard(
-                    category: categories[index],
-                  );
-                },
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: categories.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                mainAxisExtent: 160,
               ),
-            
+              itemBuilder: (context, index) {
+                return CategoryCard(
+                  category: categories[index],
+                );
+              },
+            ),
           ],
         );
       },
     );
   }
 }
+
 class _FeaturedBadge extends StatelessWidget {
   const _FeaturedBadge();
 
@@ -84,18 +85,19 @@ class _FeaturedBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F5EC),
+        color: AppColors.primaryLight,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primaryBorder),
       ),
-      child: Row(
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.circle, size: 8, color: Color(0xFF2E7D4F)),
-          const SizedBox(width: 6),
-          const Text(
+          Icon(Icons.circle, size: 8, color: AppColors.primary),
+          SizedBox(width: 6),
+          Text(
             'Popular Categories',
             style: TextStyle(
-              color: Color(0xFF2E7D4F),
+              color: AppColors.primaryDark,
               fontWeight: FontWeight.bold,
               fontSize: 13,
             ),

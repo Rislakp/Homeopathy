@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,104 @@ class _AddLessonDialogState extends State<AddLessonDialog> {
   void dispose() {
     _titleController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const [
+          'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 
+          'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp',
+          'mp4', 'avi', 'mov', 'mkv', 'flv', 'wmv'
+        ],
+        allowMultiple: false,
+      );
+      
+      if (result == null || result.files.isEmpty) {
+        return;
+      }
+      
+      final file = result.files.single;
+      
+      // Limit file size to 100 MB
+      const int maxSizeBytes = 100 * 1024 * 1024; // 100 MB
+      if (file.size > maxSizeBytes) {
+        if (mounted) {
+          _showErrorDialog(
+            "File Too Large",
+            "The selected file size is ${(file.size / (1024 * 1024)).toStringAsFixed(2)} MB, which exceeds the limit of 100 MB. Please select a smaller file.",
+          );
+        }
+        return;
+      }
+
+      // Validate file extension
+      final extension = file.extension?.toLowerCase();
+      final allowed = const [
+        'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 
+        'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp',
+        'mp4', 'avi', 'mov', 'mkv', 'flv', 'wmv'
+      ];
+      if (extension == null || !allowed.contains(extension)) {
+        if (mounted) {
+          _showErrorDialog(
+            "Unsupported File Type",
+            "The file format '.${extension ?? ''}' is not supported. Please select a PDF, Word, PowerPoint, Excel, Image, or Video file.",
+          );
+        }
+        return;
+      }
+
+      setState(() {
+        _selectedFileName = file.name;
+      });
+    } catch (e) {
+      debugPrint('Error picking file: $e');
+      if (mounted) {
+        _showErrorDialog(
+          "File Selection Failed",
+          "An error occurred while picking the file: ${e.toString()}",
+        );
+      }
+    }
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        return AlertDialog(
+          backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+          title: Text(
+            title,
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : const Color(0xFF1F2937),
+            ),
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.inter(
+              color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF4B5563),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                "OK",
+                style: GoogleFonts.inter(
+                  color: const Color(0xFF10B981),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -312,13 +411,7 @@ class _AddLessonDialogState extends State<AddLessonDialog> {
                         ),
                         const SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedFileName = _selectedFileName == null 
-                                  ? "remedy_provings_guide.pdf" 
-                                  : null;
-                            });
-                          },
+                          onTap: _pickFile,
                           child: InputDecorator(
                             decoration: _getInputDecoration(fieldBg, border).copyWith(
                               contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),

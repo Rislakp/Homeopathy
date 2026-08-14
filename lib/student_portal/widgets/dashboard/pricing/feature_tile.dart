@@ -11,23 +11,22 @@ class FeatureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 14),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const Icon(
-            Icons.check_circle_outline,
-            color: Colors.green,
-            size: 20,
+            Icons.check_circle_rounded,
+            color: AppColors.primary,
+            size: 18,
           ),
-
           const SizedBox(width: 10),
-
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                fontSize: 16,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: AppColors.textSecondary,
               ),
             ),
           ),

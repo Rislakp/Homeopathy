@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/student_provider.dart';
 import '../utils/app_colors.dart';
-import '../utils/app_constants.dart';
 import '../utils/app_textstyles.dart';
 
 class SearchFilterBar extends StatefulWidget {
@@ -32,37 +31,6 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
 
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 768;
-
-    Widget buildDropdown({
-      required String? value,
-      required String hint,
-      required List<String> items,
-      required ValueChanged<String?> onChanged,
-    }) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: value ?? 'All',
-            hint: Text(hint, style: AppTextStyles.subtitle),
-            items: ['All', ...items].map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item, style: AppTextStyles.tableCell),
-              );
-            }).toList(),
-            onChanged: onChanged,
-            icon: const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
-            style: AppTextStyles.tableCell,
-          ),
-        ),
-      );
-    }
 
     final List<Widget> filterWidgets = [
       // Search Box

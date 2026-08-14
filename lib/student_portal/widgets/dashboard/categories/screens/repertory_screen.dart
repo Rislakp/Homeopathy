@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 
 class RepertoryScreen extends StatelessWidget {
   const RepertoryScreen({super.key});
@@ -6,20 +7,19 @@ class RepertoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF4F8F6),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xff2E7D32)),
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          "Homoeopathic Repertory",
+          "Repertory & Case Taking",
           style: TextStyle(
-            color: Color(0xff1B5E20),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
           ),
         ),
       ),
@@ -31,7 +31,7 @@ class RepertoryScreen extends StatelessWidget {
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xffE8F5E9), Color(0xffC8E6C9)],
+                  colors: [AppColors.primaryLight, Color(0xFFDBEAFE)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -43,11 +43,11 @@ class RepertoryScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xff2E7D32),
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      "Case Analysis & Rubric Selections",
+                      "Repertorisation & Analysis",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -57,80 +57,56 @@ class RepertoryScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   const Text(
-                    "Repertory & Case Repertorisation",
+                    "Repertory Masterclass",
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1B5E20),
-                      fontFamily: 'Poppins',
+                      color: AppColors.textPrimary,
+                      height: 1.2,
                     ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    "Learn structural designs of prominent repertories: Kent, Boenninghausen (BBCR, TPB), Boger, and modern clinical card repertories.",
+                    "Detailed study of Kent's, Boenninghausen's, Boger's, Synthesis, and modern clinical repertories with cross-repertorisation case studies.",
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xff33691E),
+                      color: AppColors.textSecondary,
                       height: 1.5,
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 900 ? 4 : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 3.5,
-                children: [
-                  _buildStatCard(Icons.menu_book, "12 Courses", "Covering classical & modern books"),
-                  _buildStatCard(Icons.play_circle_fill, "100+ Lectures", "Video lectures with rubrics demo"),
-                  _buildStatCard(Icons.quiz, "25+ Practical Quizzes", "Rubrics identification tests"),
-                  _buildStatCard(Icons.people, "5.6k Students", "Joined practitioners"),
+                  const SizedBox(height: 28),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text("Start Studying", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: const Text(
-                "Course Syllabus Structure",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff1B5E20),
-                  fontFamily: 'Poppins',
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildCurriculumTile(
-                    "01",
-                    "Kent's Repertory & Rubric Study",
-                    "Structure, grading of remedies, and detailed analysis of mind and physical general rubrics.",
-                    "5 Courses",
+                  const Text(
+                    "Core Repertories",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
-                  _buildCurriculumTile(
-                    "02",
-                    "Puritan & Special Repertories",
-                    "TPB, BBCR, Boger's synoptic key, clinical, card and concordance repertories analysis.",
-                    "4 Courses",
-                  ),
-                  _buildCurriculumTile(
-                    "03",
-                    "Computer Repertories & RADAR",
-                    "Modern homoeopathic softwares, digital search techniques, and quick repertorisation strategies.",
-                    "3 Courses",
-                  ),
+                  const SizedBox(height: 20),
+                  _buildCurriculumTile("01", "Kent's Repertory", "Philosophical background, plan, construction, gradation, mind rubrics.", "25 Lectures"),
+                  _buildCurriculumTile("02", "Boger Boenninghausen's Repertory (BBCR)", "Doctrine of analogy, concomitant symptoms, grand generalisation.", "20 Lectures"),
+                  _buildCurriculumTile("03", "Card Repertories & Computer Repertories", "Radar Opus, MacRepertory, Hompath, Complete Repertory comparison.", "15 Lectures"),
                 ],
               ),
             ),
@@ -141,91 +117,42 @@ class RepertoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(IconData icon, String title, String subtitle) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff2E7D32).withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: const Color(0xffE8F5E9)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Color(0xffE8F5E9),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: const Color(0xff2E7D32), size: 24),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff1B5E20)),
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCurriculumTile(String num, String title, String desc, String duration) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xffE8F5E9)),
+        border: Border.all(color: AppColors.border),
       ),
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundColor: const Color(0xffE8F5E9),
+          backgroundColor: AppColors.primaryLight,
           child: Text(
             num,
-            style: const TextStyle(color: Color(0xff2E7D32), fontWeight: FontWeight.bold),
+            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
           ),
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1B5E20)),
+          style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
         ),
-        subtitle: Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        subtitle: Text(duration, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 72, right: 24, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(desc, style: const TextStyle(color: Colors.black87, height: 1.4)),
+                Text(desc, style: const TextStyle(color: AppColors.textSecondary, height: 1.4)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff2E7D32),
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const Text("Study Repertory", style: TextStyle(color: Colors.white)),
+                  child: const Text("Start Studying", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

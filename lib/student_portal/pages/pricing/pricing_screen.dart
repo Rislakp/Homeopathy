@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:homeopathy/core/theme/app_colors.dart';
 import 'pricing_provider.dart';
 import 'pricing_card.dart';
 import 'package:homeopathy/responsive/responsive_layout.dart';
@@ -23,8 +24,8 @@ class PricingScreen extends StatelessWidget {
 class _PricingScreenContent extends StatelessWidget {
   const _PricingScreenContent();
 
-  static const Color primaryGreen = Color(0xFF0F9D58);
-  static const Color scaffoldBg = Color(0xFFF7FBF9);
+  static const Color primaryBlue = AppColors.primary;
+  static const Color scaffoldBg = AppColors.background;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class _PricingScreenContent extends StatelessWidget {
                                       SnackBar(
                                         content: Text('Plan selected: ${plan.name}'),
                                         behavior: SnackBarBehavior.floating,
-                                        backgroundColor: primaryGreen,
+                                        backgroundColor: primaryBlue,
                                         duration: const Duration(seconds: 1),
                                       ),
                                     );
@@ -138,17 +139,18 @@ class _PricingScreenContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: primaryGreen.withOpacity(0.1),
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: AppColors.primaryBorder),
                 ),
                 child: Text(
                   "PRICING PLANS",
-                  style: GoogleFonts.outfit(
+                  style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: primaryGreen,
+                    color: AppColors.primaryDark,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -157,20 +159,20 @@ class _PricingScreenContent extends StatelessWidget {
               Text(
                 "Simple plans.\nSerious outcomes.",
                 textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
+                style: GoogleFonts.inter(
                   fontSize: isMobile ? 32 : 44,
                   fontWeight: FontWeight.w900,
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.textPrimary,
                   height: 1.15,
                 ),
               ),
               const SizedBox(height: 12),
               Text(
-                "Choose the best plan for your learning journey.",
+                "Choose the best plan for your medical exam preparation journey.",
                 textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
+                style: GoogleFonts.inter(
                   fontSize: 16,
-                  color: const Color(0xFF64748B),
+                  color: AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

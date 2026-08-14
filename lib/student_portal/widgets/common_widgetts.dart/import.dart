@@ -1,8 +1,14 @@
-// pacakge
+// package
 export 'package:flutter/material.dart';
 export 'package:provider/provider.dart';
 export 'package:video_player/video_player.dart';
 export 'package:google_fonts/google_fonts.dart';
+
+// core theme
+export 'package:homeopathy/core/theme/app_colors.dart';
+export 'package:homeopathy/core/theme/app_text_styles.dart';
+export 'package:homeopathy/core/theme/app_dimensions.dart';
+export 'package:homeopathy/core/theme/app_theme.dart';
 
 // model
 export 'package:homeopathy/student_portal/model/category_model.dart';
@@ -52,13 +58,14 @@ export 'package:homeopathy/student_portal/pages/stories/sucess_stories.dart';
 export 'package:homeopathy/student_portal/pages/home/dashboard.dart';
 export 'package:homeopathy/student_portal/pages/live_classes/live_class.dart';
 export 'package:homeopathy/student_portal/pages/live_classes/live_card.dart';
+export 'package:homeopathy/auth/sign_up_screen.dart';
+export 'package:homeopathy/auth/login_screen.dart';
 
 //admin portal
 
 export 'package:homeopathy/admin/widgets/responsive/responsive_layout.dart';
 export 'package:homeopathy/admin/models/admin_menu_item.dart';
 export 'package:homeopathy/admin/providers/drawer_provider.dart';
-export 'package:homeopathy/admin/screens/admins/admins_screen.dart';
 export 'package:homeopathy/admin/screens/courses/courses_screen.dart';
 export 'package:homeopathy/admin/screens/dashboard/dashboard_screen.dart';
 export 'package:homeopathy/admin/screens/demo_videos/demo_videos_screen.dart';
@@ -70,7 +77,6 @@ export 'package:homeopathy/admin/screens/recorded_classes/recorded_classes_scree
 export 'package:homeopathy/admin/screens/students/students_screen.dart';
 export 'package:homeopathy/admin/screens/subscriptions/subscriptions_screen.dart';
 export 'package:homeopathy/admin/screens/videos/videos_screen.dart';
-export 'package:homeopathy/admin/theme/admin_colors.dart';
 export 'package:homeopathy/admin/widgets/common/admin_header.dart';
 export 'package:homeopathy/admin/widgets/drawer/app_drawer.dart';
 
@@ -78,19 +84,12 @@ export 'package:homeopathy/admin/providers/video_provider.dart';
 export 'package:homeopathy/admin/providers/course_management_provider.dart';
 export 'package:homeopathy/admin/providers/live_class_provider.dart';
 export 'package:homeopathy/admin/providers/subscription_plan_provider.dart';
-export 'package:homeopathy/admin/screens/auth/login/login_screen.dart';
+
 
 export 'package:homeopathy/admin/providers/admin_data_provider.dart';
 export 'package:homeopathy/admin/theme/admin_theme.dart';
 export 'package:homeopathy/admin/providers/auth_provider.dart';
-export 'package:homeopathy/api/auth_api_service.dart';
-export 'package:homeopathy/models/auth_model.dart';
 
-export 'package:homeopathy/admin/screens/auth/login/widgets/left_brand_panel.dart';
-export 'package:homeopathy/admin/screens/auth/login/widgets/login_form.dart';
+
+
 export 'package:homeopathy/admin/admin_shell_layout.dart';
-export 'package:homeopathy/admin/screens/auth/login/models/login_model.dart';
-export 'package:homeopathy/admin/screens/auth/login/widgets/custom_textfield.dart';
-export 'package:homeopathy/admin/screens/auth/login/widgets/footer_text.dart';
-export 'package:homeopathy/admin/screens/auth/login/widgets/login_button.dart';
-export 'package:homeopathy/admin/screens/auth/login/widgets/remember_me.dart';
