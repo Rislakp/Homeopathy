@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/admin/admin_app.dart';
 import 'package:homeopathy/auth/login_screen.dart';
 import 'package:homeopathy/auth/sign_up_screen.dart';
 import 'package:homeopathy/core/theme/app_colors.dart';
@@ -144,11 +145,44 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         const SizedBox(width: 14),
         _buildSignInButton(context),
         const SizedBox(width: 14),
+       // _buildAdminButton(context),
+       // const SizedBox(width: 14),
         _buildStartLearningButton(context),
         const SizedBox(width: 30),
       ],
     );
   }
+
+  // Widget: Admin Button
+  // Widget _buildAdminButton(BuildContext context) {
+  //   return MouseRegion(
+  //     cursor: SystemMouseCursors.click,
+  //     child: OutlinedButton.icon(
+  //       onPressed: () {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(builder: (_) => const WhiteCoatAdminPortal()),
+  //         );
+  //       },
+  //       icon: const Icon(Icons.shield_outlined, size: 16),
+  //       label: Text(
+  //         "Admin",
+  //         style: GoogleFonts.inter(
+  //           fontSize: 14,
+  //           fontWeight: FontWeight.w600,
+  //         ),
+  //       ),
+  //       style: OutlinedButton.styleFrom(
+  //         foregroundColor: AppColors.primary,
+  //         side: const BorderSide(color: AppColors.border),
+  //         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Widget: Logo Section
   Widget _buildLogoSection() {

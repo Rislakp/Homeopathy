@@ -68,6 +68,46 @@ class StudentProvider extends ChangeNotifier {
     }
   }
 
+  /// Registers a new student via the backend API
+  Future<bool> registerStudentViaApi({
+    required String name,
+    required String email,
+    required String password,
+    required String dateOfBirth,
+    required String contactNumber,
+    required String qualification,
+  }) async {
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+
+      // Calls your api service to execute the POST /api/auth/register request
+      final success = await _apiService.registerStudent(
+        name: name,
+        email: email,
+        password: password,
+        dateOfBirth: dateOfBirth,
+        contactNumber: contactNumber,
+        qualification: qualification,
+      );
+
+      if (success == true) {
+        // Refresh the student list so the new record immediately shows up in the admin table
+        await fetchStudents(showLoading: false);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Error registering student: $e');
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   /// Refreshes the students list.
   Future<void> refresh() => fetchStudents(showLoading: true);
 

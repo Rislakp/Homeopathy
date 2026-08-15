@@ -69,7 +69,7 @@ class RememberMeSection extends StatelessWidget {
             padding: EdgeInsets.zero,
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            overlayColor: primaryColor.withOpacity(0.08),
+            overlayColor: primaryColor.withValues(alpha: 0.08),
           ),
           child: Text(
             'Forgot Password?',

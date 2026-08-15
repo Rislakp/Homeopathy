@@ -49,7 +49,7 @@ class ViewStudentScoresDialog extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: avatarColor.withOpacity(0.12),
+                  backgroundColor: avatarColor.withValues(alpha: 0.12),
                   child: Text(
                     student.avatarText,
                     style: TextStyle(
@@ -225,7 +225,24 @@ class ViewStudentScoresDialog extends StatelessWidget {
     final isPassed = exam.status.toLowerCase() == 'passed';
     final statusColor = isPassed ? const Color(0xFF10B981) : const Color(0xFFEF4444);
     final statusBgColor = isPassed ? const Color(0xFFECFDF5) : const Color(0xFFFEF2F2);
-    final pctProgress = (exam.percentage / 100).clamp(0.0, 1.0);
+
+    // --- Negative Marking Calculation ---
+    const int negativePenaltyPerWrongAnswer = 1;
+    // Derive marksPerQuestion from score/correct when possible, else default to 1
+    final int marksPerQuestion = (exam.totalCorrect > 0)
+        ? (exam.score / exam.totalCorrect).round().clamp(1, 10)
+        : 1;
+    final int earnedMarks = exam.totalCorrect * marksPerQuestion;
+    final int totalNegativeMarks =
+        exam.totalWrong * negativePenaltyPerWrongAnswer;
+    int finalScoreInt = earnedMarks - totalNegativeMarks;
+    if (finalScoreInt < 0) finalScoreInt = 0;
+    final double adjustedPct = exam.totalMarks > 0
+        ? ((finalScoreInt / exam.totalMarks) * 100).clamp(0.0, 100.0)
+        : 0.0;
+    // --- End Negative Marking Calculation ---
+
+    final pctProgress = (adjustedPct / 100).clamp(0.0, 1.0);
 
     return Container(
       padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
@@ -235,7 +252,7 @@ class ViewStudentScoresDialog extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -286,7 +303,7 @@ class ViewStudentScoresDialog extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: statusBgColor,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: statusColor.withOpacity(0.3)),
+                  border: Border.all(color: statusColor.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -330,7 +347,7 @@ class ViewStudentScoresDialog extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: exam.score % 1 == 0 ? '${exam.score.toInt()}' : '${exam.score}',
+                      text: '$finalScoreInt',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -355,7 +372,7 @@ class ViewStudentScoresDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  '${exam.percentage.toStringAsFixed(1)}%',
+                  '${adjustedPct.toStringAsFixed(1)}%',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -382,18 +399,18 @@ class ViewStudentScoresDialog extends StatelessWidget {
           // Detailed counters if available
           if (exam.totalAttempted > 0 || exam.totalCorrect > 0 || exam.totalWrong > 0) ...[
             const SizedBox(height: 10),
-            Row(
+            Wrap(
+              spacing: 12,
+              runSpacing: 6,
               children: [
                 if (exam.totalAttempted > 0)
                   _buildSubMetric('Attempted', '${exam.totalAttempted}', const Color(0xFF4B5563)),
-                if (exam.totalCorrect > 0) ...[
-                  const SizedBox(width: 12),
+                if (exam.totalCorrect > 0)
                   _buildSubMetric('Correct', '${exam.totalCorrect}', const Color(0xFF10B981)),
-                ],
-                if (exam.totalWrong > 0) ...[
-                  const SizedBox(width: 12),
+                if (exam.totalWrong > 0)
                   _buildSubMetric('Wrong', '${exam.totalWrong}', const Color(0xFFEF4444)),
-                ],
+                if (totalNegativeMarks > 0)
+                  _buildSubMetric('Penalty', '-$totalNegativeMarks', const Color(0xFFF97316)),
               ],
             ),
           ],

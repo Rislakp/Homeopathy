@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homeopathy/student_portal/pages/live_classes/live_classes_page.dart';
 import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
 
 class DashboardDesktop extends StatelessWidget {

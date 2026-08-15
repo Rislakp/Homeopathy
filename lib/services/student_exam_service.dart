@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +12,11 @@ import 'package:homeopathy/models/test_result_model.dart';
 class StudentExamService {
   static const String _baseUrl =
       'https://homeopathybackend-1.onrender.com/api/student/exams';
+
+  /// Timeout applied to all API requests.
+  /// Set to 50 s to survive Render.com free-tier cold-start (~30-45 s),
+  /// while still ending promptly on genuine network failure.
+  static const Duration _timeout = Duration(seconds: 50);
 
   /// Fetches all available Grand Mock exams for the authenticated student.
   ///
@@ -32,7 +39,9 @@ class StudentExamService {
     };
 
     try {
-      final response = await http.get(url, headers: headers);
+      final response = await http
+          .get(url, headers: headers)
+          .timeout(_timeout);
 
       Map<String, dynamic> responseData = {};
       if (response.body.isNotEmpty) {
@@ -65,6 +74,16 @@ class StudentExamService {
             'Failed to fetch exams (Status: ${response.statusCode}).';
         throw Exception(errorMessage);
       }
+    } on SocketException {
+      throw Exception(
+          'Unable to connect to the server. Please check your internet connection.');
+    } on TimeoutException {
+      // Render free-tier cold-start can take 30-45 s. If the server is still
+      // warming up the timeout fires here, surfacing a readable error instead
+      // of leaving the FutureBuilder stuck in ConnectionState.waiting forever.
+      throw Exception(
+          'The server is taking too long to respond. '
+          'This usually means the backend is starting up — please wait a moment and tap Retry.');
     } catch (e) {
       debugPrint('Error in StudentExamService.getAvailableExams: $e');
       rethrow;
@@ -73,12 +92,13 @@ class StudentExamService {
 
   /// Initiates an active exam session and fetches sanitized questions for [examId].
   ///
-  /// GET `/api/student/exams/:id/start`
+  /// POST `/api/student/exams/:id/start`
   /// Includes `Authorization: Bearer <token>` header.
   /// Throws an [Exception] if session token is missing or if the API returns an error status code.
   Future<ActiveExamModel> startExam(String examId) async {
     final Uri url = Uri.parse('$_baseUrl/$examId/start');
 
+    // ── 1. Retrieve the student's JWT from SharedPreferences ─────────────────
     final prefs = await SharedPreferences.getInstance();
     final String? authToken = prefs.getString('auth_token');
 
@@ -86,13 +106,17 @@ class StudentExamService {
       throw Exception('Session expired. Please log in again.');
     }
 
+    // ── 2. Build headers with Authorization: Bearer <token> ──────────────────
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $authToken',
     };
 
+    // ── 3. POST to /api/student/exams/:id/start (backend requires POST) ───────
     try {
-      final response = await http.get(url, headers: headers);
+      final response = await http
+          .post(url, headers: headers)
+          .timeout(_timeout);
 
       Map<String, dynamic> responseData = {};
       if (response.body.isNotEmpty) {
@@ -106,13 +130,11 @@ class StudentExamService {
         }
       }
 
-      if (response.statusCode == 200) {
-        final bool isSuccess = responseData['success'] == true;
+      // ── 4. Accept 200 or 201 as success ──────────────────────────────────────
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final dynamic data = responseData['data'];
 
-        if (isSuccess && data is Map<String, dynamic>) {
-          return ActiveExamModel.fromJson(data);
-        } else if (data is Map<String, dynamic>) {
+        if (data is Map<String, dynamic>) {
           return ActiveExamModel.fromJson(data);
         } else {
           final String errorMessage = responseData['message'] as String? ??
@@ -120,11 +142,18 @@ class StudentExamService {
           throw Exception(errorMessage);
         }
       } else {
+        // Surface the backend's error message verbatim when available
         final String errorMessage = responseData['message'] as String? ??
             responseData['error'] as String? ??
             'Failed to start exam (Status: ${response.statusCode}).';
         throw Exception(errorMessage);
       }
+    } on SocketException {
+      throw Exception(
+          'Unable to connect to the server. Please check your internet connection.');
+    } on TimeoutException {
+      throw Exception(
+          'The server is taking too long to respond. Please try again.');
     } catch (e) {
       debugPrint('Error in StudentExamService.startExam: $e');
       rethrow;
@@ -136,25 +165,40 @@ class StudentExamService {
   /// POST `/api/student/exams/:id/submit`
   /// Payload format: `{ "answers": [ { "questionId": "...", "selectedOption": "A" } ] }`
   /// Returns parsed [TestResultModel] on 200/201 success response.
+  ///
+  /// The [http.post] is wrapped in a try-catch-finally with [_timeout] so the
+  /// loading dialog in the UI is never left open on network failure or a
+  /// Render.com cold-start timeout.
   Future<TestResultModel> submitExam(
     String examId,
-    Map<String, String> selectedAnswers,
-  ) async {
+    Map<String, String> selectedAnswers, {
+    String? token,
+  }) async {
     final Uri url = Uri.parse('$_baseUrl/$examId/submit');
+    debugPrint('StudentExamService.submitExam → POST $url');
 
-    final prefs = await SharedPreferences.getInstance();
-    final String? authToken = prefs.getString('auth_token');
+    // ── 1. Retrieve the student's JWT from SharedPreferences ─────────────────
+    //    If the caller already read the token (e.g. from the UI layer) it can
+    //    be passed via [token] to skip the extra SharedPreferences read.
+    final String? authToken;
+    if (token != null && token.trim().isNotEmpty) {
+      authToken = token;
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      authToken = prefs.getString('auth_token');
+    }
 
     if (authToken == null || authToken.trim().isEmpty) {
       throw Exception('Session expired. Please log in again.');
     }
 
+    // ── 2. Build headers with Authorization: Bearer <token> ──────────────────
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $authToken',
     };
 
-    // Format payload as JSON list structure: { "answers": [ { "questionId": "...", "selectedOption": "..." } ] }
+    // ── 3. Format payload: { "answers": [ { "questionId": "...", "selectedOption": "..." } ] }
     final List<Map<String, String>> formattedAnswers =
         selectedAnswers.entries.map((entry) {
       return {
@@ -167,13 +211,21 @@ class StudentExamService {
       'answers': formattedAnswers,
     };
 
-    try {
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: json.encode(body),
-      );
+    debugPrint('submitExam payload: ${json.encode(body)}');
 
+    // ── 4. POST with timeout ──────────────────────────────────────────────────
+    try {
+      final response = await http
+          .post(
+            url,
+            headers: headers,
+            body: json.encode(body),
+          )
+          .timeout(_timeout);
+
+      debugPrint('submitExam STATUS: ${response.statusCode}');
+
+      // ── 5. Parse response body ────────────────────────────────────────────
       Map<String, dynamic> responseData = {};
       if (response.body.isNotEmpty) {
         try {
@@ -186,6 +238,7 @@ class StudentExamService {
         }
       }
 
+      // ── 6. Interpret status code ──────────────────────────────────────────
       if (response.statusCode == 200 || response.statusCode == 201) {
         final dynamic data = responseData['data'] ?? responseData;
         if (data is Map<String, dynamic>) {
@@ -199,6 +252,15 @@ class StudentExamService {
             'Failed to submit exam (Status: ${response.statusCode}).';
         throw Exception(errorMessage);
       }
+    } on SocketException {
+      // No network connectivity.
+      throw Exception(
+          'Unable to connect to the server. Please check your internet connection.');
+    } on TimeoutException {
+      // Server cold-start on Render free-tier can exceed _timeout.
+      throw Exception(
+          'The submission request timed out. '
+          'The backend may still be starting up — please wait a moment and try again.');
     } catch (e) {
       debugPrint('Error in StudentExamService.submitExam: $e');
       rethrow;

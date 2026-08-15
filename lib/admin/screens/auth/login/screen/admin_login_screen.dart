@@ -1,6 +1,7 @@
 import 'package:homeopathy/admin/screens/auth/login/widgets/left_brand_panel.dart';
 import 'package:homeopathy/admin/screens/auth/login/widgets/login_form.dart';
-import 'package:homeopathy/student_portal/widgets/common_widgetts.dart/import.dart';
+import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/widgets/responsive/responsive_layout.dart';
 
 class AdminLoginScreen extends StatelessWidget {
   const AdminLoginScreen({super.key});

@@ -33,7 +33,7 @@ class _LoginButtonState extends State<LoginButton> {
     double scale = 1.0;
     List<BoxShadow> shadows = [
       BoxShadow(
-        color: primaryColor.withOpacity(0.24),
+        color: primaryColor.withValues(alpha: 0.24),
         blurRadius: 8,
         offset: const Offset(0, 4),
       ),
@@ -42,14 +42,14 @@ class _LoginButtonState extends State<LoginButton> {
     final bool isDisabled = widget.onPressed == null || widget.isLoading;
 
     if (isDisabled) {
-      buttonColor = primaryColor.withOpacity(0.6);
+      buttonColor = primaryColor.withValues(alpha: 0.6);
       shadows = [];
     } else if (_isPressed) {
       buttonColor = pressedColor;
       scale = 0.97;
       shadows = [
         BoxShadow(
-          color: primaryColor.withOpacity(0.16),
+          color: primaryColor.withValues(alpha: 0.16),
           blurRadius: 4,
           offset: const Offset(0, 2),
         ),
@@ -59,7 +59,7 @@ class _LoginButtonState extends State<LoginButton> {
       scale = 1.02;
       shadows = [
         BoxShadow(
-          color: primaryColor.withOpacity(0.35),
+          color: primaryColor.withValues(alpha: 0.35),
           blurRadius: 14,
           offset: const Offset(0, 6),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homeopathy/admin/screens/courses/provider/course_provider.dart';
 import 'package:homeopathy/admin/screens/courses/widgets/course_grid.dart';
-import 'package:homeopathy/admin/screens/courses/widgets/course_header.dart';
 import 'package:homeopathy/admin/screens/courses/widgets/course_search_filter.dart';
 import 'package:homeopathy/admin/screens/live_classes/widgets/loading_widget.dart';
 import 'package:homeopathy/widgets/empty_course_widget.dart';
@@ -39,8 +38,7 @@ class _CourseBodyState extends State<CourseBody> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Top title and subtitle description
-            const CourseHeader(),
-
+           
             // Search input field, category drop-down, and add button
             const CourseSearchFilter(),
 

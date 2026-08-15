@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homeopathy/admin/theme/admin_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:homeopathy/responsive/extensions.dart';
 import 'provider/student_provider.dart';
@@ -18,23 +19,25 @@ class StudentBody extends StatelessWidget {
   }
 
   void _showAddStudentDialog(BuildContext context) async {
-    final provider = context.read<StudentProvider>();
     final StudentModel? result = await showDialog<StudentModel>(
       context: context,
+      barrierDismissible: false, // prevent accidental close during API call
       builder: (context) => const AddEditStudentDialog(),
     );
 
+    // The dialog handles the API call and list refresh internally.
+    // We only need to show a confirmation SnackBar on success.
     if (result != null && context.mounted) {
-      provider.addStudent(result);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Student "${result.name}" added successfully.'),
-          backgroundColor: const Color(0xFF10B981),
+          content: Text('Student "${result.name}" registered successfully.'),
+          backgroundColor: AppColors.adminBlue,
           behavior: SnackBarBehavior.floating,
         ),
       );
     }
   }
+
 
   void _showEditStudentDialog(BuildContext context, StudentModel student) async {
     final provider = context.read<StudentProvider>();
@@ -115,32 +118,12 @@ class StudentBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Students',
-                    style: TextStyle(
-                      fontSize: titleSize,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF111827),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Manage enrolled students, subscriptions, and view exam performance.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                ],
-              ),
-              IconButton(
+              
+              /*IconButton(
                 icon: const Icon(Icons.refresh_rounded, color: Color(0xFF4B5563)),
                 tooltip: 'Refresh Students',
                 onPressed: () => provider.refresh(),
-              ),
+              ),*/
             ],
           ),
           SizedBox(height: spacing),
@@ -152,9 +135,9 @@ class StudentBody extends StatelessWidget {
           SizedBox(height: spacing),
 
           if (provider.isLoading && students.isNotEmpty)
-            const LinearProgressIndicator(
+            LinearProgressIndicator(
               backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
+              valueColor: AlwaysStoppedAnimation(AppColors.adminBlue),
               minHeight: 3,
             ),
 
@@ -184,7 +167,7 @@ class StudentBody extends StatelessWidget {
                 height: 36,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF10B981)),
+                    valueColor: AlwaysStoppedAnimation(AppColors.adminBlue),
                 ),
               ),
               SizedBox(height: 16),
@@ -251,7 +234,7 @@ class StudentBody extends StatelessWidget {
                 icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: const Text('Try Again'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF10B981),
+                  backgroundColor: AppColors.adminBlue,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

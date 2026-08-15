@@ -15,7 +15,17 @@ void main() async {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return const RootApp();
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'White Coat Academy',
+          routes: {
+            '/': (context) => const RootApp(),
+            '/admin': (context) => const WhiteCoatAdminPortal(),
+            '/admin/login': (context) => const WhiteCoatAdminPortal(),
+            '/student': (context) => const WhiteCoatStudentPortal(),
+          },
+          initialRoute: '/',
+        );
       },
     ),
   );
@@ -64,14 +74,11 @@ class _RootAppState extends State<RootApp> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: Color(0xFF0F172A),
-          body: Center(
-            child: CircularProgressIndicator(
-              color: Color(0xFF3B82F6),
-            ),
+      return const Scaffold(
+        backgroundColor: Color(0xFF0F172A),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFF3B82F6),
           ),
         ),
       );
