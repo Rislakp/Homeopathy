@@ -18,6 +18,13 @@ class _StudentMockTestScreenState extends State<StudentMockTestScreen> {
   final StudentExamService _examService = StudentExamService();
   late Future<List<StudentExamModel>> _examsFuture;
 
+  /// True while the start-exam API call is in flight.
+  bool _isStartingExam = false;
+
+  /// The [StudentExamModel.id] of the card whose button triggered the load,
+  /// used to show a per-card spinner instead of a full-screen one.
+  String? _startingExamId;
+
   @override
   void initState() {
     super.initState();
@@ -32,26 +39,28 @@ class _StudentMockTestScreenState extends State<StudentMockTestScreen> {
   }
 
   /// Handles starting an active exam session by fetching questions and navigating.
+  ///
+  /// — Reads the JWT from SharedPreferences (via [StudentExamService.startExam]).
+  /// — Injects `Authorization: Bearer <token>` header into the POST request.
+  /// — Uses try-catch-finally; the finally block **always** resets [_isStartingExam]
+  ///   so the spinner cannot get stuck even if the request fails.
+  /// — Shows a [SnackBar] with the backend's error message on any non-200/201 response.
   Future<void> _handleStartExam(StudentExamModel exam) async {
-    // Show a modal loading indicator while fetching questions
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    // Prevent double-tap while a request is already in flight.
+    if (_isStartingExam) return;
+
+    setState(() {
+      _isStartingExam = true;
+      _startingExamId = exam.id;
+    });
 
     try {
-      final ActiveExamModel activeExam =
-          await _examService.startExam(exam.id);
+      // POST /api/student/exams/:id/start — token injected inside the service.
+      final ActiveExamModel activeExam = await _examService.startExam(exam.id);
 
       if (!mounted) return;
 
-      // Close loading dialog
-      Navigator.of(context).pop();
-
-      // Navigate to ActiveExamScreen
+      // Navigate to the active exam screen on success.
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ActiveExamScreen(activeExam: activeExam),
@@ -60,20 +69,26 @@ class _StudentMockTestScreenState extends State<StudentMockTestScreen> {
     } catch (e) {
       if (!mounted) return;
 
-      // Close loading dialog
-      Navigator.of(context).pop();
-
       final String errorMessage =
           e.toString().replaceAll('Exception: ', '').trim();
 
-      // Display SnackBar with Theme error background
+      // Show the backend's error message (e.g., "Unauthorised", "Exam not found").
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
           backgroundColor: Theme.of(context).colorScheme.error,
           behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
         ),
       );
+    } finally {
+      // ── CRITICAL: always reset the loading flag so the spinner never gets stuck.
+      if (mounted) {
+        setState(() {
+          _isStartingExam = false;
+          _startingExamId = null;
+        });
+      }
     }
   }
 
@@ -362,7 +377,9 @@ class _StudentMockTestScreenState extends State<StudentMockTestScreen> {
               width: itemWidth,
               child: StudentExamCard(
                 exam: exam,
-                onActionPressed: () => _handleStartExam(exam),
+                isLoading: _startingExamId == exam.id && _isStartingExam,
+                onActionPressed:
+                    _isStartingExam ? null : () => _handleStartExam(exam),
               ),
             );
           }).toList(),

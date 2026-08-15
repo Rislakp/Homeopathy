@@ -3,10 +3,8 @@ import 'package:homeopathy/admin/screens/auth/login/screen/admin_login_screen.da
 import 'package:homeopathy/admin/screens/auth/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../../models/admin_menu_item.dart';
-import '../../providers/auth_provider.dart';
 import '../../providers/drawer_provider.dart';
 import '../../theme/admin_colors.dart';
-import 'drawer_footer.dart';
 import 'drawer_header.dart';
 import 'drawer_item.dart';
 import 'drawer_section.dart';

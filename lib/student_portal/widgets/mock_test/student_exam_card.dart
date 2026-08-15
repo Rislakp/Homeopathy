@@ -6,10 +6,15 @@ class StudentExamCard extends StatelessWidget {
   final StudentExamModel exam;
   final VoidCallback? onActionPressed;
 
+  /// When true, the action button shows a loading spinner instead of its label.
+  /// Controlled by the parent screen's [_isStartingExam] state.
+  final bool isLoading;
+
   const StudentExamCard({
     super.key,
     required this.exam,
     this.onActionPressed,
+    this.isLoading = false,
   });
 
   @override
@@ -289,7 +294,7 @@ class StudentExamCard extends StatelessWidget {
         isAttempted ? 'Retake / Continue >' : 'Start Test >';
 
     return ElevatedButton(
-      onPressed: onActionPressed ??
+      onPressed: isLoading ? null : onActionPressed ??
           () {
             debugPrint('Exam selected: ${exam.id} (${exam.title})');
           },
@@ -297,6 +302,7 @@ class StudentExamCard extends StatelessWidget {
         elevation: 0,
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
+        disabledBackgroundColor: colorScheme.primary.withValues(alpha: 0.7),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -308,7 +314,16 @@ class StudentExamCard extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
       ),
-      child: Text(buttonText),
+      child: isLoading
+          ? SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: colorScheme.onPrimary,
+              ),
+            )
+          : Text(buttonText),
     );
   }
 }

@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:homeopathy/core/constants/api_constants.dart';
 import 'package:homeopathy/models/auth_model.dart';
 import 'package:homeopathy/services/auth_service.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -22,6 +20,11 @@ class AuthProvider extends ChangeNotifier {
   bool get isAdmin => _userRole == 'admin' || _userRole == 'superadmin';
   bool get isAuthenticated => _token != null && _token!.isNotEmpty;
 
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+
   Future<bool> login(String emailOrUsername, String password) async {
     _isLoading = true;
     _errorMessage = null;
@@ -33,17 +36,25 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
 
-      _token = res['token'];
-      _userRole = res['role'];
+      _token = res['token']?.toString();
+      _userRole = res['role']?.toString();
       final userObj = res['user'];
       if (userObj is Map<String, dynamic>) {
         _currentUser = UserModel.fromJson(userObj);
+      } else if (userObj is String) {
+        try {
+          _currentUser = UserModel.fromJson(json.decode(userObj));
+        } catch (_) {}
       }
 
+      _errorMessage = null;
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '').trim();
-      rethrow;
+      _errorMessage = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '').trim();
+      if (_errorMessage == null || _errorMessage!.isEmpty) {
+        _errorMessage = 'Login failed. Please check your credentials.';
+      }
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -54,6 +65,7 @@ class AuthProvider extends ChangeNotifier {
     _token = null;
     _userRole = null;
     _currentUser = null;
+    _errorMessage = null;
     await _authService.logout();
     notifyListeners();
   }

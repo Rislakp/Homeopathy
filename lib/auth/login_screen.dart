@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:homeopathy/admin/admin_app.dart';
 import 'package:homeopathy/admin/admin_shell_layout.dart';
 import 'package:homeopathy/auth/sign_up_screen.dart';
 import 'package:homeopathy/auth/widgets/custom_text_field.dart';
@@ -502,6 +503,32 @@ class _LoginModalCardState extends State<LoginModalCard> {
                             },
                         ),
                       ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: TextButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).maybePop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const WhiteCoatAdminPortal(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.admin_panel_settings_outlined,
+                      size: 16,
+                      color: Color(0xFF64748B),
+                    ),
+                    label: Text(
+                      'Admin Portal Login',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF64748B),
+                      ),
                     ),
                   ),
                 ),

@@ -199,13 +199,29 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
               ? activeResult.exam.title
               : 'Grand Mock Test Result';
 
-          final int score = activeResult.score;
           final int totalMarks = activeResult.totalMarks > 0
               ? activeResult.totalMarks
               : (widget.totalExamMarks ?? 0);
 
+          // --- Negative Marking Calculation ---
+          final int correctAnswers = activeResult.totalCorrect;
+          final int wrongAnswers = activeResult.totalWrong;
+          // Use exam's marksPerQuestion if available, else fall back to 1
+          final int marksPerQuestion =
+              activeResult.exam.marksPerQuestion > 0
+                  ? activeResult.exam.marksPerQuestion
+                  : 1;
+          const int negativePenaltyPerWrongAnswer = 1;
+
+          final int earnedMarks = correctAnswers * marksPerQuestion;
+          final int totalNegativeMarks =
+              wrongAnswers * negativePenaltyPerWrongAnswer;
+          int finalScore = earnedMarks - totalNegativeMarks;
+          if (finalScore < 0) finalScore = 0;
+          // --- End Negative Marking Calculation ---
+
           final double percentage = totalMarks > 0
-              ? ((score / totalMarks) * 100).clamp(0.0, 100.0)
+              ? ((finalScore / totalMarks) * 100).clamp(0.0, 100.0)
               : 0.0;
 
           final bool isCompleted =
@@ -298,7 +314,7 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
                       child: Column(
                         children: [
                           Text(
-                            '$score / $totalMarks',
+                            '$finalScore / $totalMarks',
                             style: theme.textTheme.displaySmall?.copyWith(
                               color: colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -312,12 +328,22 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                          if (totalNegativeMarks > 0) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              'Penalty: -$totalNegativeMarks marks applied',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.orange.shade700,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
                     const SizedBox(height: 24),
 
-                    // Dynamic Stats Row (Attempted, Correct, Wrong)
+                    // Dynamic Stats Row (Attempted, Correct, Wrong, Penalty)
                     Row(
                       children: [
                         Expanded(
@@ -330,7 +356,7 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
                             iconColor: Colors.blue.shade600,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: _buildStatBox(
                             context: context,
@@ -341,7 +367,7 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
                             iconColor: Colors.green.shade600,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: _buildStatBox(
                             context: context,
@@ -350,6 +376,17 @@ class _ResultSummaryScreenState extends State<ResultSummaryScreen> {
                             value: activeResult.totalWrong.toString(),
                             bgColor: Colors.red.shade50,
                             iconColor: Colors.red.shade600,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _buildStatBox(
+                            context: context,
+                            icon: Icons.remove_circle_outline_rounded,
+                            label: 'Penalty',
+                            value: '-$totalNegativeMarks',
+                            bgColor: Colors.orange.shade50,
+                            iconColor: Colors.orange.shade700,
                           ),
                         ),
                       ],

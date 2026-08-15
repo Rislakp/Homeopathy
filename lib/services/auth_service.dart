@@ -5,7 +5,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:homeopathy/core/constants/api_constants.dart';
-import 'package:homeopathy/models/auth_model.dart';
 
 /// Authentication Service managing student and admin login, registration,
 /// session persistence with Hive, and token storage in SharedPreferences.

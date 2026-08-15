@@ -5,7 +5,6 @@ import 'package:homeopathy/widgets/empty_course_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../../utils/app_colors.dart';
 import '../widgets/course_grid.dart';
-import '../widgets/course_header.dart';
 import '../widgets/course_search_filter.dart';
 
 
@@ -39,7 +38,7 @@ class _CourseBodyState extends State<CourseBody> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Top title and subtitle description
-            const CourseHeader(),
+           
 
             // Search input field, category drop-down, and add button
             const CourseSearchFilter(),

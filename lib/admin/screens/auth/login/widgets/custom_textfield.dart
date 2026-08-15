@@ -8,6 +8,8 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController controller;
   final String? errorText;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
 
   const CustomTextField({
     super.key,
@@ -18,6 +20,8 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     required this.controller,
     this.errorText,
+    this.textInputAction,
+    this.onSubmitted,
   });
 
   @override
@@ -82,7 +86,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             boxShadow: [
               if (_isFocused)
                 BoxShadow(
-                  color: (widget.errorText != null ? Colors.red : primaryColor).withOpacity(0.08),
+                  color: (widget.errorText != null ? Colors.red : primaryColor).withValues(alpha: 0.08),
                   blurRadius: 4,
                   spreadRadius: 3,
                   offset: const Offset(0, 1),
@@ -94,6 +98,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             focusNode: _focusNode,
             keyboardType: widget.keyboardType,
             obscureText: widget.isPassword && _obscureText,
+            textInputAction: widget.textInputAction,
+            onSubmitted: widget.onSubmitted,
             style: GoogleFonts.inter(
               fontSize: 15,
               color: darkColor,
@@ -130,7 +136,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   : null,
               hintText: widget.hintText,
               hintStyle: GoogleFonts.inter(
-                color: textGrey.withOpacity(0.6),
+                color: textGrey.withValues(alpha: 0.6),
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
               ),

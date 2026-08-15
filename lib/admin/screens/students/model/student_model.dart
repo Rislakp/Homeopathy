@@ -424,11 +424,24 @@ class StudentModel {
     // Stats parsing
     final stats = StudentStats.fromJson(json['stats']);
 
-    // Attended Exams parsing
+    // Attended Exams / Test History parsing
+    // The backend may send this array under several different key names:
+    //   'testHistory'    – backend default
+    //   'test_history'   – snake_case variant
+    //   'attended_exams' – legacy
+    //   'attendedExams'  – camelCase legacy
+    //   'exams'          – short form
     List<ExamScore> exams = [];
-    final examsData = json['attended_exams'] ?? json['attendedExams'] ?? json['exams'];
+    final examsData = json['testHistory'] ??
+        json['test_history'] ??
+        json['attended_exams'] ??
+        json['attendedExams'] ??
+        json['exams'];
     if (examsData is List) {
-      exams = examsData.map((e) => ExamScore.fromJson(e as Map<String, dynamic>)).toList();
+      exams = examsData
+          .whereType<Map<String, dynamic>>()
+          .map((e) => ExamScore.fromJson(e))
+          .toList();
     }
 
     // Dates

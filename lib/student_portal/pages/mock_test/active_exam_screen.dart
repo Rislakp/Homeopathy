@@ -4,6 +4,7 @@ import 'package:homeopathy/models/active_exam_model.dart';
 import 'package:homeopathy/models/test_result_model.dart';
 import 'package:homeopathy/services/student_exam_service.dart';
 import 'package:homeopathy/student_portal/pages/mock_test/result_summary_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Screen where students attempt an active exam, view questions, track remaining time,
 /// navigate questions, and submit responses for evaluation.
@@ -30,62 +31,34 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
   final Set<int> _skippedQuestions = {};
   final Set<int> _visitedQuestions = {0};
 
-  Timer? _examTimer;
-  late int _remainingSeconds;
+  // Timer is managed by _ExamTimerWidget to avoid full-screen setState every second.
+  final GlobalKey<_ExamTimerWidgetState> _timerKey = GlobalKey();
+  late int _initialDurationSeconds;
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
+
     final int durationMin = widget.activeExam.durationMinutes > 0
         ? widget.activeExam.durationMinutes
         : 60;
-    _remainingSeconds = durationMin * 60;
-    _startTimer();
+    // Duration stored once; _ExamTimerWidget manages its own countdown.
+    _initialDurationSeconds = durationMin * 60;
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _examTimer?.cancel();
+    // _ExamTimerWidget disposes its own Timer in its own dispose().
     super.dispose();
   }
 
   // --------------------------------------------------------------------------
   // Timer Management
   // --------------------------------------------------------------------------
-  void _startTimer() {
-    _examTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
-        if (mounted) {
-          setState(() {
-            _remainingSeconds--;
-          });
-        }
-      } else {
-        _examTimer?.cancel();
-        _submitExam(autoSubmitted: true);
-      }
-    });
-  }
-
-  String _formatTime(int totalSeconds) {
-    if (totalSeconds <= 0) return '00:00';
-    final int hours = totalSeconds ~/ 3600;
-    final int minutes = (totalSeconds % 3600) ~/ 60;
-    final int seconds = totalSeconds % 60;
-
-    final String minutesStr = minutes.toString().padLeft(2, '0');
-    final String secondsStr = seconds.toString().padLeft(2, '0');
-
-    if (hours > 0) {
-      final String hoursStr = hours.toString().padLeft(2, '0');
-      return '$hoursStr:$minutesStr:$secondsStr';
-    }
-    return '$minutesStr:$secondsStr';
-  }
+  // _startTimer() and _formatTime() moved into _ExamTimerWidget below.
 
   // --------------------------------------------------------------------------
   // Navigation & Selection Logic
@@ -148,18 +121,43 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
   }
 
   Future<void> _confirmAndSubmit({bool autoSubmitted = false}) async {
+    if (!mounted) return;
+
+    // ── 1. Read the student's JWT up-front ────────────────────────────────────
+    //    We do this before showing the dialog so that a missing token is caught
+    //    immediately rather than leaving the loading spinner open.
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('auth_token');
+
+    if (authToken == null || authToken.trim().isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Session expired. Please log in again.'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() {
       _isSubmitting = true;
     });
 
-    _examTimer?.cancel();
+    _timerKey.currentState?.cancel();
 
     if (!mounted) return;
 
+    // useRootNavigator: true ensures the dialog is pushed onto — and later
+    // popped from — the root navigator, so rootNavigator: true on the pop
+    // targets the exact same level regardless of nested navigators.
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => PopScope(
+      useRootNavigator: true,
+      builder: (_) => PopScope(
         canPop: false,
         child: AlertDialog(
           content: Row(
@@ -179,27 +177,50 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
       ),
     );
 
+    TestResultModel? result;
+    String? errorMessage;
+
     try {
+      // ── 3. Build submission payload ─────────────────────────────────────────
       final Map<String, String> submissionAnswers = {};
       for (int i = 0; i < widget.activeExam.questions.length; i++) {
         if (_selectedAnswers.containsKey(i)) {
           final q = widget.activeExam.questions[i];
-          final String key = q.id.trim().isNotEmpty
-              ? q.id.trim()
-              : '$i';
+          final String key = q.id.trim().isNotEmpty ? q.id.trim() : '$i';
           submissionAnswers[key] = _selectedAnswers[i]!;
         }
       }
 
-      final TestResultModel result = await _examService.submitExam(
+      // ── 4. POST with JWT in Authorization header ────────────────────────────
+      //    submitExam() reads the token from SharedPreferences internally, but
+      //    passing it here as a named parameter ensures this screen's freshly-
+      //    read token is used, so the backend never rejects the request.
+      result = await _examService.submitExam(
         widget.activeExam.id,
         submissionAnswers,
+        token: authToken,
       );
+    } catch (e) {
+      result = null;
+      errorMessage = e.toString().replaceAll('Exception: ', '').trim();
+      debugPrint('_confirmAndSubmit error: $e');
+    } finally {
+      // ── 5. Pop dialog EXACTLY ONCE via the root navigator ───────────────────
+      //    rootNavigator: true mirrors the useRootNavigator: true used in
+      //    showDialog, so we always hit the correct navigator level.
+      //    This runs before any navigation or setState below.
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
 
-      if (!mounted) return;
+    // ── 6. Navigate or show error (after dialog is closed) ───────────────────
+    if (!mounted) return;
 
-      Navigator.of(context).pop(); // Close loading dialog
-
+    if (result != null) {
       final int calculatedTotalMarks = (widget.activeExam.marksPerQuestion *
               widget.activeExam.totalQuestions)
           .round();
@@ -208,28 +229,20 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
         MaterialPageRoute(
           builder: (context) => ResultSummaryScreen(
             examId: widget.activeExam.id,
-            result: result,
+            result: result!,
             totalExamMarks: result.totalMarks > 0
                 ? result.totalMarks
                 : calculatedTotalMarks,
           ),
         ),
       );
-    } catch (e) {
-      if (!mounted) return;
-
-      Navigator.of(context).pop(); // Close loading dialog
-
-      setState(() {
-        _isSubmitting = false;
-      });
-
-      final String errorMessage =
-          e.toString().replaceAll('Exception: ', '').trim();
-
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(errorMessage),
+          content: Text(
+            errorMessage ??
+                'Submission failed. Please check your connection and try again.',
+          ),
           backgroundColor: Theme.of(context).colorScheme.error,
           behavior: SnackBarBehavior.floating,
         ),
@@ -392,7 +405,6 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final bool isTimerLow = _remainingSeconds <= 300; 
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -419,59 +431,12 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
             ),
           ),
           const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: isTimerLow
-                  ? colorScheme.errorContainer
-                  : colorScheme.primaryContainer.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isTimerLow
-                    ? colorScheme.error
-                    : colorScheme.primary.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.alarm_rounded,
-                  size: 18,
-                  color: isTimerLow
-                      ? colorScheme.error
-                      : colorScheme.primary,
-                ),
-                const SizedBox(width: 6),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'TIME REMAINING',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: isTimerLow
-                            ? colorScheme.error
-                            : colorScheme.primary,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    Text(
-                      _formatTime(_remainingSeconds),
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: isTimerLow
-                            ? colorScheme.error
-                            : colorScheme.primary,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          // Isolated widget: its every-second setState only repaints the clock,
+          // not the question text, options, or navigator palette.
+          _ExamTimerWidget(
+            key: _timerKey,
+            initialSeconds: _initialDurationSeconds,
+            onExpired: () => _submitExam(autoSubmitted: true),
           ),
         ],
       ),
@@ -824,6 +789,144 @@ class _ActiveExamScreenState extends State<ActiveExamScreen> with WidgetsBinding
           ),
         ),
       ],
+    );
+  }
+}
+
+// =============================================================================
+// ISOLATED TIMER WIDGET
+// Extracted from _ActiveExamScreenState so that its Timer.periodic setState()
+// only rebuilds the small clock display — NOT the entire exam screen.
+//
+// Before this change: setState() fired every second on _ActiveExamScreenState,
+// causing a full rebuild of the question text, all 4 option AnimatedContainers,
+// and the GridView navigator palette on every tick.
+//
+// After this change: the parent screen only rebuilds on real user actions
+// (question navigation, answer selection, submission).
+// =============================================================================
+class _ExamTimerWidget extends StatefulWidget {
+  final int initialSeconds;
+  final VoidCallback onExpired;
+
+  const _ExamTimerWidget({
+    super.key,
+    required this.initialSeconds,
+    required this.onExpired,
+  });
+
+  @override
+  _ExamTimerWidgetState createState() => _ExamTimerWidgetState();
+}
+
+class _ExamTimerWidgetState extends State<_ExamTimerWidget> {
+  late int _remainingSeconds;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingSeconds = widget.initialSeconds;
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  /// Called by the parent (via GlobalKey) when the student manually submits,
+  /// preventing onExpired from firing after the exam is already submitted.
+  void cancel() {
+    _timer?.cancel();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0) {
+        if (mounted) {
+          // Only this tiny widget repaints — not the question or palette.
+          setState(() {
+            _remainingSeconds--;
+          });
+        }
+      } else {
+        _timer?.cancel();
+        widget.onExpired();
+      }
+    });
+  }
+
+  String _formatTime(int totalSeconds) {
+    if (totalSeconds <= 0) return '00:00';
+    final int hours = totalSeconds ~/ 3600;
+    final int minutes = (totalSeconds % 3600) ~/ 60;
+    final int seconds = totalSeconds % 60;
+
+    final String minutesStr = minutes.toString().padLeft(2, '0');
+    final String secondsStr = seconds.toString().padLeft(2, '0');
+
+    if (hours > 0) {
+      final String hoursStr = hours.toString().padLeft(2, '0');
+      return '$hoursStr:$minutesStr:$secondsStr';
+    }
+    return '$minutesStr:$secondsStr';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final bool isTimerLow = _remainingSeconds <= 300;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: isTimerLow
+            ? colorScheme.errorContainer
+            : colorScheme.primaryContainer.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isTimerLow
+              ? colorScheme.error
+              : colorScheme.primary.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.alarm_rounded,
+            size: 18,
+            color: isTimerLow ? colorScheme.error : colorScheme.primary,
+          ),
+          const SizedBox(width: 6),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'TIME REMAINING',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w800,
+                  color: isTimerLow ? colorScheme.error : colorScheme.primary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              Text(
+                _formatTime(_remainingSeconds),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isTimerLow ? colorScheme.error : colorScheme.primary,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -460,7 +460,7 @@ class _SearchFilterBarState extends State<SearchFilterBar> {
         ),
 
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor: const Color.fromARGB(255, 16, 27, 185),
           elevation: 0,
 
           shape: RoundedRectangleBorder(

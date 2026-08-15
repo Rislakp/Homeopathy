@@ -27,15 +27,7 @@ class CourseDesktop extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      const CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Color(0xff1F7A3D),
-                        child: Icon(
-                          Icons.water_drop,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
+                    
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
