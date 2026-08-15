@@ -26,7 +26,7 @@ class _LoginButtonState extends State<LoginButton> {
   Widget build(BuildContext context) {
     final Color primaryColor = AppColors.adminBlue;
     final Color hoverColor = AppColors.adminBlueHover;
-    final Color pressedColor = AppColors.adminBlue.withOpacity(0.85);
+    final Color pressedColor = AppColors.adminBlue.withValues(alpha: 0.85);
 
     // Define colors & shadows dynamically based on interaction states
     Color buttonColor = primaryColor;
